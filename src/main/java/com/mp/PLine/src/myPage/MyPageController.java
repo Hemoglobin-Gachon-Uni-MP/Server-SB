@@ -65,7 +65,7 @@ public class MyPageController {
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
             @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
             @ApiResponse(code = 2011, message = "닉네임을 입력해주세요."),
-            @ApiResponse(code = 2017, message = "위치를 입력해주세요."),
+            @ApiResponse(code = 2015, message = "위치를 입력해주세요."),
             @ApiResponse(code = 2020, message = "닉네임 길이를 확인해주세요."),
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
     })

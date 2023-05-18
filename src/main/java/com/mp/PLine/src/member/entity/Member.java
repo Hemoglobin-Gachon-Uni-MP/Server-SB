@@ -25,8 +25,8 @@ public class Member extends BaseEntity {
     private Long age;
     private String phone;
     private String gender;
-    private String abo;
-    private String rh;
+    private int abo;
+    private int rh;
     private String location;
     private int profileImg;
     private Long kakaoId;
@@ -35,8 +35,8 @@ public class Member extends BaseEntity {
 
 
     @Builder
-    public Member(String name, String nickname, String birth, Long age, String phone, String gender, String abo,
-                  String rh, String location, int profileImg, Long kakaoId, Status status) {
+    public Member(String name, String nickname, String birth, Long age, String phone, String gender, int abo,
+                  int rh, String location, int profileImg, Long kakaoId, Status status) {
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;

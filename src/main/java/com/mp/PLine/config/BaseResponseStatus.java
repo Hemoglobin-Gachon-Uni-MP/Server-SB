@@ -27,9 +27,7 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_BIRTH(false, 2012, "생년월일을 입력해주세요."),
     POST_USERS_EMPTY_PHONE(false, 2013, "전화번호를 입력해주세요."),
     POST_USERS_EMPTY_GENDER(false, 2014, "성별을 입력해주세요."),
-    POST_USERS_EMPTY_ABO(false, 2015, "ABO 혈액형을 입력해주세요."),
-    POST_USERS_EMPTY_RH(false, 2016, "RH 혈액형을 입력해주세요."),
-    POST_USERS_EMPTY_LOCATION(false, 2017, "위치를 입력해주세요."),
+    POST_USERS_EMPTY_LOCATION(false, 2015, "위치를 입력해주세요."),
 
     POST_USERS_INVAlID_NICKNAME(false, 2020, "닉네임 길이를 확인해주세요."),
     POST_USERS_INVAlID_PHONE(false, 2021, "올바르지 않은 전화번호 형식입니다."),

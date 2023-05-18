@@ -15,12 +15,12 @@ public class PostUserReq {
     private String birth;
     @ApiModelProperty(example = "010-2449-2187")
     private String phone;
-    @ApiModelProperty(example = "F (M, F)")
+    @ApiModelProperty(example = "남자: M, 여자: F)")
     private String gender;
-    @ApiModelProperty(example = "O (A, B, O, AB)")
-    private String abo;
-    @ApiModelProperty(example = "Rh+ (Rh+, Rh-)")
-    private String rh;
+    @ApiModelProperty(example = "0: A, 1: B, 2: O, 3: AB")
+    private int abo;
+    @ApiModelProperty(example = "0: Rh+, 1: Rh-")
+    private int rh;
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
     @ApiModelProperty(example = "1 (1, 2)")

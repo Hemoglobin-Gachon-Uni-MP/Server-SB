@@ -15,8 +15,6 @@ public class Validation {
         if(postUserReq.getBirth().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_BIRTH;
         if(postUserReq.getPhone().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_PHONE;
         if(postUserReq.getGender().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_GENDER;
-        if(postUserReq.getAbo().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_ABO;
-        if(postUserReq.getRh().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_RH;
         if(postUserReq.getLocation().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_LOCATION;
 
         // 형식
@@ -24,15 +22,15 @@ public class Validation {
         String phone = postUserReq.getPhone();
         String birth = postUserReq.getBirth();
         String gender = postUserReq.getGender();
-        String abo = postUserReq.getAbo(), rh = postUserReq.getRh();
+        int abo = postUserReq.getAbo(), rh = postUserReq.getRh();
         int profileImg = postUserReq.getProfileImg();
 
         if(nickname.length() < 1 || nickname.length() > 8) return BaseResponseStatus.POST_USERS_INVAlID_NICKNAME;
         if(!ValidationRegex.isRegexPhone(phone)) return BaseResponseStatus.POST_USERS_INVAlID_PHONE;
         if(!ValidationRegex.isRegexBirth(birth)) return BaseResponseStatus.POST_USERS_INVALID_BIRTH;
         if(!(gender.equals("M") || gender.equals("F"))) return BaseResponseStatus.POST_USERS_INVALID_GENDER;
-        if(!(abo.equals("A") || abo.equals("B") || abo.equals("O") || abo.equals("AB"))) return BaseResponseStatus.POST_USERS_INVALID_ABO;
-        if(!(rh.equals("Rh+") || rh.equals("Rh-"))) return BaseResponseStatus.POST_USERS_INVALID_RH;
+        if(abo < 0 || abo > 3) return BaseResponseStatus.POST_USERS_INVALID_ABO;
+        if(rh < 0 || rh > 1) return BaseResponseStatus.POST_USERS_INVALID_RH;
         if(!(profileImg == 1 || profileImg == 2)) return BaseResponseStatus.POST_USERS_INVALID_PROFILE;
 
         return BaseResponseStatus.SUCCESS;
