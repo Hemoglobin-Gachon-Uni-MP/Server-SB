@@ -32,7 +32,20 @@ public class MyPageService {
         List<FeedRes> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
 
         return new GetUserRes(info.getId(), info.getName(), info.getNickname(), info.getBirth(), info.getPhone(),
-                info.getGender().equals("F") ? "여" : "남", info.getRh() + info.getAbo(), info.getLocation(), info.getProfileImg(), feedList);
+                info.getGender().equals("F") ? "여" : "남", blood(info.getRh(), info.getAbo()), info.getLocation(), info.getProfileImg(), feedList);
+    }
+
+    public String blood(int rh, int abo) {
+        String blood = "";
+        if(rh == 0) blood += "Rh+";
+        else if(rh == 1) blood += "Rh-";
+
+        if(abo == 0) blood += "A";
+        else if(abo == 1) blood += "B";
+        else if(abo == 2) blood += "O";
+        else if(abo == 3) blood += "AB";
+
+        return blood;
     }
 
     /* 내 정보 수정 API */
