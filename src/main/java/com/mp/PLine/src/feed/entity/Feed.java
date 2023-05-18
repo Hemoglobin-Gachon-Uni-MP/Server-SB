@@ -20,19 +20,18 @@ public class Feed extends BaseEntity {
     private String abo;
     private String rh;
     private String location;
-    @Enumerated(EnumType.STRING)
-    private TransStatus transStatus;
+    private String isReceiver;
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Feed(Member user, String context, String abo, String rh, String location, TransStatus transStatus, Status status) {
+    public Feed(Member user, String context, String abo, String rh, String location, String isReceiver, Status status) {
         this.user = user;
         this.context = context;
         this.abo = abo;
         this.rh = rh;
         this.location = location;
-        this.transStatus = transStatus;
+        this.isReceiver = isReceiver;
         this.status = status;
     }
 }

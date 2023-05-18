@@ -4,9 +4,6 @@ import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.FeedRepository;
 import com.mp.PLine.src.feed.dto.FeedRes;
-import com.mp.PLine.src.feed.dto.FeedResI;
-import com.mp.PLine.src.feed.entity.Feed;
-import com.mp.PLine.src.member.MemberRepository;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.myPage.dto.GetUserRes;
 import com.mp.PLine.src.myPage.dto.PatchUserReq;
@@ -32,7 +29,7 @@ public class MyPageService {
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
         Member info = member.get();
-        List<FeedResI> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
+        List<FeedRes> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
 
         return new GetUserRes(info.getId(), info.getName(), info.getNickname(), info.getBirth(), info.getPhone(),
                 info.getGender().equals("F") ? "여" : "남", info.getRh() + info.getAbo(), info.getLocation(), info.getProfileImg(), feedList);

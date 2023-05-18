@@ -4,6 +4,7 @@ import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,6 +12,6 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByKakaoIdAndStatus(Long kakaoId, Status A);
-    Optional<Member> findByIdAndStatus(Long userId, Status A);
+    Optional<Member> findByKakaoIdAndStatus(@Param("kakaoId") Long kakaoId, @Param("status") Status A);
+    Optional<Member> findByIdAndStatus(@Param("userId") Long userId, @Param("status") Status A);
 }

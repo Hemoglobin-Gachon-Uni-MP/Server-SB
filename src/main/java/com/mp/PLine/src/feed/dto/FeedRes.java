@@ -2,19 +2,21 @@ package com.mp.PLine.src.feed.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class FeedRes {
+public interface FeedRes {
     @ApiModelProperty(example = "1")
-    private Long feedId;
+    Long getFeedId();
     @ApiModelProperty(example = "1")
-    private Long userId;
+    Long getUserId();
     @ApiModelProperty(example = "보리")
-    private String nickname;
+    String getNickname();
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    int getProfileImg();
     @ApiModelProperty(example = "안녕 반갑수다")
-    private String context;
+    String getContext();
     @ApiModelProperty(example = "3")
-    private int commentCnt;
+    int getCommentCnt();
     @ApiModelProperty(example = "5/18")
-    private String date;
+    String getDate();
+    @ApiModelProperty(example = "T (T, F)")
+    String getIsReceiver();
 }
