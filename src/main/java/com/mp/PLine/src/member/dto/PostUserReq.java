@@ -15,7 +15,7 @@ public class PostUserReq {
     private String birth;
     @ApiModelProperty(example = "010-2449-2187")
     private String phone;
-    @ApiModelProperty(example = "남자: M, 여자: F)")
+    @ApiModelProperty(example = "M: 남자, F: 여자")
     private String gender;
     @ApiModelProperty(example = "0: A, 1: B, 2: O, 3: AB")
     private int abo;

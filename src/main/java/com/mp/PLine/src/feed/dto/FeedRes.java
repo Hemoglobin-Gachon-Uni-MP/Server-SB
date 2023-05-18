@@ -17,6 +17,6 @@ public interface FeedRes {
     int getCommentCnt();
     @ApiModelProperty(example = "5/18")
     String getDate();
-    @ApiModelProperty(example = "T (T, F)")
+    @ApiModelProperty(example = "T: 수혈, F: 공혈")
     String getIsReceiver();
 }
