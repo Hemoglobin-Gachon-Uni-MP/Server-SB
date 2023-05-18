@@ -22,7 +22,7 @@ public class GetUserRes {
     private String phone;
     @ApiModelProperty(example = "F (M, F)")
     private String gender;
-    @ApiModelProperty(example = "O (Rh+A, Rh+B, Rh+O, Rh+AB, Rh-A, Rh-B, Rh-O, Rh-AB)")
+    @ApiModelProperty(example = "Rh+O (Rh+A, Rh+B, Rh+O, Rh+AB, Rh-A, Rh-B, Rh-O, Rh-AB)")
     private String blood;
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
