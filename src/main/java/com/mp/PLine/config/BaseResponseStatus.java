@@ -45,10 +45,8 @@ public enum BaseResponseStatus {
     /* Feed */
     POST_FEEDS_EMPTY_USER(false, 2030, "유저 아이디를 입력해주세요."),
     POST_FEEDS_EMPTY_CONTEXT(false, 2031, "본문을 입력해주세요."),
-    POST_FEEDS_EMPTY_ABO(false, 2032, "ABO 혈액형을 입력해주세요."),
-    POST_FEEDS_EMPTY_RH(false, 2033, "RH 혈액형을 입력해주세요."),
-    POST_FEEDS_EMPTY_LOCATION(false, 2034, "장소를 입력해주세요."),
-    POST_FEEDS_EMPTY_IS_RECEIVER(false, 2035, "수혈 & 공혈 여부 입력해주세요."),
+    POST_FEEDS_EMPTY_LOCATION(false, 2032, "장소를 입력해주세요."),
+    POST_FEEDS_EMPTY_IS_RECEIVER(false, 2033, "수혈 & 공혈 여부 입력해주세요."),
 
     POST_FEEDS_INVALID_ABO(false, 2040, "올바르지 않은 ABO 혈액형 형식입니다."),
     POST_FEEDS_INVALID_RH(false, 2041, "올바르지 않은 RH 혈액형 형식입니다."),

@@ -17,15 +17,15 @@ public class Feed extends BaseEntity {
     @ManyToOne @JoinColumn(name = "user_id")
     private Member user;
     private String context;
-    private String abo;
-    private String rh;
+    private int abo;
+    private int rh;
     private String location;
     private String isReceiver;
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Feed(Member user, String context, String abo, String rh, String location, String isReceiver, Status status) {
+    public Feed(Member user, String context, int abo, int rh, String location, String isReceiver, Status status) {
         this.user = user;
         this.context = context;
         this.abo = abo;

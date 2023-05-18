@@ -56,15 +56,13 @@ public class Validation {
     public static BaseResponseStatus checkPostFeed(PostFeedReq postFeedReq) {
         if(postFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
-        if(postFeedReq.getAbo().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_ABO;
-        if(postFeedReq.getRh().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_RH;
         if(postFeedReq.getLocation().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_LOCATION;
         if(postFeedReq.getIsReceiver().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_IS_RECEIVER;
 
-        String abo = postFeedReq.getAbo(), rh = postFeedReq.getRh();
+        int abo = postFeedReq.getAbo(), rh = postFeedReq.getRh();
         String isReceiver = postFeedReq.getIsReceiver();
-        if(!(abo.equals("A") || abo.equals("B") || abo.equals("O") || abo.equals("AB"))) return BaseResponseStatus.POST_FEEDS_INVALID_ABO;
-        if(!(rh.equals("Rh+") || rh.equals("Rh-"))) return BaseResponseStatus.POST_FEEDS_INVALID_RH;
+        if(abo < 0 || abo > 3) return BaseResponseStatus.POST_FEEDS_INVALID_ABO;
+        if(rh < 0 || rh > 1) return BaseResponseStatus.POST_FEEDS_INVALID_RH;
         if(!(isReceiver.equals("T") || isReceiver.equals("F"))) return BaseResponseStatus.POST_FEEDS_INVALID_IS_RECEIVER;
 
         return BaseResponseStatus.SUCCESS;

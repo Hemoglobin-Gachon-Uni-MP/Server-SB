@@ -35,10 +35,8 @@ public class FeedController {
             @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
             @ApiResponse(code = 2030, message = "유저 아이디를 입력해주세요."),
             @ApiResponse(code = 2031, message = "본문을 입력해주세요."),
-            @ApiResponse(code = 2032, message = "ABO 혈액형을 입력해주세요."),
-            @ApiResponse(code = 2033, message = "RH 혈액형을 입력해주세요."),
-            @ApiResponse(code = 2034, message = "장소를 입력해주세요."),
-            @ApiResponse(code = 2035, message = "수혈 & 공혈 여부 입력해주세요."),
+            @ApiResponse(code = 2032, message = "장소를 입력해주세요."),
+            @ApiResponse(code = 2033, message = "수혈 & 공혈 여부 입력해주세요."),
             @ApiResponse(code = 2040, message = "올바르지 않은 ABO 혈액형 형식입니다."),
             @ApiResponse(code = 2041, message = "올바르지 않은 RH 혈액형 형식입니다."),
             @ApiResponse(code = 2042, message = "올바르지 않은 수혈 & 공혈 형식입니다.")

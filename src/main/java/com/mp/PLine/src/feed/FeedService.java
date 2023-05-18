@@ -27,9 +27,8 @@ public class FeedService {
         Optional<Member> member = myPageRepository.findByIdAndStatus(postFeedReq.getUserId(), Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        PostFeedReq info = postFeedReq;
-        Feed feed = new Feed(member.get(), info.getContext(), info.getAbo(), info.getRh(),
-                info.getLocation(), info.getIsReceiver(), Status.A);
+        Feed feed = new Feed(member.get(), postFeedReq.getContext(), postFeedReq.getAbo(), postFeedReq.getRh(),
+                postFeedReq.getLocation(), postFeedReq.getIsReceiver(), Status.A);
         Feed newFeed = feedRepository.save(feed);
 
         return newFeed.getId();
