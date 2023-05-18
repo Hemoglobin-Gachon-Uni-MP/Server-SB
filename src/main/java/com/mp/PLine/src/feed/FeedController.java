@@ -1,5 +1,11 @@
 package com.mp.PLine.src.feed;
 
+import com.mp.PLine.config.BaseException;
+import com.mp.PLine.config.BaseResponse;
+import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.feed.dto.PostFeedReq;
+import com.mp.PLine.utils.JwtService;
+import com.mp.PLine.utils.Validation;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,40 +17,47 @@ import org.springframework.web.bind.annotation.*;
 public class FeedController {
     private final FeedService feedService;
     private final FeedRepository feedRepository;
+    private final JwtService jwtService;
 
     /**
-     * 도장 개수 반환 API
-     * 전체 도장 개수 & 현재 스탬프지의 도장 개수 반환
-     * [GET] /attendances/{userIdx}
+     * 게시물 업로드 API
+     * [POST] /feeds
      */
-//    @ApiOperation("도장 개수 반환 API")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "Authorization", paramType = "header", value = "서비스 자체 jwt 토큰")
-//    })
-//    @ApiResponses({
-//            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
-//            @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
-//            @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
-//            @ApiResponse(code = 2004, message = "존재하지 않는 유저입니다.")
-//    })
-//    @ResponseBody
-//    @GetMapping("/{userId}")
-//    public BaseResponse<GetStampRes> getStamps(@PathVariable Long userId) {
-//        try{
-//            User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//            String user = principal.getUsername();
-//
-//            Long userIdByAuth = Long.parseLong(user);
-//
-//            if(!Objects.equals(userId, userIdByAuth)){
-//                return new BaseResponse<>(INVALID_JWT);
-//            }
-//            else{
-//                GetStampRes getStampRes = attendanceProvider.getStamps(userId);
-//                return new BaseResponse<>(getStampRes);
-//            }
-//        } catch(BaseException e){
-//            return new BaseResponse<>(e.getStatus());
-//        }
-//    }
+    @ApiOperation("게시물 업로드 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
+            @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
+            @ApiResponse(code = 2030, message = "유저 아이디를 입력해주세요."),
+            @ApiResponse(code = 2031, message = "본문을 입력해주세요."),
+            @ApiResponse(code = 2032, message = "ABO 혈액형을 입력해주세요."),
+            @ApiResponse(code = 2033, message = "RH 혈액형을 입력해주세요."),
+            @ApiResponse(code = 2034, message = "장소를 입력해주세요."),
+            @ApiResponse(code = 2035, message = "수혈 & 공혈 여부 입력해주세요."),
+            @ApiResponse(code = 2040, message = "올바르지 않은 ABO 혈액형 형식입니다."),
+            @ApiResponse(code = 2041, message = "올바르지 않은 RH 혈액형 형식입니다."),
+            @ApiResponse(code = 2042, message = "올바르지 않은 수혈 & 공혈 형식입니다.")
+    })
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<Long> postFeed(@RequestBody PostFeedReq postFeedReq) {
+        try {
+            // 빈 칸 & 형식 검사
+            BaseResponseStatus status = Validation.checkPostFeed(postFeedReq);
+            if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
+
+            // JWT 추출
+            Long userIdByJwt = jwtService.getUserId();
+            if (!postFeedReq.getUserId().equals(userIdByJwt)) {
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+
+            return new BaseResponse<>(feedService.postFeed(postFeedReq));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

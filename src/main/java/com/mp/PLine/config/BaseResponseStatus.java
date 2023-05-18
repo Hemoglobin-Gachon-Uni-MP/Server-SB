@@ -42,22 +42,19 @@ public enum BaseResponseStatus {
     EXIST_USER(false,2027,"이미 존재하는 유저입니다."),
     INVALID_USER(false,2028,"존재하지 않는 유저입니다."),
 
+    /* Feed */
+    POST_FEEDS_EMPTY_USER(false, 2030, "유저 아이디를 입력해주세요."),
+    POST_FEEDS_EMPTY_CONTEXT(false, 2031, "본문을 입력해주세요."),
+    POST_FEEDS_EMPTY_ABO(false, 2032, "ABO 혈액형을 입력해주세요."),
+    POST_FEEDS_EMPTY_RH(false, 2033, "RH 혈액형을 입력해주세요."),
+    POST_FEEDS_EMPTY_LOCATION(false, 2034, "장소를 입력해주세요."),
+    POST_FEEDS_EMPTY_IS_RECEIVER(false, 2035, "수혈 & 공혈 여부 입력해주세요."),
+
+    POST_FEEDS_INVALID_ABO(false, 2040, "올바르지 않은 ABO 혈액형 형식입니다."),
+    POST_FEEDS_INVALID_RH(false, 2041, "올바르지 않은 RH 혈액형 형식입니다."),
+    POST_FEEDS_INVALID_IS_RECEIVER(false, 2042, "올바르지 않은 수혈 & 공혈 형식입니다."),
 
 
-
-    // pins
-    POST_PINS_EMPTY_TITLE(false, 2040, "제목을 입력해주세요."),
-    POST_PINS_EMPTY_SINGER(false, 2041, "가수를 입력해주세요."),
-    POST_PINS_EMPTY_ALBUM(false, 2042, "앨범 제목을 입력해주세요."),
-    POST_PINS_EMPTY_ALBUM_COVER(false, 2043, "앨범 커버를 입력해주세요."),
-    POST_PINS_EMPTY_REASON(false, 2044, "추천 이유를 입력해주세요."),
-    POST_PINS_EMPTY_HASHTAG(false, 2045, "해시태그를 입력해주세요."),
-    POST_PINS_EMPTY_STATE(false, 2046, "시를 입력해주세요."),
-    POST_PINS_EMPTY_CITY(false, 2047, "군을 입력해주세요."),
-    POST_PINS_EMPTY_STREET(false, 2048, "구를 입력해주세요."),
-    POST_PINS_INVALID_LATITUDE(false, 2050, "위도 범위를 확인해주세요."),
-    POST_PINS_INVALID_LONGITUDE(false, 2051, "경도 범위를 확인해주세요."),
-    POST_PINS_EXISTS_SONG(false, 2060, "중복된 곡입니다."),
 
     /**
      * 3000 : Response 오류

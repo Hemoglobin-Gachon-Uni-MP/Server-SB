@@ -53,6 +53,7 @@ public class MemberController {
             @ApiImplicitParam(name = "K-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2004, message = "ACCESS TOKEN을 입력해주세요."),
             @ApiResponse(code = 2010, message = "이름을 입력해주세요."),
             @ApiResponse(code = 2011, message = "닉네임을 입력해주세요."),
@@ -69,9 +70,7 @@ public class MemberController {
             @ApiResponse(code = 2024, message = "올바르지 않은 ABO 혈액형 형식입니다."),
             @ApiResponse(code = 2025, message = "올바르지 않은 RH 혈액형 형식입니다."),
             @ApiResponse(code = 2026, message = "올바르지 않은 프로필 사진 형식입니다."),
-            @ApiResponse(code = 2027, message = "이미 존재하는 유저입니다."),
-
-
+            @ApiResponse(code = 2027, message = "이미 존재하는 유저입니다.")
     })
     @PostMapping("/kakao/sign-up")
     public BaseResponse<PostUserRes> signUp(@RequestBody PostUserReq postUserReq) {
@@ -109,8 +108,9 @@ public class MemberController {
             @ApiImplicitParam(name = "K-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2004, message = "ACCESS TOKEN을 입력해주세요."),
-            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
+            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
     })
     @PostMapping("/kakao/sign-in")
     public BaseResponse<PostUserRes> signIn() {
