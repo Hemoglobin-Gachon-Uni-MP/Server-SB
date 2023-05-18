@@ -10,10 +10,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableJpaRepositories
 public interface FeedRepository extends JpaRepository<Feed, Long> {
+    Optional<Feed> findByIdAndStatus(@Param("id") Long id, @Param("status") Status status);
+
     @Query(value = "select f.id as feedId, \n" +
             "   f.user.id as userId, f.user.nickname as nickname, f.user.profileImg as profileImg, \n" +
             "   f.context as context, \n" +

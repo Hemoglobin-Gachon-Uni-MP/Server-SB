@@ -3,6 +3,7 @@ package com.mp.PLine.src.feed;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.feed.dto.PatchFeedReq;
 import com.mp.PLine.src.feed.dto.PostFeedReq;
 import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.Validation;
@@ -56,6 +57,43 @@ public class FeedController {
             }
 
             return new BaseResponse<>(feedService.postFeed(postFeedReq));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 게시물 수정 API
+     * [PATCH] /feeds/{feedId}
+     */
+    @ApiOperation("게시물 수정 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
+            @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
+            @ApiResponse(code = 2030, message = "유저 아이디를 입력해주세요."),
+            @ApiResponse(code = 2031, message = "본문을 입력해주세요."),
+            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
+            @ApiResponse(code = 2045, message = "존재하지 않는 게시물입니다.")
+    })
+    @ResponseBody
+    @PatchMapping("/{feedId}")
+    public BaseResponse<String> updateFeed(@PathVariable Long feedId, @RequestBody PatchFeedReq patchFeedReq) {
+        try {
+            // 빈 칸 & 형식 검사
+            BaseResponseStatus status = Validation.checkUpdateFeed(patchFeedReq);
+            if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
+
+            // JWT 추출
+            Long userIdByJwt = jwtService.getUserId();
+            if (!patchFeedReq.getUserId().equals(userIdByJwt)) {
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+
+            return new BaseResponse<>(feedService.updateFeed(feedId, patchFeedReq));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

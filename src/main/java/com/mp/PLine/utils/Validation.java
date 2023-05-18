@@ -1,6 +1,7 @@
 package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.feed.dto.PatchFeedReq;
 import com.mp.PLine.src.feed.dto.PostFeedReq;
 import com.mp.PLine.src.member.dto.PostUserReq;
 import com.mp.PLine.src.myPage.dto.PatchUserReq;
@@ -51,6 +52,7 @@ public class Validation {
         return BaseResponseStatus.SUCCESS;
     }
 
+    /** 게시물 업로드 시 비어있는 값이 있는지 확인 **/
     public static BaseResponseStatus checkPostFeed(PostFeedReq postFeedReq) {
         if(postFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
@@ -64,6 +66,15 @@ public class Validation {
         if(!(abo.equals("A") || abo.equals("B") || abo.equals("O") || abo.equals("AB"))) return BaseResponseStatus.POST_FEEDS_INVALID_ABO;
         if(!(rh.equals("Rh+") || rh.equals("Rh-"))) return BaseResponseStatus.POST_FEEDS_INVALID_RH;
         if(!(isReceiver.equals("T") || isReceiver.equals("F"))) return BaseResponseStatus.POST_FEEDS_INVALID_IS_RECEIVER;
+
+        return BaseResponseStatus.SUCCESS;
+    }
+
+    /** 게시물 수정 시 비어있는 값이 있는지 확인 **/
+    public static BaseResponseStatus checkUpdateFeed(PatchFeedReq patchFeedReq) {
+        // 빈 칸 확인
+        if(patchFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
+        if(patchFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
 
         return BaseResponseStatus.SUCCESS;
     }
