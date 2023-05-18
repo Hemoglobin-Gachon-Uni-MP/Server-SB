@@ -3,6 +3,7 @@ package com.mp.PLine.src.feed;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.feed.dto.BaseUserIdReq;
 import com.mp.PLine.src.feed.dto.PatchFeedReq;
 import com.mp.PLine.src.feed.dto.PostFeedReq;
 import com.mp.PLine.utils.JwtService;
@@ -74,6 +75,7 @@ public class FeedController {
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
             @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
+            @ApiResponse(code = 2003, message = "권한이 없는 유저의 접근입니다."),
             @ApiResponse(code = 2030, message = "유저 아이디를 입력해주세요."),
             @ApiResponse(code = 2031, message = "본문을 입력해주세요."),
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
@@ -94,6 +96,38 @@ public class FeedController {
             }
 
             return new BaseResponse<>(feedService.updateFeed(feedId, patchFeedReq));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 게시물 삭제 API
+     * [PATCH] /feeds/{feedId}/status
+     */
+    @ApiOperation("게시물 삭제 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
+            @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
+            @ApiResponse(code = 2003, message = "권한이 없는 유저의 접근입니다."),
+            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
+            @ApiResponse(code = 2045, message = "존재하지 않는 게시물입니다.")
+    })
+    @ResponseBody
+    @PatchMapping("/{feedId}/status")
+    public BaseResponse<String> deleteFeed(@PathVariable Long feedId, @RequestBody BaseUserIdReq baseUserIdReq) {
+        try {
+            // JWT 추출
+            Long userIdByJwt = jwtService.getUserId();
+            if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+
+            return new BaseResponse<>(feedService.deleteFeed(feedId, baseUserIdReq.getUserId()));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
