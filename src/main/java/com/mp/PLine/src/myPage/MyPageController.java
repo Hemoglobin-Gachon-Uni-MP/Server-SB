@@ -26,7 +26,6 @@ public class MyPageController {
      * 내 정보 반환 API
      * [GET] /mypages/{userId}
      */
-    @ApiIgnore
     @ApiOperation("내 정보 반환 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")

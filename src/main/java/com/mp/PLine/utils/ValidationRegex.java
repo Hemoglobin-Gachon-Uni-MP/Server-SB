@@ -22,7 +22,7 @@ public class ValidationRegex {
     }
 
     public static boolean isRegexBirth(String birth) {
-        String regex = "^\\d{4}.\\d{2}.\\d{2}$";
+        String regex = "^\\d{4}\\.\\d{2}\\.\\d{2}$";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(birth);
 
