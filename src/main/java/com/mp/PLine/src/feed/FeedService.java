@@ -3,8 +3,13 @@ package com.mp.PLine.src.feed;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.dto.PatchFeedReq;
+import com.mp.PLine.src.feed.dto.PostCommentReq;
 import com.mp.PLine.src.feed.dto.PostFeedReq;
+import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
+import com.mp.PLine.src.feed.repository.CommentRepository;
+import com.mp.PLine.src.feed.repository.FeedRepository;
+import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.myPage.MyPageRepository;
 import com.mp.PLine.utils.entity.Status;
@@ -19,6 +24,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class FeedService {
     private final FeedRepository feedRepository;
+    private final CommentRepository commentRepository;
+    private final ReplyRepository replyRepository;
     private final MyPageRepository myPageRepository;
 
     @Transactional
@@ -70,5 +77,21 @@ public class FeedService {
         feedRepository.save(updateFeed);
 
         return "게시물이 삭제되었습니다.";
+    }
+
+    @Transactional
+    public Long postComment(Long feedId, PostCommentReq postCommentReq) throws BaseException {
+        // userID를 이용해서 존재하는 유저인지 확인
+        Optional<Member> member = myPageRepository.findByIdAndStatus(postCommentReq.getUserId(), Status.A);
+        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
+
+        // feedID를 이용해서 존재하는 게시물인지 확인
+        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
+        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
+
+        Comment comment = new Comment(member.get(), feed.get(), postCommentReq.getContext(), Status.A);
+        Comment newComment = commentRepository.save(comment);
+
+        return newComment.getId();
     }
 }

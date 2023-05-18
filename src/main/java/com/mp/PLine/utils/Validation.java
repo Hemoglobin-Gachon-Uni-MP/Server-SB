@@ -2,6 +2,7 @@ package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.dto.PatchFeedReq;
+import com.mp.PLine.src.feed.dto.PostCommentReq;
 import com.mp.PLine.src.feed.dto.PostFeedReq;
 import com.mp.PLine.src.member.dto.PostUserReq;
 import com.mp.PLine.src.myPage.dto.PatchUserReq;
@@ -71,6 +72,16 @@ public class Validation {
         // 빈 칸 확인
         if(patchFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(patchFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
+
+        return BaseResponseStatus.SUCCESS;
+    }
+
+    /** 댓글 업로 시 비어있는 값이 있는지 확인 **/
+
+    public static BaseResponseStatus checkPostComment(PostCommentReq postCommentReq) {
+        // 빈 칸 확인
+        if(postCommentReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
+        if(postCommentReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
 
         return BaseResponseStatus.SUCCESS;
     }

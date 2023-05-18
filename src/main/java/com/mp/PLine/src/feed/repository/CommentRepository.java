@@ -1,4 +1,4 @@
-package com.mp.PLine.src.feed;
+package com.mp.PLine.src.feed.repository;
 
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;

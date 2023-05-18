@@ -1,4 +1,4 @@
-package com.mp.PLine.src.feed;
+package com.mp.PLine.src.feed.repository;
 
 import com.mp.PLine.src.feed.entity.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
