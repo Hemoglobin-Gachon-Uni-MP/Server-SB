@@ -4,6 +4,7 @@ import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.dto.PatchFeedReq;
 import com.mp.PLine.src.feed.dto.PostCommentReq;
 import com.mp.PLine.src.feed.dto.PostFeedReq;
+import com.mp.PLine.src.feed.dto.PostReplyReq;
 import com.mp.PLine.src.member.dto.PostUserReq;
 import com.mp.PLine.src.myPage.dto.PatchUserReq;
 
@@ -76,12 +77,21 @@ public class Validation {
         return BaseResponseStatus.SUCCESS;
     }
 
-    /** 댓글 업로 시 비어있는 값이 있는지 확인 **/
-
+    /** 댓글 업로드 시 비어있는 값이 있는지 확인 **/
     public static BaseResponseStatus checkPostComment(PostCommentReq postCommentReq) {
         // 빈 칸 확인
         if(postCommentReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postCommentReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
+
+        return BaseResponseStatus.SUCCESS;
+    }
+
+    /** 답글 업로드 시 비어있는 값이 있는지 확인 **/
+    public static BaseResponseStatus checkPostReply(PostReplyReq postReplyReq) {
+        // 빈 칸 확인
+        if(postReplyReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
+        if(postReplyReq.getFeedId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_FEED;
+        if(postReplyReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
 
         return BaseResponseStatus.SUCCESS;
     }
