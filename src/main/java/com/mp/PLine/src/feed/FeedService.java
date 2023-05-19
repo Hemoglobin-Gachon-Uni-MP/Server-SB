@@ -143,4 +143,24 @@ public class FeedService {
 
         return newReply.getId();
     }
+
+    /* 댓글 삭제 API */
+    @Transactional
+    public String deleteReply(Long replyId, Long userId) throws BaseException {
+        // userID를 이용해서 존재하는 유저인지 확인
+        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
+        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
+
+        // replyID를 이용해서 존재하는 답글인지 확인
+        Optional<Reply> reply = replyRepository.findByIdAndStatus(replyId, Status.A);
+        if(reply.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_REPLY);
+
+        Reply updateReply = reply.get();
+        if(!updateReply.getUser().getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
+
+        updateReply.setStatus(Status.D);
+        replyRepository.save(updateReply);
+
+        return "답글이 삭제되었습니다.";
+    }
 }

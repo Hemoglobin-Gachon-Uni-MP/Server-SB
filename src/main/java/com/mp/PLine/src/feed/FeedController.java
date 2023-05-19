@@ -185,6 +185,8 @@ public class FeedController {
     })
     @PatchMapping("/comment/{commentId}/status")
     public BaseResponse<String> postComment(@PathVariable Long commentId, @RequestBody BaseUserIdReq baseUserIdReq) {
+        if(baseUserIdReq.getUserId() == null) return new BaseResponse<>(BaseResponseStatus.POST_FEEDS_EMPTY_USER);
+
         try {
             // JWT 추출
             Long userIdByJwt = jwtService.getUserId();
@@ -233,6 +235,41 @@ public class FeedController {
             }
 
             return new BaseResponse<>(feedService.postReply(commentId, postReplyReq));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 답글 삭제 API
+     * [PATCH] /feeds/reply/{replyId}/status
+     */
+    @ApiOperation("답글 삭제 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
+            @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
+            @ApiResponse(code = 2003, message = "권한이 없는 유저의 접근입니다."),
+            @ApiResponse(code = 2030, message = "유저 아이디를 입력해주세요."),
+            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
+            @ApiResponse(code = 2046, message = "존재하지 않는 댓글입니다."),
+            @ApiResponse(code = 2047, message = "존재하지 않는 답글입니다.")
+    })
+    @PatchMapping("/reply/{replyId}/status")
+    public BaseResponse<String> postReply(@PathVariable Long replyId, @RequestBody BaseUserIdReq baseUserIdReq) {
+        if(baseUserIdReq.getUserId() == null) return new BaseResponse<>(BaseResponseStatus.POST_FEEDS_EMPTY_USER);
+
+        try {
+            // JWT 추출
+            Long userIdByJwt = jwtService.getUserId();
+            if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+
+            return new BaseResponse<>(feedService.deleteReply(replyId, baseUserIdReq.getUserId()));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
