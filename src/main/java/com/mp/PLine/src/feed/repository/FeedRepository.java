@@ -1,6 +1,6 @@
 package com.mp.PLine.src.feed.repository;
 
-import com.mp.PLine.src.feed.dto.FeedRes;
+import com.mp.PLine.src.myPage.dto.FeedRes;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,8 +15,10 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface FeedRepository extends JpaRepository<Feed, Long> {
+    // 피드 존재 여부 확인
     Optional<Feed> findByIdAndStatus(@Param("id") Long id, @Param("status") Status status);
 
+    // 유저가 올린 피드 리스트 반환
     @Query(value = "select f.id as feedId, \n" +
             "   f.user.id as userId, f.user.nickname as nickname, f.user.profileImg as profileImg, \n" +
             "   f.context as context, \n" +

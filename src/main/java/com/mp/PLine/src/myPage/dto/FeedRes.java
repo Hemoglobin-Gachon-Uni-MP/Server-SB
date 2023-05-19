@@ -1,4 +1,4 @@
-package com.mp.PLine.src.feed.dto;
+package com.mp.PLine.src.myPage.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,8 +15,10 @@ public interface FeedRes {
     String getContext();
     @ApiModelProperty(example = "3")
     int getCommentCnt();
-    @ApiModelProperty(example = "5/18")
+    @ApiModelProperty(example = "05/18")
     String getDate();
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
     String getIsReceiver();
+
+
 }

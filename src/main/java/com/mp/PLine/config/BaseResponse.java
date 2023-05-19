@@ -3,6 +3,7 @@ package com.mp.PLine.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class BaseResponse<T> {//BaseResponse 객체를 사용할때 성공, 실�
     private final Boolean isSuccess;
     private final String message;
     private final int code;
+    @ApiModelProperty("XX 생성 API의 경우 XXId를 반환, 나머지는 XX가 완료되었습니다.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 

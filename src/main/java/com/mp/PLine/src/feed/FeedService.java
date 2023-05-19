@@ -2,10 +2,7 @@ package com.mp.PLine.src.feed;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.feed.dto.PatchFeedReq;
-import com.mp.PLine.src.feed.dto.PostCommentReq;
-import com.mp.PLine.src.feed.dto.PostFeedReq;
-import com.mp.PLine.src.feed.dto.PostReplyReq;
+import com.mp.PLine.src.feed.dto.*;
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.src.feed.entity.Reply;
@@ -19,6 +16,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +45,48 @@ public class FeedService {
         Feed newFeed = feedRepository.save(feed);
 
         return newFeed.getId();
+    }
+
+    /* 게시물 정보 반환 API */
+    public GetFeedRes getFeed(Long feedId) throws BaseException {
+        // feedID를 이용해서 존재하는 게시물인지 확인
+        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
+        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
+
+        Feed feedRes = feed.get();
+        Member userRes = feedRes.getUser();
+
+        List<CommentRes> comment = getComments(feedId);
+
+        return new GetFeedRes(feedRes.getId(), userRes.getId(), userRes.getProfileImg(), userRes.getNickname(),
+                feedRes.getContext(), comment.size(), comment,
+                shortDate(feedRes.getCreatedAt()), feedRes.getAbo(), feedRes.getRh(),
+                feedRes.getLocation(), feedRes.getIsReceiver());
+    }
+
+    /* 날짜 표기 */
+    public String shortDate(Timestamp createdAt) {
+        DateFormat format = new SimpleDateFormat("MM/dd");
+        return format.format(new Date(createdAt.getTime()));
+    }
+
+    public String longDate(Timestamp createdAt) {
+        DateFormat format = new SimpleDateFormat("MM/dd a KK:mm");
+        return format.format(new Date(createdAt.getTime()));
+    }
+
+    /* 게시물 댓글 리스트 */
+    public List<CommentRes> getComments(Long feedId) {
+        List<CommentResI> commentResI = commentRepository.findByFeedId(feedId);
+        List<CommentRes> commentRes = new ArrayList<>();
+
+        for (CommentResI cur : commentResI) {
+            List<ReplyRes> reply = replyRepository.findByCommentId(cur.getCommentId());
+            commentRes.add(new CommentRes(cur.getCommentId(), cur.getUserId(), cur.getProfileImg(), cur.getNickname(),
+                    cur.getContext(), reply, longDate(cur.getDate())));
+        }
+
+        return commentRes;
     }
 
     /* 게시물 수정 API */

@@ -1,6 +1,5 @@
 package com.mp.PLine.src.myPage.dto;
 
-import com.mp.PLine.src.feed.dto.FeedRes;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

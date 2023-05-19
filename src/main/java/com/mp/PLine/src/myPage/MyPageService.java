@@ -3,7 +3,7 @@ package com.mp.PLine.src.myPage;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.repository.FeedRepository;
-import com.mp.PLine.src.feed.dto.FeedRes;
+import com.mp.PLine.src.myPage.dto.FeedRes;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.myPage.dto.GetUserRes;
 import com.mp.PLine.src.myPage.dto.PatchUserReq;

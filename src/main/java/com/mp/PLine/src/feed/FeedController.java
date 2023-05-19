@@ -10,6 +10,7 @@ import com.mp.PLine.utils.Validation;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,10 +22,10 @@ public class FeedController {
     private final JwtService jwtService;
 
     /**
-     * 게시물 업로드 API
+     * 게시물 생성 API
      * [POST] /feeds
      */
-    @ApiOperation("게시물 업로드 API")
+    @ApiOperation("게시물 생성 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
     })
@@ -55,6 +56,26 @@ public class FeedController {
             }
 
             return new BaseResponse<>(feedService.postFeed(postFeedReq));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 게시물 정보 반환 API
+     * [GET] /feeds/info/{feedId}
+     */
+    @ApiIgnore
+    @ApiOperation("게시물 정보 반환 API")
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2045, message = "존재하지 않는 게시물입니다.")
+    })
+    @ResponseBody
+    @GetMapping("/info/{feedId}")
+    public BaseResponse<GetFeedRes> getFeed(@PathVariable Long feedId) {
+        try {
+            return new BaseResponse<>(feedService.getFeed(feedId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
