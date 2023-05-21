@@ -1,6 +1,6 @@
 package com.mp.PLine.src.feed.repository;
 
-import com.mp.PLine.src.feed.dto.ReplyRes;
+import com.mp.PLine.src.feed.dto.ReplyResI;
 import com.mp.PLine.src.feed.entity.Reply;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,8 +22,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("select r.id as replyId, \n" +
             "   r.user.id as userId, r.user.profileImg as profileImg, r.user.nickname as nickname, \n" +
             "   r.context as context, \n" +
-            "   function('date_format', r.createdAt, '%m/%d %p %l:%i') as date \n" +
+            "   r.createdAt as date \n" +
             "from Reply r \n" +
             "where r.comment.id = :commentId and r.status = 'A' and r.user.status = 'A'")
-    List<ReplyRes> findByCommentId(@Param("commentId") Long commentId);
+    List<ReplyResI> findByCommentId(@Param("commentId") Long commentId);
 }

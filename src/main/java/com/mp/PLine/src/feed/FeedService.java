@@ -104,14 +104,28 @@ public class FeedService {
         int replyCnt = 0;
 
         for (CommentResI cur : commentResI) {
-            List<ReplyRes> reply = replyRepository.findByCommentId(cur.getCommentId());
+            List<ReplyRes> replyRes = getReplies(cur.getCommentId());
             commentRes.add(new CommentRes(cur.getCommentId(), cur.getUserId(), cur.getProfileImg(), cur.getNickname(),
-                    cur.getContext(), reply, longDate(cur.getDate())));
+                    cur.getContext(), replyRes, longDate(cur.getDate())));
 
-            replyCnt += reply.size();
+            replyCnt += replyRes.size();
         }
 
         return new CommentInfo(replyCnt + commentRes.size(), commentRes);
+    }
+
+    public List<ReplyRes> getReplies(Long commentId) {
+        List<ReplyResI> replyResI = replyRepository.findByCommentId(commentId);
+
+        return replyResI.stream().
+                map(d -> ReplyRes.builder()
+                        .replyId(d.getReplyId())
+                        .userId(d.getUserId())
+                        .profileImg(d.getProfileImg())
+                        .nickname(d.getNickname())
+                        .context(d.getContext())
+                        .date(longDate(d.getDate())).build())
+                .collect(Collectors.toList());
     }
 
     /* 게시물 수정 API */

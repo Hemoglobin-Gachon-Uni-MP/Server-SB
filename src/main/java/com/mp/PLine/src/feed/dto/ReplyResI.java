@@ -1,26 +1,20 @@
 package com.mp.PLine.src.feed.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 
 import java.sql.Timestamp;
 
-@Getter
-@AllArgsConstructor
-@Builder
-public class ReplyRes {
+public interface ReplyResI {
     @ApiModelProperty("1")
-    private Long replyId;
+    Long getReplyId();
     @ApiModelProperty("7")
-    private Long userId;
+    Long getUserId();
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    int getProfileImg();
     @ApiModelProperty(example = "보리")
-    private String nickname;
+    String getNickname();
     @ApiModelProperty(example = "답글s")
-    private String context;
+    String getContext();
     @ApiModelProperty(example = "05/09 오후 5:15")
-    private String date;
+    Timestamp getDate();
 }
