@@ -1,8 +1,7 @@
 package com.mp.PLine.src.feed.repository;
 
-import com.mp.PLine.src.feed.dto.CommentResI;
+import com.mp.PLine.src.feed.dto.util.CommentResI;
 import com.mp.PLine.src.feed.entity.Comment;
-import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

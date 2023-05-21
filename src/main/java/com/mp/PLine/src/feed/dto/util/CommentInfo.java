@@ -1,5 +1,6 @@
-package com.mp.PLine.src.feed.dto;
+package com.mp.PLine.src.feed.dto.util;
 
+import com.mp.PLine.src.feed.dto.res.CommentRes;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

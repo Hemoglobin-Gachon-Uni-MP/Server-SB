@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.member.dto.PostUserReq;
+import com.mp.PLine.src.member.dto.req.PostUserReq;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;

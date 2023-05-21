@@ -1,4 +1,4 @@
-package com.mp.PLine.src.feed.dto;
+package com.mp.PLine.src.feed.dto.res;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

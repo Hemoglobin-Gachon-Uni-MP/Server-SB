@@ -1,4 +1,4 @@
-package com.mp.PLine.src.myPage.dto;
+package com.mp.PLine.src.myPage.dto.req;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

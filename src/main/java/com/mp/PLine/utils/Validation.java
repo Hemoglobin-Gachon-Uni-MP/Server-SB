@@ -1,12 +1,12 @@
 package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.feed.dto.PatchFeedReq;
-import com.mp.PLine.src.feed.dto.PostCommentReq;
-import com.mp.PLine.src.feed.dto.PostFeedReq;
-import com.mp.PLine.src.feed.dto.PostReplyReq;
-import com.mp.PLine.src.member.dto.PostUserReq;
-import com.mp.PLine.src.myPage.dto.PatchUserReq;
+import com.mp.PLine.src.feed.dto.req.PatchFeedReq;
+import com.mp.PLine.src.feed.dto.req.PostCommentReq;
+import com.mp.PLine.src.feed.dto.req.PostFeedReq;
+import com.mp.PLine.src.feed.dto.req.PostReplyReq;
+import com.mp.PLine.src.member.dto.req.PostUserReq;
+import com.mp.PLine.src.myPage.dto.req.PatchUserReq;
 
 public class Validation {
     /** 회원 가입 시 비어있는 값이 있는지 확인 **/

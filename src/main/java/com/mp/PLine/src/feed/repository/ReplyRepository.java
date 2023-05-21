@@ -1,6 +1,6 @@
 package com.mp.PLine.src.feed.repository;
 
-import com.mp.PLine.src.feed.dto.ReplyResI;
+import com.mp.PLine.src.feed.dto.util.ReplyResI;
 import com.mp.PLine.src.feed.entity.Reply;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;

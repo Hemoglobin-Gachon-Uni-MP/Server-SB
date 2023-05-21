@@ -1,0 +1,16 @@
+package com.mp.PLine.src.feed.dto.util;
+
+public interface GetFeedsResI {
+    Long getFeedId();
+    Long getUserId();
+    int getProfileImg();
+    String getNickname();
+    String getContext();
+    int getCommentCnt();
+    int getReplyCnt();
+    String getDate();
+    int getAbo();
+    int getRh();
+    String getLocation();
+    String getIsReceiver();
+}

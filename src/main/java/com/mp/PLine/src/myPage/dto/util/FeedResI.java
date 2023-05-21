@@ -1,4 +1,4 @@
-package com.mp.PLine.src.myPage.dto;
+package com.mp.PLine.src.myPage.dto.util;
 
 import io.swagger.annotations.ApiModelProperty;
 

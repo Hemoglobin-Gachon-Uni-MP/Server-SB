@@ -3,15 +3,13 @@ package com.mp.PLine.src.myPage;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.myPage.dto.GetUserRes;
-import com.mp.PLine.src.myPage.dto.PatchUserReq;
+import com.mp.PLine.src.myPage.dto.res.GetUserRes;
+import com.mp.PLine.src.myPage.dto.req.PatchUserReq;
 import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.Validation;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
