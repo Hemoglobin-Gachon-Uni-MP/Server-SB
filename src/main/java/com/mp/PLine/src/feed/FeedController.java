@@ -10,7 +10,8 @@ import com.mp.PLine.utils.Validation;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,10 +63,27 @@ public class FeedController {
     }
 
     /**
+     * 게시물 목록 반환 API
+     * [GET] /feeds/info-list
+     */
+    @ApiOperation("게시물 목록 반환 API")
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다.")
+    })
+    @ResponseBody
+    @GetMapping("info-list")
+    public BaseResponse<List<GetFeedsRes>> getFeeds() {
+        try {
+            return new BaseResponse<>(feedService.getFeeds());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
      * 게시물 정보 반환 API
      * [GET] /feeds/info/{feedId}
      */
-    @ApiIgnore
     @ApiOperation("게시물 정보 반환 API")
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),

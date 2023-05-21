@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,26 @@ public class FeedService {
         return newFeed.getId();
     }
 
+    /* 게시물 목록 반환 API */
+    public List<GetFeedsRes> getFeeds() throws BaseException {
+        List<GetFeedsResI> getFeedsResI = feedRepository.findAllByStatus();
+
+        return getFeedsResI.stream()
+                .map(d -> GetFeedsRes.builder()
+                        .feedId(d.getFeedId())
+                        .userId(d.getUserId())
+                        .profileImg(d.getProfileImg())
+                        .nickname(d.getNickname())
+                        .context(d.getContext())
+                        .commentCnt(d.getCommentCnt() + d.getReplyCnt())
+                        .date(d.getDate())
+                        .abo(d.getAbo())
+                        .rh(d.getRh())
+                        .location(d.getLocation())
+                        .isReceiver(d.getIsReceiver()).build())
+                    .collect(Collectors.toList());
+    }
+
     /* 게시물 정보 반환 API */
     public GetFeedRes getFeed(Long feedId) throws BaseException {
         // feedID를 이용해서 존재하는 게시물인지 확인
@@ -56,10 +77,10 @@ public class FeedService {
         Feed feedRes = feed.get();
         Member userRes = feedRes.getUser();
 
-        List<CommentRes> comment = getComments(feedId);
+        CommentInfo comment = getComments(feedId);
 
         return new GetFeedRes(feedRes.getId(), userRes.getId(), userRes.getProfileImg(), userRes.getNickname(),
-                feedRes.getContext(), comment.size(), comment,
+                feedRes.getContext(), comment.getCommentCnt(), comment.getCommentRes(),
                 shortDate(feedRes.getCreatedAt()), feedRes.getAbo(), feedRes.getRh(),
                 feedRes.getLocation(), feedRes.getIsReceiver());
     }
@@ -76,17 +97,21 @@ public class FeedService {
     }
 
     /* 게시물 댓글 리스트 */
-    public List<CommentRes> getComments(Long feedId) {
+    public CommentInfo getComments(Long feedId) {
         List<CommentResI> commentResI = commentRepository.findByFeedId(feedId);
         List<CommentRes> commentRes = new ArrayList<>();
+
+        int replyCnt = 0;
 
         for (CommentResI cur : commentResI) {
             List<ReplyRes> reply = replyRepository.findByCommentId(cur.getCommentId());
             commentRes.add(new CommentRes(cur.getCommentId(), cur.getUserId(), cur.getProfileImg(), cur.getNickname(),
                     cur.getContext(), reply, longDate(cur.getDate())));
+
+            replyCnt += reply.size();
         }
 
-        return commentRes;
+        return new CommentInfo(replyCnt + commentRes.size(), commentRes);
     }
 
     /* 게시물 수정 API */

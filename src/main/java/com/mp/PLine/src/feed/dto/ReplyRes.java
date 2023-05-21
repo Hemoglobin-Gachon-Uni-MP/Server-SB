@@ -1,6 +1,7 @@
 package com.mp.PLine.src.feed.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 
 public interface ReplyRes {
     @ApiModelProperty("1")
