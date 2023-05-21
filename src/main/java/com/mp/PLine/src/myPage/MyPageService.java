@@ -4,6 +4,7 @@ import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.myPage.dto.FeedRes;
+import com.mp.PLine.src.myPage.dto.FeedResI;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.myPage.dto.GetUserRes;
 import com.mp.PLine.src.myPage.dto.PatchUserReq;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +31,22 @@ public class MyPageService {
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
         Member info = member.get();
-        List<FeedRes> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
+        List<FeedResI> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
+
+        List<FeedRes> feedRes = feedList.stream()
+                .map(d -> FeedRes.builder()
+                        .feedId(d.getFeedId())
+                        .userId(d.getUserId())
+                        .nickname(d.getNickname())
+                        .profileImg(d.getProfileImg())
+                        .context(d.getContext())
+                        .commentCnt(d.getCommentCnt() + d.getReplyCnt())
+                        .date(d.getDate())
+                        .isReceiver(d.getIsReceiver()).build())
+                .collect(Collectors.toList());
 
         return new GetUserRes(info.getId(), info.getName(), info.getNickname(), info.getBirth(), info.getPhone(),
-                info.getGender().equals("F") ? "여" : "남", blood(info.getRh(), info.getAbo()), info.getLocation(), info.getProfileImg(), feedList);
+                info.getGender().equals("F") ? "여" : "남", blood(info.getRh(), info.getAbo()), info.getLocation(), info.getProfileImg(), feedRes);
     }
 
     public String blood(int rh, int abo) {

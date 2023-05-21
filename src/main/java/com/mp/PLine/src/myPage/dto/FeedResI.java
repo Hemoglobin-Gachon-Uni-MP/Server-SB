@@ -1,30 +1,25 @@
 package com.mp.PLine.src.myPage.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 
-@Builder
-@Getter
-@AllArgsConstructor
-public class FeedRes {
+public interface FeedResI {
     @ApiModelProperty(example = "1")
-    private Long feedId;
+    Long getFeedId();
     @ApiModelProperty(example = "1")
-    private Long userId;
+    Long getUserId();
     @ApiModelProperty(example = "보리")
-    private String nickname;
+    String getNickname();
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    int getProfileImg();
     @ApiModelProperty(example = "안녕 반갑수다")
-    private String context;
+    String getContext();
     @ApiModelProperty(example = "3")
-    private int commentCnt;
+    int getCommentCnt();
+    int getReplyCnt();
     @ApiModelProperty(example = "05/18")
-    private String date;
+    String getDate();
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
-    private String isReceiver;
+    String getIsReceiver();
 
 
 }
