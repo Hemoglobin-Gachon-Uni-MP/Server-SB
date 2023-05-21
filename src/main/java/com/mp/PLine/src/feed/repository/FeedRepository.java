@@ -5,6 +5,7 @@ import com.mp.PLine.src.myPage.dto.FeedResI;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
@@ -42,4 +43,9 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "from Feed f \n" +
             "where f.status = 'A' and f.user.status = 'A'")
     List<GetFeedsResI> findAllByStatus();
+
+    // 유저 삭제시 게시물도 삭제
+    @Modifying
+    @Query("update Feed f set f.status = 'D' where f.user.id = :userId")
+    void setFeedByUserStatus(@Param("userId") Long userId);
 }

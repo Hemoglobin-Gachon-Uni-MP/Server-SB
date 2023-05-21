@@ -149,6 +149,8 @@ public class MemberService {
         member.get().setStatus(Status.D);
         memberRepository.save(member.get());
 
+
+
         return "회원 탈퇴가 완료되었습니다.";
     }
 }

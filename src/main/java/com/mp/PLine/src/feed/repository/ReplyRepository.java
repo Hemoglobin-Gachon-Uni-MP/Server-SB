@@ -4,6 +4,7 @@ import com.mp.PLine.src.feed.dto.ReplyResI;
 import com.mp.PLine.src.feed.entity.Reply;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +27,19 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
             "from Reply r \n" +
             "where r.comment.id = :commentId and r.status = 'A' and r.user.status = 'A'")
     List<ReplyResI> findByCommentId(@Param("commentId") Long commentId);
+
+    // 유저 삭제시 답글도 삭제
+    @Modifying
+    @Query("update Reply r set r.status = 'D' where r.user.id = :userId")
+    void setReplyByUserStatus(@Param("userId") Long userId);
+
+    // 게시물 삭제시 답글도 삭제
+    @Modifying
+    @Query("update Reply r set r.status = 'D' where r.feed.id = :feedId")
+    void setReplyByFeedStatus(@Param("feedId") Long feedId);
+
+    // 댓글 삭제시 답글도 삭제
+    @Modifying
+    @Query("update Reply r set r.status = 'D' where r.comment.id = :commentId")
+    void setReplyByCommentStatus(@Param("commentId") Long commentId);
 }

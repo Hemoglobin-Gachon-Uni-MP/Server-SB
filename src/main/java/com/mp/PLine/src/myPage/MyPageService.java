@@ -2,7 +2,9 @@ package com.mp.PLine.src.myPage;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.feed.repository.CommentRepository;
 import com.mp.PLine.src.feed.repository.FeedRepository;
+import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.myPage.dto.FeedRes;
 import com.mp.PLine.src.myPage.dto.FeedResI;
 import com.mp.PLine.src.member.entity.Member;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 public class MyPageService {
     private final MyPageRepository myPageRepository;
     private final FeedRepository feedRepository;
+    private final CommentRepository commentRepository;
+    private final ReplyRepository replyRepository;
 
     /* 내 정보 반환 API */
     public GetUserRes getUser(Long userId) throws BaseException {
@@ -72,6 +76,10 @@ public class MyPageService {
         member.get().setNickname(patchUserReq.getNickname());
         member.get().setLocation(patchUserReq.getLocation());
         myPageRepository.save(member.get());
+
+        feedRepository.setFeedByUserStatus(userId);
+        commentRepository.setCommentByUserStatus(userId);
+        replyRepository.setReplyByUserStatus(userId);
 
         return "정보가 수정되었습니다.";
     }

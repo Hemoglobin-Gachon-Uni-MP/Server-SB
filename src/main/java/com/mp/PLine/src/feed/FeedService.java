@@ -114,6 +114,7 @@ public class FeedService {
         return new CommentInfo(replyCnt + commentRes.size(), commentRes);
     }
 
+    /* 게시물 답글 리스트 */
     public List<ReplyRes> getReplies(Long commentId) {
         List<ReplyResI> replyResI = replyRepository.findByCommentId(commentId);
 
@@ -165,6 +166,9 @@ public class FeedService {
         updateFeed.setStatus(Status.D);
         feedRepository.save(updateFeed);
 
+        commentRepository.setCommentByFeedStatus(feedId);
+        replyRepository.setReplyByFeedStatus(feedId);
+
         return "게시물이 삭제되었습니다.";
     }
 
@@ -201,6 +205,8 @@ public class FeedService {
 
         updateComment.setStatus(Status.D);
         commentRepository.save(updateComment);
+
+        replyRepository.setReplyByCommentStatus(commentId);
 
         return "댓글이 삭제되었습니다.";
     }

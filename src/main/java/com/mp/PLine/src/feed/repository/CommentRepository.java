@@ -5,6 +5,7 @@ import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +27,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "from Comment c \n" +
             " where c.feed.id = :feedId and c.status = 'A' and c.user.status = 'A'")
     List<CommentResI> findByFeedId(@Param("feedId") Long feedId);
+
+    // 유저 삭제시 댓글도 삭제
+    @Modifying
+    @Query("update Comment c set c.status = 'D' where c.user.id = :userId")
+    void setCommentByUserStatus(@Param("userId") Long userId);
+
+    // 게시물 삭제시 댓글도 삭제
+    @Modifying
+    @Query("update Comment c set c.status = 'D' where c.feed.id = :feedId")
+    void setCommentByFeedStatus(@Param("feedId") Long feedId);
 }

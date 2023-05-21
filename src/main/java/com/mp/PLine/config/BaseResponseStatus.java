@@ -50,7 +50,7 @@ public enum BaseResponseStatus {
     POST_FEEDS_INVALID_ABO(false, 2040, "올바르지 않은 ABO 혈액형 형식입니다."),
     POST_FEEDS_INVALID_RH(false, 2041, "올바르지 않은 RH 혈액형 형식입니다."),
     POST_FEEDS_INVALID_IS_RECEIVER(false, 2042, "올바르지 않은 수혈 & 공혈 형식입니다."),
-    POST_FEEDS_INVALID_FEED(false, 2043, "글"),
+    POST_FEEDS_INVALID_FEED(false, 2043, "올바르지 않은 게시물 경로입니다."),
 
 
     INVALID_FEED(false,2045,"존재하지 않는 게시물입니다."),
