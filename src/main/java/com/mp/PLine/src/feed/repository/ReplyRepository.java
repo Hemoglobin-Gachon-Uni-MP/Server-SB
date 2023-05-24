@@ -25,7 +25,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
             "   r.context as context, \n" +
             "   r.createdAt as date \n" +
             "from Reply r \n" +
-            "where r.comment.id = :commentId and r.status = 'A' and r.user.status = 'A'")
+            "where r.comment.id = :commentId and r.status = 'A' and r.user.status = 'A' \n" +
+            "order by r.createdAt")
     List<ReplyResI> findByCommentId(@Param("commentId") Long commentId);
 
     // 유저 삭제시 답글도 삭제

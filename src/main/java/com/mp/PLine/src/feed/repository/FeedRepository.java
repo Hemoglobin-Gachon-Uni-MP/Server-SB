@@ -29,7 +29,8 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "   function('date_format', f.createdAt, '%m/%d') as date, \n" +
             "   f.isReceiver as isReceiver \n" +
             "from Feed as f \n" +
-            "where f.user.id = :userId and f.status = :status and f.user.status = :status")
+            "where f.user.id = :userId and f.status = :status and f.user.status = :status \n" +
+            " order by f.createdAt")
     List<FeedResI> findAllByUserIdAndStatus(@Param("userId") Long userId, @Param("status") Status status);
 
     // 게시물 목록 반환
@@ -41,7 +42,8 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "   function('date_format', f.createdAt, '%m/%d') as date, \n" +
             "   f.abo as abo, f.rh as rh, f.location as location, f.isReceiver as isReceiver \n" +
             "from Feed f \n" +
-            "where f.status = 'A' and f.user.status = 'A'")
+            "where f.status = 'A' and f.user.status = 'A' \n" +
+            "order by f.createdAt")
     List<GetFeedsResI> findAllByStatus();
 
     // 유저 삭제시 게시물도 삭제

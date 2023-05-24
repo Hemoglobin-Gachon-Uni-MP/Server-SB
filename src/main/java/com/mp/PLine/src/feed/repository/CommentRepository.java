@@ -24,7 +24,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "   c.user.id as userId, c.user.profileImg as profileImg, c.user.nickname as nickname, \n" +
             "   c.context as context, c.createdAt as date \n" +
             "from Comment c \n" +
-            " where c.feed.id = :feedId and c.status = 'A' and c.user.status = 'A'")
+            "where c.feed.id = :feedId and c.status = 'A' and c.user.status = 'A' \n" +
+            "order by c.createdAt")
     List<CommentResI> findByFeedId(@Param("feedId") Long feedId);
 
     // 유저 삭제시 댓글도 삭제
