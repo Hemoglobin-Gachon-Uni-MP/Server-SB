@@ -3,6 +3,7 @@ package com.mp.PLine.src.myPage.dto.util;
 import io.swagger.annotations.ApiModelProperty;
 
 public interface FeedResI {
+    // mapping DTO for user's feed
     @ApiModelProperty(example = "1")
     Long getFeedId();
     @ApiModelProperty(example = "1")

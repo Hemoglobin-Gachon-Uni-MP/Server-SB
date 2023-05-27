@@ -29,23 +29,20 @@ public class MemberController {
     private final JwtService jwtService;
 
     /**
-     * 카카오 인가 코드 받기 API
-     * 클라이언트가 없는 경우에 사용
+     * Get kakao AccessToken API
+     * using if there is no client
      */
     @ApiIgnore
     @ResponseBody
     @GetMapping("/kakao")
     public void kakaoCallback(@RequestParam String code) {
-        // 코드를 통해 Access Token을 받아옴
-        System.out.println("code : " +  code);
-
         String token = memberService.getKaKaoAccessToken(code);
         memberService.createKakaoUser(token);
     }
 
     /**
-     * 카카오 회원가입 API
-     * ACCESS TOKEN을 이용해서 받아온 ID를 비교해서 회원가입을 진행
+     * Sign up with kakao API
+     * Get kakaoId using AccessToken sent by client
      * [POST} /kakao/sign-up
      */
     @ApiOperation("카카오 회원가입 API")
@@ -72,17 +69,18 @@ public class MemberController {
     })
     @PostMapping("/kakao/sign-up")
     public BaseResponse<PostUserRes> signUp(@RequestBody PostUserReq postUserReq) {
-        // 빈 칸 & 형식 검사
+        // blank & form check
         BaseResponseStatus status = Validation.checkSignUp(postUserReq);
         if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
         try {
-            // 카카오 ACCESS TOKEN 추출 -> 카카오 ID 추출
+            // get Kakao AccessToken
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             String accessToken = request.getHeader("K-ACCESS-TOKEN");
 
             if(accessToken.isBlank()) return new BaseResponse<>(BaseResponseStatus.EMPTY_ACCESS_TOKEN);
 
+            // create user
             Long kakaoId = memberService.createKakaoUser(accessToken);
             Long age = 2023 - Long.parseLong(postUserReq.getBirth().substring(0, 4)) + 1;
 
@@ -97,8 +95,8 @@ public class MemberController {
     }
 
     /**
-     * 카카오 로그인 API
-     * ACCESS TOKEN을 이용해서 받아온 ID를 비교해서 로그인을 진행
+     * Login with kakao API
+     * compare kakaoId using AccessToken
      * [POST} /kakao/sign-in
      */
     @ApiOperation("카카오 로그인 API")
@@ -112,17 +110,20 @@ public class MemberController {
     })
     @PostMapping("/kakao/sign-in")
     public BaseResponse<PostUserRes> signIn() {
-        // 카카오 ACCESS TOKEN 추출 -> 카카오 ID 추출
+        // get Kakao AccessToken
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String accessToken = request.getHeader("K-ACCESS-TOKEN");
 
         if (accessToken.isEmpty()) return new BaseResponse<>(BaseResponseStatus.EMPTY_ACCESS_TOKEN);
 
+        // get kakaoId
         Long kakaoId = memberService.createKakaoUser(accessToken);
 
+        // check user existence
         Long userId;
         Optional<Member> member = memberRepository.findByKakaoIdAndStatus(kakaoId, Status.A);
 
+        // if user exist, return userId and jwt
         if (member.isPresent()) {
             userId = member.get().getId();
             String jwt = jwtService.createJwt(userId);
@@ -133,7 +134,7 @@ public class MemberController {
     }
 
     /**
-     * 회원 탈퇴 API
+     * Resign API
      * [PATCH] /{userId}/status
      */
     @ApiOperation("회원 탈퇴 API")
@@ -148,7 +149,7 @@ public class MemberController {
     @PatchMapping("/resign/{userId}")
     public BaseResponse<String> resign(@PathVariable Long userId) {
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if(!userId.equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);

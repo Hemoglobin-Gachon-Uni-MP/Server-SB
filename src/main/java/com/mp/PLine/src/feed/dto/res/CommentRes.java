@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class CommentRes {
+    // comment information of feed
     @ApiModelProperty("1")
     private Long commentId;
     @ApiModelProperty("7")

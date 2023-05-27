@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 @EnableWebMvc
 public class SwaggerConfig {
+    // swagger
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("P-Line")

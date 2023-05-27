@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostUserRes {
+    // edit user information dto
     @ApiModelProperty(example = "jwt....")
     private String jwt;
     @ApiModelProperty(example = "1")

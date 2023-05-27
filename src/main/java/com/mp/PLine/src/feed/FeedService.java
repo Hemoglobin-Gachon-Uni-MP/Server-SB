@@ -42,13 +42,14 @@ public class FeedService {
     private final ReplyRepository replyRepository;
     private final MyPageRepository myPageRepository;
 
-    /* 게시물 생성 API */
+    /* Create feed API */
     @Transactional
     public Long postFeed(PostFeedReq postFeedReq) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userID
         Optional<Member> member = myPageRepository.findByIdAndStatus(postFeedReq.getUserId(), Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
+        // save data
         Feed feed = new Feed(member.get(), postFeedReq.getContext(), postFeedReq.getAbo(), postFeedReq.getRh(),
                 postFeedReq.getLocation(), postFeedReq.getIsReceiver(), Status.A);
         Feed newFeed = feedRepository.save(feed);
@@ -56,8 +57,9 @@ public class FeedService {
         return newFeed.getId();
     }
 
-    /* 게시물 목록 반환 API */
+    /* Return feed list API */
     public List<GetFeedsRes> getFeeds() throws BaseException {
+        // mapping received values to list
         List<GetFeedsResI> getFeedsResI = feedRepository.findAllByStatus();
 
         return getFeedsResI.stream()
@@ -76,9 +78,9 @@ public class FeedService {
                     .collect(Collectors.toList());
     }
 
-    /* 게시물 정보 반환 API */
+    /* Return feed detail API */
     public GetFeedRes getFeed(Long feedId) throws BaseException {
-        // feedID를 이용해서 존재하는 게시물인지 확인
+        // verify feed existence using feedId
         Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
 
@@ -93,7 +95,7 @@ public class FeedService {
                 feedRes.getLocation(), feedRes.getIsReceiver());
     }
 
-    /* 날짜 표기 */
+    /* date format */
     public String shortDate(Timestamp createdAt) {
         DateFormat format = new SimpleDateFormat("MM/dd");
         return format.format(new Date(createdAt.getTime()));
@@ -104,7 +106,7 @@ public class FeedService {
         return format.format(new Date(createdAt.getTime()));
     }
 
-    /* 게시물 댓글 리스트 */
+    /* get feed's comment list */
     public CommentInfo getComments(Long feedId) {
         List<CommentResI> commentResI = commentRepository.findByFeedId(feedId);
         List<CommentRes> commentRes = new ArrayList<>();
@@ -122,8 +124,9 @@ public class FeedService {
         return new CommentInfo(replyCnt + commentRes.size(), commentRes);
     }
 
-    /* 게시물 답글 리스트 */
+    /* get comment's reply list */
     public List<ReplyRes> getReplies(Long commentId) {
+        // mapping received values to list
         List<ReplyResI> replyResI = replyRepository.findByCommentId(commentId);
 
         return replyResI.stream().
@@ -137,40 +140,42 @@ public class FeedService {
                 .collect(Collectors.toList());
     }
 
-    /* 게시물 수정 API */
+    /* Edit feed API */
     @Transactional
     public String updateFeed(Long feedId, PatchFeedReq patchFeedReq) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(patchFeedReq.getUserId(), Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        // feedID를 이용해서 존재하는 게시물인지 확인
+        // verify feed existence using feedId
         Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
 
         Feed updateFeed = feed.get();
         if(!patchFeedReq.getUserId().equals(updateFeed.getUser().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
+        // save data
         updateFeed.setContext(patchFeedReq.getContext());
         feedRepository.save(updateFeed);
 
         return "게시물 수정이 완료되었습니다.";
     }
 
-    /* 게시물 삭제 API */
+    /* Delete feed API */
     @Transactional
     public String deleteFeed(Long feedId, Long userId) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        // feedID를 이용해서 존재하는 게시물인지 확인
+        // verify feed existence using feedId
         Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
 
         Feed updateFeed = feed.get();
         if(!userId.equals(updateFeed.getUser().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
+        // delete feed and feed's comment & reply
         updateFeed.setStatus(Status.D);
         feedRepository.save(updateFeed);
 
@@ -180,14 +185,14 @@ public class FeedService {
         return "게시물이 삭제되었습니다.";
     }
 
-    /* 댓글 달기 API */
+    /* Create comment API */
     @Transactional
     public Long postComment(Long feedId, PostCommentReq postCommentReq) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(postCommentReq.getUserId(), Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        // feedID를 이용해서 존재하는 게시물인지 확인
+        // verify feed existence using feedId
         Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
 
@@ -197,20 +202,21 @@ public class FeedService {
         return newComment.getId();
     }
 
-    /* 댓글 삭제 API */
+    /* Delete comment API */
     @Transactional
     public String deleteComment(Long commentId, Long userId) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        // commentID를 이용해서 존재하는 댓글인지 확인
+        // verify feed existence using feedId
         Optional<Comment> comment = commentRepository.findByIdAndStatus(commentId, Status.A);
         if(comment.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_COMMENT);
 
         Comment updateComment = comment.get();
         if(!updateComment.getUser().getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
+        // delete comment and comment's reply
         updateComment.setStatus(Status.D);
         commentRepository.save(updateComment);
 
@@ -219,18 +225,18 @@ public class FeedService {
         return "댓글이 삭제되었습니다.";
     }
 
-    /* 답글 달기 API */
+    /* Create reply API */
     @Transactional
     public Long postReply(Long commentId, PostReplyReq postReplyReq) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(postReplyReq.getUserId(), Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        // feedID를 이용해서 존재하는 게시물인지 확인
+        // verify feed existence using feedId
         Optional<Feed> feed = feedRepository.findByIdAndStatus(postReplyReq.getFeedId(), Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
 
-        // commentID를 이용해서 존재하는 댓글인지 확인
+        // verify comment existence using commentId
         Optional<Comment> comment = commentRepository.findByIdAndStatus(commentId, Status.A);
         if(comment.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_COMMENT);
 
@@ -242,20 +248,21 @@ public class FeedService {
         return newReply.getId();
     }
 
-    /* 댓글 삭제 API */
+    /* Delete reply API */
     @Transactional
     public String deleteReply(Long replyId, Long userId) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
-        // replyID를 이용해서 존재하는 답글인지 확인
+        // verify reply existence using replyId
         Optional<Reply> reply = replyRepository.findByIdAndStatus(replyId, Status.A);
         if(reply.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_REPLY);
 
         Reply updateReply = reply.get();
         if(!updateReply.getUser().getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
+        // delete reply
         updateReply.setStatus(Status.D);
         replyRepository.save(updateReply);
 

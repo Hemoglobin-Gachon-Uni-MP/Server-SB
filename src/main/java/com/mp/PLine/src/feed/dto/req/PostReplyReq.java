@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostReplyReq {
+    // create reply DTO
     @ApiModelProperty(example = "7")
     private Long userId;
     @ApiModelProperty(example = "3")

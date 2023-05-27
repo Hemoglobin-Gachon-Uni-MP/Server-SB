@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 public class ReplyRes {
+    // reply information of comment DTO
     @ApiModelProperty("1")
     private Long replyId;
     @ApiModelProperty("7")

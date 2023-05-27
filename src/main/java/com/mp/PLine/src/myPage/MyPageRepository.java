@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface MyPageRepository extends JpaRepository<Member, Long> {
+    // check user existence
     Optional<Member> findByIdAndStatus(@Param("userId") Long userId, @Param("status") Status A);
 }

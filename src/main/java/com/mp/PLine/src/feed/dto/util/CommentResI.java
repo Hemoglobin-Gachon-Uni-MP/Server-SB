@@ -6,6 +6,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 public interface CommentResI {
+    // mapping DTO for comment
     Long getCommentId();
     Long getUserId();
     int getProfileImg();

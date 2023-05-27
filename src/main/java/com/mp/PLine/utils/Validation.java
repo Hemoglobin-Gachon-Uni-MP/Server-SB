@@ -9,9 +9,9 @@ import com.mp.PLine.src.member.dto.req.PostUserReq;
 import com.mp.PLine.src.myPage.dto.req.PatchUserReq;
 
 public class Validation {
-    /** 회원 가입 시 비어있는 값이 있는지 확인 **/
+    /** check blank & form when sign-up **/
     public static BaseResponseStatus checkSignUp(PostUserReq postUserReq) {
-        // 빈 칸 확인
+        // check blank
         if(postUserReq.getName().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_NAME;
         if(postUserReq.getNickname().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_NICKNAME;
         if(postUserReq.getBirth().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_BIRTH;
@@ -19,7 +19,7 @@ public class Validation {
         if(postUserReq.getGender().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_GENDER;
         if(postUserReq.getLocation().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_LOCATION;
 
-        // 형식
+        // check form
         String nickname = postUserReq.getNickname();
         String phone = postUserReq.getPhone();
         String birth = postUserReq.getBirth();
@@ -38,13 +38,13 @@ public class Validation {
         return BaseResponseStatus.SUCCESS;
     }
 
-    /** 내 정보 수정 시 비어있는 값이 있는지 확인 **/
+    /** check blank & form when edit user information **/
     public static BaseResponseStatus checkUpdateUser(PatchUserReq patchUserReq) {
-        // 빈 칸 확인
+        // check blank
         if(patchUserReq.getNickname().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_NICKNAME;
         if(patchUserReq.getLocation().isBlank()) return BaseResponseStatus.POST_USERS_EMPTY_LOCATION;
 
-        // 형식
+        // check form
         String nickname = patchUserReq.getNickname();
 
         if(nickname.length() < 1 || nickname.length() > 8) return BaseResponseStatus.POST_USERS_INVAlID_NICKNAME;
@@ -52,13 +52,15 @@ public class Validation {
         return BaseResponseStatus.SUCCESS;
     }
 
-    /** 게시물 업로드 시 비어있는 값이 있는지 확인 **/
+    /** check blank & form when create feed **/
     public static BaseResponseStatus checkPostFeed(PostFeedReq postFeedReq) {
+        // check blank
         if(postFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
         if(postFeedReq.getLocation().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_LOCATION;
         if(postFeedReq.getIsReceiver().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_IS_RECEIVER;
 
+        // check form
         int abo = postFeedReq.getAbo(), rh = postFeedReq.getRh();
         String isReceiver = postFeedReq.getIsReceiver();
         if(abo < 0 || abo > 3) return BaseResponseStatus.POST_FEEDS_INVALID_ABO;
@@ -68,27 +70,27 @@ public class Validation {
         return BaseResponseStatus.SUCCESS;
     }
 
-    /** 게시물 수정 시 비어있는 값이 있는지 확인 **/
+    /** check blank & form when edit feed **/
     public static BaseResponseStatus checkUpdateFeed(PatchFeedReq patchFeedReq) {
-        // 빈 칸 확인
+        // check blank
         if(patchFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(patchFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
 
         return BaseResponseStatus.SUCCESS;
     }
 
-    /** 댓글 업로드 시 비어있는 값이 있는지 확인 **/
+    /** check blank & form when create comment **/
     public static BaseResponseStatus checkPostComment(PostCommentReq postCommentReq) {
-        // 빈 칸 확인
+        // check blank
         if(postCommentReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postCommentReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
 
         return BaseResponseStatus.SUCCESS;
     }
 
-    /** 답글 업로드 시 비어있는 값이 있는지 확인 **/
+    /** check blank & form when create reply **/
     public static BaseResponseStatus checkPostReply(PostReplyReq postReplyReq) {
-        // 빈 칸 확인
+        // check blank
         if(postReplyReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postReplyReq.getFeedId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_FEED;
         if(postReplyReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;

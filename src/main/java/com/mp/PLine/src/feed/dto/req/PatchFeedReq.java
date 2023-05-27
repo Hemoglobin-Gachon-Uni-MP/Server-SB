@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PatchFeedReq {
+    // edit post DTO
     @ApiModelProperty(example = "7")
     private Long userId;
     @ApiModelProperty(example = "피가 필요하묘")

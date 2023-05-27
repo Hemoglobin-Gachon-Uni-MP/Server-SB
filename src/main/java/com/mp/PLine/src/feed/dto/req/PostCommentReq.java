@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostCommentReq {
+    // create comment of feed DTO
     @ApiModelProperty(example = "7")
     private Long userId;
     @ApiModelProperty(example = "댓글댓글댓글댓글댓글")

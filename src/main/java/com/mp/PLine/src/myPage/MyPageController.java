@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/mypages")
 public class MyPageController {
     private final MyPageService myPageService;
-    private final MyPageRepository myPageRepository;
     private final JwtService jwtService;
 
     /**
-     * 내 정보 반환 API
+     * Return user information API
      * [GET] /mypages/{userId}
      */
     @ApiOperation("내 정보 반환 API")
@@ -37,7 +36,7 @@ public class MyPageController {
     @GetMapping("/{userId}")
     public BaseResponse<GetUserRes> getUser(@PathVariable Long userId) {
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!userId.equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
@@ -51,7 +50,7 @@ public class MyPageController {
     }
 
     /**
-     * 내 정보 수정 API
+     * Edit user API
      * [PATCH] /mypages/{userId}
      */
     @ApiOperation("내 정보 수정 API")
@@ -70,13 +69,13 @@ public class MyPageController {
     @PatchMapping("/{userId}")
     public BaseResponse<String> updateUser(@PathVariable Long userId, @RequestBody PatchUserReq patchUserReq) {
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if(!userId.equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
             }
 
-            // 빈 값 & 형식 확인
+            // get jwt from header
             BaseResponseStatus status = Validation.checkUpdateUser(patchUserReq);
             if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 

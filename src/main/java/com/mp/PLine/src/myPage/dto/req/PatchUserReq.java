@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PatchUserReq {
+    // edit user DTO
     @ApiModelProperty(example = "보리")
     private String nickname;
     @ApiModelProperty(example = "서울시 관악구")

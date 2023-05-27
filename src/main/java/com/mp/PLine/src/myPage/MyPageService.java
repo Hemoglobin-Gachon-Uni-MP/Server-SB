@@ -25,12 +25,10 @@ import java.util.stream.Collectors;
 public class MyPageService {
     private final MyPageRepository myPageRepository;
     private final FeedRepository feedRepository;
-    private final CommentRepository commentRepository;
-    private final ReplyRepository replyRepository;
 
-    /* 내 정보 반환 API */
+    /* Return user information API */
     public GetUserRes getUser(Long userId) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
@@ -53,6 +51,7 @@ public class MyPageService {
                 info.getGender().equals("F") ? "여" : "남", blood(info.getRh(), info.getAbo()), info.getLocation(), info.getProfileImg(), feedRes);
     }
 
+    /* convert blood to string */
     public String blood(int rh, int abo) {
         String blood = "";
         if(rh == 0) blood += "Rh+";
@@ -66,20 +65,16 @@ public class MyPageService {
         return blood;
     }
 
-    /* 내 정보 수정 API */
+    /* Edit user information API */
     @Transactional
     public String updateUser(Long userId, PatchUserReq patchUserReq) throws BaseException {
-        // userID를 이용해서 존재하는 유저인지 확인
+        // verify user existence using userId
         Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
         if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
 
         member.get().setNickname(patchUserReq.getNickname());
         member.get().setLocation(patchUserReq.getLocation());
         myPageRepository.save(member.get());
-
-        feedRepository.setFeedByUserStatus(userId);
-        commentRepository.setCommentByUserStatus(userId);
-        replyRepository.setReplyByUserStatus(userId);
 
         return "정보가 수정되었습니다.";
     }

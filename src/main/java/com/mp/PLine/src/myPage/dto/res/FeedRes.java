@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class FeedRes {
+    // mapping DTO for feed
     @ApiModelProperty(example = "1")
     private Long feedId;
     @ApiModelProperty(example = "1")

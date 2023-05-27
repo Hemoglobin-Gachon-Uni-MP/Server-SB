@@ -16,10 +16,10 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    // 댓글 존재 여부 확인
+    // check comment existence
     Optional<Comment> findByIdAndStatus(@Param("id") Long id, @Param("status") Status status);
 
-    // 게시물 댓글 리스트 반환
+    // return comment list for feed
     @Query("select c.id as commentId, \n" +
             "   c.user.id as userId, c.user.profileImg as profileImg, c.user.nickname as nickname, \n" +
             "   c.context as context, c.createdAt as date \n" +
@@ -28,12 +28,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "order by c.createdAt")
     List<CommentResI> findByFeedId(@Param("feedId") Long feedId);
 
-    // 유저 삭제시 댓글도 삭제
+    // delete user's comments when deleting user
     @Modifying
     @Query("update Comment c set c.status = 'D' where c.user.id = :userId")
     void setCommentByUserStatus(@Param("userId") Long userId);
 
-    // 게시물 삭제시 댓글도 삭제
+    // delete feed's comments when deleting feed
     @Modifying
     @Query("update Comment c set c.status = 'D' where c.feed.id = :feedId")
     void setCommentByFeedStatus(@Param("feedId") Long feedId);

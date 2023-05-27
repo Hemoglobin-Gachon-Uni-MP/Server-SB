@@ -15,6 +15,7 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 public class Comment extends BaseEntity {
+    // Comment Entity for JPA
     @ManyToOne @JoinColumn(name = "user_id")
     private Member user;
     @ManyToOne @JoinColumn(name = "feed_id")

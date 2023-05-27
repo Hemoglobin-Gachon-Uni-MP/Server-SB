@@ -20,8 +20,8 @@ import static com.mp.PLine.config.BaseResponseStatus.INVALID_JWT;
 public class JwtService {
 
     /**
-        JWT 생성
-     @return String
+     * Create JWT
+     * @return String
      */
     public String createJwt(Long userId){
         Date now = new Date();
@@ -34,15 +34,15 @@ public class JwtService {
                 .compact();
     }
 
-    /* Header에서 X-ACCESS-TOKEN 으로 JWT 추출 */
+    /* Get JWT from header */
     public String getJwt(){
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
         return request.getHeader("X-ACCESS-TOKEN");
     }
 
-    /* JWT에서 userIdx 추출 */
+    /* get userId from JWT */
     public Long getUserId() throws BaseException {
-        //1. JWT 추출
+        // 1. get JWT
         String accessToken = getJwt();
         if(accessToken == null || accessToken.length() == 0){
             throw new BaseException(EMPTY_JWT);
@@ -58,8 +58,8 @@ public class JwtService {
             throw new BaseException(INVALID_JWT);
         }
 
-        // 3. userIdx 추출
-        return claims.getBody().get("userId", Long.class);  // jwt 에서 userIdx를 추출합니다.
+        // 3. get userId
+        return claims.getBody().get("userId", Long.class);
     }
 
 }

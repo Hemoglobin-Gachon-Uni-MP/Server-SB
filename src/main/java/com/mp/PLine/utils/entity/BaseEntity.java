@@ -23,6 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
 @EntityListeners(AuditingEntityListener.class)
 @ToString
 public class BaseEntity {
+    // common column for JPA
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

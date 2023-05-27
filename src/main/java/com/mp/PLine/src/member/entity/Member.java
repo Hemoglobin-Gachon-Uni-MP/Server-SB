@@ -18,6 +18,7 @@ import javax.persistence.Enumerated;
 @SuperBuilder
 @NoArgsConstructor
 public class Member extends BaseEntity {
+    // Member Entity for JPA
     private String name;
 
     private String nickname;

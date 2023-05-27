@@ -12,16 +12,16 @@ import static com.mp.PLine.config.BaseResponseStatus.SUCCESS;
 @Getter
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
-public class BaseResponse<T> {//BaseResponse 객체를 사용할때 성공, 실패 경우
+// BaseResponse
+public class BaseResponse<T> {
     @JsonProperty("isSuccess")
     private final Boolean isSuccess;
     private final String message;
     private final int code;
-    @ApiModelProperty("XX 생성 API의 경우 XXId를 반환, 나머지는 XX가 완료되었습니다.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
-    // 요청에 성공한 경우
+    // Request success
     public BaseResponse(T result) {
         this.isSuccess = SUCCESS.isSuccess();
         this.message = SUCCESS.getMessage();
@@ -29,7 +29,7 @@ public class BaseResponse<T> {//BaseResponse 객체를 사용할때 성공, 실�
         this.result = result;
     }
 
-    // 요청에 실패한 경우
+    // Request Fail
     public BaseResponse(BaseResponseStatus status) {
         this.isSuccess = status.isSuccess();
         this.message = status.getMessage();

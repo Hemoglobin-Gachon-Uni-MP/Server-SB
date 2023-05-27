@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetUserRes {
+    // return user info DTO
     @ApiModelProperty(example = "1")
     private Long userId;
     @ApiModelProperty(example = "정조은")

@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 public class GetFeedsRes {
+    // return feed list DTO
     @ApiModelProperty(example = "1")
     private Long feedId;
     @ApiModelProperty(example = "7")

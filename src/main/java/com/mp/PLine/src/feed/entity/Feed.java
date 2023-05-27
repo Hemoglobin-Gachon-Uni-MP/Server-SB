@@ -14,6 +14,8 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 public class Feed extends BaseEntity {
+    // Feed Entity for JPA
+
     @ManyToOne @JoinColumn(name = "user_id")
     private Member user;
     private String context;

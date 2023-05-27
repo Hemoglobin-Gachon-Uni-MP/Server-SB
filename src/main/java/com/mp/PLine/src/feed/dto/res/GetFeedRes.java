@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetFeedRes {
+    // return feed info DTO
     @ApiModelProperty(example = "1")
     private Long feedId;
     @ApiModelProperty(example = "7")

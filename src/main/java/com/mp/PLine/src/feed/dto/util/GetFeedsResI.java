@@ -1,6 +1,7 @@
 package com.mp.PLine.src.feed.dto.util;
 
 public interface GetFeedsResI {
+    // mapping DTO for feed
     Long getFeedId();
     Long getUserId();
     int getProfileImg();

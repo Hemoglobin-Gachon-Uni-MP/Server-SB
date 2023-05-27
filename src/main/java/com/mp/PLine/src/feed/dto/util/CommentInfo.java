@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class CommentInfo {
+    // mapping DTO for comment
     private int commentCnt;
     private List<CommentRes> commentRes;
 

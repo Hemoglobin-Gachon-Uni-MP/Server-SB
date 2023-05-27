@@ -25,11 +25,10 @@ import java.util.List;
 @RequestMapping("/feeds")
 public class FeedController {
     private final FeedService feedService;
-    private final FeedRepository feedRepository;
     private final JwtService jwtService;
 
     /**
-     * 게시물 생성 API
+     * Create feed API
      * [POST] /feeds
      */
     @ApiOperation("게시물 생성 API")
@@ -52,7 +51,7 @@ public class FeedController {
     @PostMapping("")
     public BaseResponse<Long> postFeed(@RequestBody PostFeedReq postFeedReq) {
         try {
-            // 빈 칸 & 형식 검사
+            // blank & form check
             BaseResponseStatus status = Validation.checkPostFeed(postFeedReq);
             if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
@@ -69,7 +68,7 @@ public class FeedController {
     }
 
     /**
-     * 게시물 목록 반환 API
+     * Return feed list API
      * [GET] /feeds/info-list
      */
     @ApiOperation("게시물 목록 반환 API")
@@ -87,7 +86,7 @@ public class FeedController {
     }
 
     /**
-     * 게시물 정보 반환 API
+     * Return feed detail API
      * [GET] /feeds/info/{feedId}
      */
     @ApiOperation("게시물 정보 반환 API")
@@ -106,7 +105,7 @@ public class FeedController {
     }
 
     /**
-     * 게시물 수정 API
+     * Edit feed API
      * [PATCH] /feeds/{feedId}
      */
     @ApiOperation("게시물 수정 API")
@@ -127,11 +126,11 @@ public class FeedController {
     @PatchMapping("/{feedId}")
     public BaseResponse<String> updateFeed(@PathVariable Long feedId, @RequestBody PatchFeedReq patchFeedReq) {
         try {
-            // 빈 칸 & 형식 검사
+            // blank & form check
             BaseResponseStatus status = Validation.checkUpdateFeed(patchFeedReq);
             if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!patchFeedReq.getUserId().equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
@@ -144,7 +143,7 @@ public class FeedController {
     }
 
     /**
-     * 게시물 삭제 API
+     * Delete feed API
      * [PATCH] /feeds/{feedId}/status
      */
     @ApiOperation("게시물 삭제 API")
@@ -163,7 +162,7 @@ public class FeedController {
     @PatchMapping("/{feedId}/status")
     public BaseResponse<String> deleteFeed(@PathVariable Long feedId, @RequestBody BaseUserIdReq baseUserIdReq) {
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
@@ -176,7 +175,7 @@ public class FeedController {
     }
 
     /**
-     * 댓글 달기 API
+     * Create comment API
      * [POST] /feeds/comment/{feedId}
      */
     @ApiOperation("댓글 달기 API")
@@ -194,12 +193,12 @@ public class FeedController {
     })
     @PostMapping("/comment/{feedId}")
     public BaseResponse<Long> postComment(@PathVariable Long feedId, @RequestBody PostCommentReq postCommentReq) {
-        // 빈 칸 & 형식 검사
+        // blank & form check
         BaseResponseStatus status = Validation.checkPostComment(postCommentReq);
         if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!postCommentReq.getUserId().equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
@@ -212,7 +211,7 @@ public class FeedController {
     }
 
     /**
-     * 댓글 삭제 API
+     * Delete comment API
      * [PATCH] /feeds/comment/{commentId}/status
      */
     @ApiOperation("댓글 삭제 API")
@@ -233,7 +232,7 @@ public class FeedController {
         if(baseUserIdReq.getUserId() == null) return new BaseResponse<>(BaseResponseStatus.POST_FEEDS_EMPTY_USER);
 
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
@@ -246,7 +245,7 @@ public class FeedController {
     }
 
     /**
-     * 답글 달기 API
+     * Create reply API
      * [POST] /feeds/reply/{commentId}
      */
     @ApiOperation("답글 달기 API")
@@ -268,12 +267,12 @@ public class FeedController {
     })
     @PostMapping("/reply/{commentId}")
     public BaseResponse<Long> postReply(@PathVariable Long commentId, @RequestBody PostReplyReq postReplyReq) {
-        // 빈 칸 & 형식 검사
+        // blank & form check
         BaseResponseStatus status = Validation.checkPostReply(postReplyReq);
         if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!postReplyReq.getUserId().equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
@@ -286,7 +285,7 @@ public class FeedController {
     }
 
     /**
-     * 답글 삭제 API
+     * Delete reply API
      * [PATCH] /feeds/reply/{replyId}/status
      */
     @ApiOperation("답글 삭제 API")
@@ -308,7 +307,7 @@ public class FeedController {
         if(baseUserIdReq.getUserId() == null) return new BaseResponse<>(BaseResponseStatus.POST_FEEDS_EMPTY_USER);
 
         try {
-            // JWT 추출
+            // get jwt from header
             Long userIdByJwt = jwtService.getUserId();
             if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);

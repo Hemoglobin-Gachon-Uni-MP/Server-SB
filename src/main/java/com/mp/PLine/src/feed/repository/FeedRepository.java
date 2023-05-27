@@ -17,10 +17,10 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface FeedRepository extends JpaRepository<Feed, Long> {
-    // 피드 존재 여부 확인
+    // check feed existence
     Optional<Feed> findByIdAndStatus(@Param("id") Long id, @Param("status") Status status);
 
-    // 유저가 올린 피드 리스트 반환
+    // return user's feed list
     @Query(value = "select f.id as feedId, \n" +
             "   f.user.id as userId, f.user.nickname as nickname, f.user.profileImg as profileImg, \n" +
             "   f.context as context, \n" +
@@ -33,7 +33,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             " order by f.createdAt desc ")
     List<FeedResI> findAllByUserIdAndStatus(@Param("userId") Long userId, @Param("status") Status status);
 
-    // 게시물 목록 반환
+    // return all feed
     @Query(value = "select f.id as feedId," +
             "   f.user.id as userId, f.user.profileImg as profileImg, f.user.nickname as nickname, \n" +
             "   f.context as context, \n" +
@@ -46,7 +46,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "order by f.createdAt desc ")
     List<GetFeedsResI> findAllByStatus();
 
-    // 유저 삭제시 게시물도 삭제
+    // delete user's feeds when deleting user
     @Modifying
     @Query("update Feed f set f.status = 'D' where f.user.id = :userId")
     void setFeedByUserStatus(@Param("userId") Long userId);
