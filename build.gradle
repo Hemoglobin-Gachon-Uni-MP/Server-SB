@@ -12,6 +12,10 @@ repositories {
 	mavenCentral()
 }
 
+test {
+	useJUnitPlatform()
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -51,8 +55,4 @@ dependencies {
 	// XML -> JSON
 	implementation 'org.json:json:20230227'
 
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
