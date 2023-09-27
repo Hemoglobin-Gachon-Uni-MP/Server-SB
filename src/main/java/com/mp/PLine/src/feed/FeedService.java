@@ -79,12 +79,9 @@ public class FeedService {
         // verify feed existence using feedId
         Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
-
         Feed feedRes = feed.get();
-        Member userRes = feedRes.getUser();
-        CommentInfo comment = getComments(feedId);
 
-        return GetFeedRes.of(feedRes, userRes, comment);
+        return GetFeedRes.of(feedRes, feedRes.getUser(), getComments(feedId));
     }
 
     /* get feed's comment list */
@@ -93,7 +90,6 @@ public class FeedService {
         List<CommentRes> commentRes = new ArrayList<>();
 
         int replyCnt = 0;
-
         for (CommentResI cur : commentResI) {
             List<ReplyRes> replyRes = getReplies(cur.getCommentId());
             commentRes.add(CommentRes.of(cur,replyRes));
@@ -117,15 +113,12 @@ public class FeedService {
     @Transactional
     public String updateFeed(Long feedId, PatchFeedReq patchFeedReq) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(patchFeedReq.getUserId(), Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        Member member = myPageRepository.findByIdAndStatus(patchFeedReq.getUserId(), Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // verify feed existence using feedId
-        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
-        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
-
-        Feed updateFeed = feed.get();
-        if(!patchFeedReq.getUserId().equals(updateFeed.getUser().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
+        Feed updateFeed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
+        if (!patchFeedReq.getUserId().equals(updateFeed.getUser().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // save data
         updateFeed.setContext(patchFeedReq.getContext());
@@ -138,20 +131,16 @@ public class FeedService {
     @Transactional
     public String deleteFeed(Long feedId, Long userId) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        myPageRepository.findByIdAndStatus(userId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // verify feed existence using feedId
-        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
-        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
-
-        Feed updateFeed = feed.get();
-        if(!userId.equals(updateFeed.getUser().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
+        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
+        Member feedOwner = feed.getUser();
+        if (!userId.equals(feedOwner.getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // delete feed and feed's comment & reply
-        updateFeed.setStatus(Status.D);
-        feedRepository.save(updateFeed);
-
+        feed.setStatus(Status.D);
         commentRepository.setCommentByFeedStatus(feedId);
         replyRepository.setReplyByFeedStatus(feedId);
 
@@ -162,16 +151,13 @@ public class FeedService {
     @Transactional
     public Long postComment(Long feedId, PostCommentReq postCommentReq) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(postCommentReq.getUserId(), Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        Member member = myPageRepository.findByIdAndStatus(postCommentReq.getUserId(), Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // verify feed existence using feedId
-        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
-        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
+        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
 
-        Comment comment = Comment.of(member.get(), feed.get(), postCommentReq.getContext(), Status.A);
-        Comment newComment = commentRepository.save(comment);
-
+        Comment newComment = commentRepository.save(Comment.of(member, feed, postCommentReq.getContext(), Status.A));
         return newComment.getId();
     }
 
@@ -179,22 +165,17 @@ public class FeedService {
     @Transactional
     public String deleteComment(Long commentId, Long userId) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        Member member = myPageRepository.findByIdAndStatus(userId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // verify feed existence using feedId
-        Optional<Comment> comment = commentRepository.findByIdAndStatus(commentId, Status.A);
-        if(comment.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_COMMENT);
-
-        Comment updateComment = comment.get();
-        if(!updateComment.getUser().getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
+        Comment comment = commentRepository.findByIdAndStatus(commentId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
+        Member commentOwner = comment.getUser();
+        if(!commentOwner.getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // delete comment and comment's reply
-        updateComment.setStatus(Status.D);
-        commentRepository.save(updateComment);
-
+        comment.setStatus(Status.D);
         replyRepository.setReplyByCommentStatus(commentId);
-
         return "댓글이 삭제되었습니다.";
     }
 
@@ -202,22 +183,19 @@ public class FeedService {
     @Transactional
     public Long postReply(Long commentId, PostReplyReq postReplyReq) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(postReplyReq.getUserId(), Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        Member member = myPageRepository.findByIdAndStatus(postReplyReq.getUserId(), Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // verify feed existence using feedId
-        Optional<Feed> feed = feedRepository.findByIdAndStatus(postReplyReq.getFeedId(), Status.A);
-        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
-
+        Feed feed = feedRepository.findByIdAndStatus(postReplyReq.getFeedId(), Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
         // verify comment existence using commentId
-        Optional<Comment> comment = commentRepository.findByIdAndStatus(commentId, Status.A);
-        if(comment.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_COMMENT);
+        Comment comment = commentRepository.findByIdAndStatus(commentId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
 
-        if(!feed.get().getId().equals(comment.get().getFeed().getId())) throw new BaseException(BaseResponseStatus.POST_FEEDS_INVALID_FEED);
+        if(!feed.getId().equals(comment.getFeed().getId())) throw new BaseException(BaseResponseStatus.POST_FEEDS_INVALID_FEED);
 
-        Reply reply = Reply.of(member.get(), feed.get(), comment.get(), postReplyReq.getContext(), Status.A);
+        Reply reply = Reply.of(member, feed, comment, postReplyReq.getContext(), Status.A);
         Reply newReply = replyRepository.save(reply);
-
         return newReply.getId();
     }
 
@@ -225,20 +203,17 @@ public class FeedService {
     @Transactional
     public String deleteReply(Long replyId, Long userId) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        myPageRepository.findByIdAndStatus(userId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // verify reply existence using replyId
-        Optional<Reply> reply = replyRepository.findByIdAndStatus(replyId, Status.A);
-        if(reply.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_REPLY);
-
-        Reply updateReply = reply.get();
-        if(!updateReply.getUser().getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
+        Reply updateReply = replyRepository.findByIdAndStatus(replyId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
+        Member replyOwner = updateReply.getUser();
+        if(!replyOwner.getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // delete reply
         updateReply.setStatus(Status.D);
-        replyRepository.save(updateReply);
-
         return "답글이 삭제되었습니다.";
     }
+
 }

@@ -43,30 +43,25 @@ public class MyPageService {
     /* Return user information API */
     public GetUserRes getUser(Long userId) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
-        Member info = member.get();
+        Member member = myPageRepository.findByIdAndStatus(userId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         List<FeedResI> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
-
         List<FeedRes> feedRes = feedList.stream()
                 .map(FeedRes::from)
                 .collect(Collectors.toList());
 
-        return GetUserRes.of(info, info.getGender().equals("F") ? "여" : "남", feedRes);
+        return GetUserRes.of(member, member.getGender().equals("F") ? "여" : "남", feedRes);
     }
 
     /* Edit user information API */
     @Transactional
     public String updateUser(Long userId, PatchUserReq patchUserReq) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
+        Member member = myPageRepository.findByIdAndStatus(userId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
-        member.get().setNickname(patchUserReq.getNickname());
-        member.get().setLocation(patchUserReq.getLocation());
-        myPageRepository.save(member.get());
-
+        member.setNickname(patchUserReq.getNickname());
+        member.setLocation(patchUserReq.getLocation());
         return "정보가 수정되었습니다.";
     }
 }
