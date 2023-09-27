@@ -1,12 +1,16 @@
 package com.mp.PLine.src.myPage.dto.res;
 
+import com.mp.PLine.src.member.entity.Member;
+import com.mp.PLine.src.myPage.MyPageService;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor
 public class GetUserRes {
     // return user info DTO
@@ -43,4 +47,20 @@ public class GetUserRes {
         this.profileImg = profileImg;
         this.feedList = feedList;
     }
+
+    public static GetUserRes of(Member member, String genderStrKorean, List<FeedRes> feedList) {
+        return GetUserRes.builder()
+                .userId(member.getId())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .birth(member.getBirth())
+                .phone(member.getPhone())
+                .gender(genderStrKorean)
+                .blood(MyPageService.blood(member.getRh(), member.getAbo()))
+                .location(member.getLocation())
+                .profileImg(member.getProfileImg())
+                .feedList(feedList)
+                .build();
+    }
+
 }

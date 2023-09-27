@@ -138,10 +138,8 @@ public class MemberService {
         }
 
         // if user is not exist, save user
-        Member newMember = new Member(info.getName(), info.getNickname(), info.getBirth(), age, info.getPhone(),
-            info.getGender(), info.getAbo(), info.getRh(), info.getLocation(), info.getProfileImg(), kakaoId, Status.A);
+        Member newMember = Member.of(info, age, kakaoId, Status.A);
         Member savedMember = memberRepository.save(newMember);
-
         return savedMember.getId();
     }
 

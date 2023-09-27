@@ -1,5 +1,6 @@
 package com.mp.PLine.src.feed.entity;
 
+import com.mp.PLine.src.feed.dto.req.PostFeedReq;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
@@ -15,7 +16,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Feed extends BaseEntity {
     // Feed Entity for JPA
-
     @ManyToOne @JoinColumn(name = "user_id")
     private Member user;
     private String context;
@@ -36,4 +36,17 @@ public class Feed extends BaseEntity {
         this.isReceiver = isReceiver;
         this.status = status;
     }
+
+    public static Feed of(Member member, PostFeedReq postFeedReq, Status status) {
+        return Feed.builder()
+                .user(member)
+                .context(postFeedReq.getContext())
+                .abo(postFeedReq.getAbo())
+                .rh(postFeedReq.getRh())
+                .location(postFeedReq.getLocation())
+                .isReceiver(postFeedReq.getIsReceiver())
+                .status(status)
+                .build();
+    }
+
 }

@@ -34,4 +34,15 @@ public class Reply extends BaseEntity {
         this.context = context;
         this.status = status;
     }
+
+    public static Reply of(Member member, Feed feed, Comment comment, String context, Status status) {
+        return Reply.builder()
+                .user(member)
+                .feed(feed)
+                .comment(comment)
+                .context(context)
+                .status(status)
+                .build();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.mp.PLine.src.myPage.dto.res;
 
+import com.mp.PLine.src.myPage.dto.util.FeedResI;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,17 @@ public class FeedRes {
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
     private String isReceiver;
 
+    public static FeedRes from(FeedResI feedResInfo) {
+        return FeedRes.builder()
+                .feedId(feedResInfo.getFeedId())
+                .userId(feedResInfo.getUserId())
+                .nickname(feedResInfo.getNickname())
+                .profileImg(feedResInfo.getProfileImg())
+                .context(feedResInfo.getContext())
+                .commentCnt(feedResInfo.getCommentCnt())
+                .date(feedResInfo.getDate())
+                .isReceiver(feedResInfo.getIsReceiver())
+                .build();
+    }
 
 }

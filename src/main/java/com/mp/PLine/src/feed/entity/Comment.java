@@ -31,4 +31,13 @@ public class Comment extends BaseEntity {
         this.context = context;
         this.status = status;
     }
+
+    public static Comment of (Member member, Feed feed, String context, Status status) {
+        return Comment.builder()
+                .user(member)
+                .feed(feed)
+                .context(context)
+                .status(status)
+                .build();
+    }
 }

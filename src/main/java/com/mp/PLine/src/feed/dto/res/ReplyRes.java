@@ -1,5 +1,7 @@
 package com.mp.PLine.src.feed.dto.res;
 
+import com.mp.PLine.src.feed.FeedService;
+import com.mp.PLine.src.feed.dto.util.ReplyResI;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +26,15 @@ public class ReplyRes {
     private String context;
     @ApiModelProperty(example = "05/09 오후 5:15")
     private String date;
+
+    public static ReplyRes from(ReplyResI replyResInfo) {
+        return ReplyRes.builder()
+                .replyId(replyResInfo.getReplyId())
+                .userId(replyResInfo.getUserId())
+                .profileImg(replyResInfo.getProfileImg())
+                .nickname(replyResInfo.getNickname())
+                .context(replyResInfo.getContext())
+                .date(FeedService.longDate(replyResInfo.getDate()))
+                .build();
+    }
 }

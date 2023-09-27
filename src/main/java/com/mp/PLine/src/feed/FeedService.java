@@ -42,18 +42,25 @@ public class FeedService {
     private final ReplyRepository replyRepository;
     private final MyPageRepository myPageRepository;
 
+    /* date format */
+    public static String shortDate(Timestamp createdAt) {
+        DateFormat format = new SimpleDateFormat("MM/dd");
+        return format.format(new Date(createdAt.getTime()));
+    }
+
+    public static String longDate(Timestamp createdAt) {
+        DateFormat format = new SimpleDateFormat("MM/dd a KK:mm");
+        return format.format(new Date(createdAt.getTime()));
+    }
+
     /* Create feed API */
     @Transactional
     public Long postFeed(PostFeedReq postFeedReq) throws BaseException {
         // verify user existence using userID
-        Optional<Member> member = myPageRepository.findByIdAndStatus(postFeedReq.getUserId(), Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
+        Member member = myPageRepository.findByIdAndStatus(postFeedReq.getUserId(), Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         // save data
-        Feed feed = new Feed(member.get(), postFeedReq.getContext(), postFeedReq.getAbo(), postFeedReq.getRh(),
-                postFeedReq.getLocation(), postFeedReq.getIsReceiver(), Status.A);
-        Feed newFeed = feedRepository.save(feed);
-
+        Feed newFeed = feedRepository.save(Feed.of(member, postFeedReq, Status.A));
         return newFeed.getId();
     }
 
@@ -63,19 +70,8 @@ public class FeedService {
         List<GetFeedsResI> getFeedsResI = feedRepository.findAllByStatus();
 
         return getFeedsResI.stream()
-                .map(d -> GetFeedsRes.builder()
-                        .feedId(d.getFeedId())
-                        .userId(d.getUserId())
-                        .profileImg(d.getProfileImg())
-                        .nickname(d.getNickname())
-                        .context(d.getContext())
-                        .commentCnt(d.getCommentCnt() + d.getReplyCnt())
-                        .date(d.getDate())
-                        .abo(d.getAbo())
-                        .rh(d.getRh())
-                        .location(d.getLocation())
-                        .isReceiver(d.getIsReceiver()).build())
-                    .collect(Collectors.toList());
+                .map(GetFeedsRes::from)
+                .collect(Collectors.toList());
     }
 
     /* Return feed detail API */
@@ -86,24 +82,9 @@ public class FeedService {
 
         Feed feedRes = feed.get();
         Member userRes = feedRes.getUser();
-
         CommentInfo comment = getComments(feedId);
 
-        return new GetFeedRes(feedRes.getId(), userRes.getId(), userRes.getProfileImg(), userRes.getNickname(),
-                feedRes.getContext(), comment.getCommentCnt(), comment.getCommentRes(),
-                shortDate(feedRes.getCreatedAt()), feedRes.getAbo(), feedRes.getRh(),
-                feedRes.getLocation(), feedRes.getIsReceiver());
-    }
-
-    /* date format */
-    public String shortDate(Timestamp createdAt) {
-        DateFormat format = new SimpleDateFormat("MM/dd");
-        return format.format(new Date(createdAt.getTime()));
-    }
-
-    public String longDate(Timestamp createdAt) {
-        DateFormat format = new SimpleDateFormat("MM/dd a KK:mm");
-        return format.format(new Date(createdAt.getTime()));
+        return GetFeedRes.of(feedRes, userRes, comment);
     }
 
     /* get feed's comment list */
@@ -115,9 +96,7 @@ public class FeedService {
 
         for (CommentResI cur : commentResI) {
             List<ReplyRes> replyRes = getReplies(cur.getCommentId());
-            commentRes.add(new CommentRes(cur.getCommentId(), cur.getUserId(), cur.getProfileImg(), cur.getNickname(),
-                    cur.getContext(), replyRes, longDate(cur.getDate())));
-
+            commentRes.add(CommentRes.of(cur,replyRes));
             replyCnt += replyRes.size();
         }
 
@@ -130,13 +109,7 @@ public class FeedService {
         List<ReplyResI> replyResI = replyRepository.findByCommentId(commentId);
 
         return replyResI.stream().
-                map(d -> ReplyRes.builder()
-                        .replyId(d.getReplyId())
-                        .userId(d.getUserId())
-                        .profileImg(d.getProfileImg())
-                        .nickname(d.getNickname())
-                        .context(d.getContext())
-                        .date(longDate(d.getDate())).build())
+                map(ReplyRes::from)
                 .collect(Collectors.toList());
     }
 
@@ -196,7 +169,7 @@ public class FeedService {
         Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
 
-        Comment comment = new Comment(member.get(), feed.get(), postCommentReq.getContext(), Status.A);
+        Comment comment = Comment.of(member.get(), feed.get(), postCommentReq.getContext(), Status.A);
         Comment newComment = commentRepository.save(comment);
 
         return newComment.getId();
@@ -242,7 +215,7 @@ public class FeedService {
 
         if(!feed.get().getId().equals(comment.get().getFeed().getId())) throw new BaseException(BaseResponseStatus.POST_FEEDS_INVALID_FEED);
 
-        Reply reply = new Reply(member.get(), feed.get(), comment.get(), postReplyReq.getContext(), Status.A);
+        Reply reply = Reply.of(member.get(), feed.get(), comment.get(), postReplyReq.getContext(), Status.A);
         Reply newReply = replyRepository.save(reply);
 
         return newReply.getId();

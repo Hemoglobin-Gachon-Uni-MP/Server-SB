@@ -26,33 +26,8 @@ public class MyPageService {
     private final MyPageRepository myPageRepository;
     private final FeedRepository feedRepository;
 
-    /* Return user information API */
-    public GetUserRes getUser(Long userId) throws BaseException {
-        // verify user existence using userId
-        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
-        Member info = member.get();
-        List<FeedResI> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
-
-        List<FeedRes> feedRes = feedList.stream()
-                .map(d -> FeedRes.builder()
-                        .feedId(d.getFeedId())
-                        .userId(d.getUserId())
-                        .nickname(d.getNickname())
-                        .profileImg(d.getProfileImg())
-                        .context(d.getContext())
-                        .commentCnt(d.getCommentCnt() + d.getReplyCnt())
-                        .date(d.getDate())
-                        .isReceiver(d.getIsReceiver()).build())
-                .collect(Collectors.toList());
-
-        return new GetUserRes(info.getId(), info.getName(), info.getNickname(), info.getBirth(), info.getPhone(),
-                info.getGender().equals("F") ? "여" : "남", blood(info.getRh(), info.getAbo()), info.getLocation(), info.getProfileImg(), feedRes);
-    }
-
     /* convert blood to string */
-    public String blood(int rh, int abo) {
+    public static String blood(int rh, int abo) {
         String blood = "";
         if(rh == 0) blood += "Rh+";
         else if(rh == 1) blood += "Rh-";
@@ -63,6 +38,22 @@ public class MyPageService {
         else if(abo == 3) blood += "AB";
 
         return blood;
+    }
+
+    /* Return user information API */
+    public GetUserRes getUser(Long userId) throws BaseException {
+        // verify user existence using userId
+        Optional<Member> member = myPageRepository.findByIdAndStatus(userId, Status.A);
+        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
+
+        Member info = member.get();
+        List<FeedResI> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
+
+        List<FeedRes> feedRes = feedList.stream()
+                .map(FeedRes::from)
+                .collect(Collectors.toList());
+
+        return GetUserRes.of(info, info.getGender().equals("F") ? "여" : "남", feedRes);
     }
 
     /* Edit user information API */
