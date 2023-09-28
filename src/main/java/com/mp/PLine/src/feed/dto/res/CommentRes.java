@@ -1,12 +1,18 @@
 package com.mp.PLine.src.feed.dto.res;
 
+import com.mp.PLine.src.feed.FeedService;
+import com.mp.PLine.src.feed.dto.util.CommentResI;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
+
 @Getter
+@Builder
 @NoArgsConstructor
 public class CommentRes {
     // comment information of feed
@@ -33,5 +39,17 @@ public class CommentRes {
         this.context = context;
         this.replyList = reply;
         this.date = date;
+    }
+
+    public static CommentRes of(CommentResI commentResInfo, List<ReplyRes> replyRes) {
+        return CommentRes.builder()
+                .commentId(commentResInfo.getCommentId())
+                .userId(commentResInfo.getUserId())
+                .profileImg(commentResInfo.getProfileImg())
+                .nickname(commentResInfo.getNickname())
+                .context(commentResInfo.getContext())
+                .replyList(replyRes)
+                .date(FeedService.longDate(commentResInfo.getDate()))
+                .build();
     }
 }

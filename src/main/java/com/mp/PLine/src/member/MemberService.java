@@ -138,10 +138,8 @@ public class MemberService {
         }
 
         // if user is not exist, save user
-        Member newMember = new Member(info.getName(), info.getNickname(), info.getBirth(), age, info.getPhone(),
-            info.getGender(), info.getAbo(), info.getRh(), info.getLocation(), info.getProfileImg(), kakaoId, Status.A);
+        Member newMember = Member.of(info, age, kakaoId, Status.A);
         Member savedMember = memberRepository.save(newMember);
-
         return savedMember.getId();
     }
 
@@ -149,16 +147,14 @@ public class MemberService {
     @Transactional
     public String resign(Long userId) throws BaseException {
         // verify user existence using userId
-        Optional<Member> member = memberRepository.findByIdAndStatus(userId, Status.A);
-        if(member.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_USER);
-
-        member.get().setStatus(Status.D);
-        memberRepository.save(member.get());
-
+        Member member = memberRepository.findByIdAndStatus(userId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
+        member.setStatus(Status.D);
         feedRepository.setFeedByUserStatus(userId);
         commentRepository.setCommentByUserStatus(userId);
         replyRepository.setReplyByUserStatus(userId);
 
         return "회원 탈퇴가 완료되었습니다.";
     }
+
 }

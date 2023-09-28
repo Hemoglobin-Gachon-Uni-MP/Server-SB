@@ -1,5 +1,6 @@
 package com.mp.PLine.src.feed.dto.res;
 
+import com.mp.PLine.src.feed.dto.util.GetFeedsResI;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -30,4 +31,19 @@ public class GetFeedsRes {
     private String location;
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
     private String isReceiver;
+
+    public static GetFeedsRes from(GetFeedsResI feedMappingInfo) {
+        return GetFeedsRes.builder()
+                .feedId(feedMappingInfo.getFeedId())
+                .userId(feedMappingInfo.getUserId())
+                .profileImg(feedMappingInfo.getProfileImg())
+                .nickname(feedMappingInfo.getNickname())
+                .commentCnt(feedMappingInfo.getCommentCnt())
+                .date(feedMappingInfo.getDate())
+                .abo(feedMappingInfo.getAbo())
+                .rh(feedMappingInfo.getRh())
+                .location(feedMappingInfo.getLocation())
+                .isReceiver(feedMappingInfo.getIsReceiver())
+                .build();
+    }
 }

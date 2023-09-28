@@ -2,6 +2,7 @@ package com.mp.PLine.src.member.entity;
 
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
+import com.mp.PLine.src.member.dto.req.PostUserReq;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.Builder;
@@ -51,4 +52,22 @@ public class Member extends BaseEntity {
         this.kakaoId = kakaoId;
         this.status = status;
     }
+
+    public static Member of(PostUserReq postUserReq, Long age, Long kakaoId, Status status) {
+        return Member.builder()
+                .name(postUserReq.getName())
+                .nickname(postUserReq.getNickname())
+                .birth(postUserReq.getBirth())
+                .age(age)
+                .phone(postUserReq.getPhone())
+                .gender(postUserReq.getGender())
+                .abo(postUserReq.getAbo())
+                .rh(postUserReq.getRh())
+                .location(postUserReq.getLocation())
+                .profileImg(postUserReq.getProfileImg())
+                .kakaoId(kakaoId)
+                .status(status)
+                .build();
+    }
+
 }

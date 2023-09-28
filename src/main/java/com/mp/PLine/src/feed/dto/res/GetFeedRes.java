@@ -1,12 +1,18 @@
 package com.mp.PLine.src.feed.dto.res;
 
+import com.mp.PLine.src.feed.FeedService;
+import com.mp.PLine.src.feed.dto.util.CommentInfo;
+import com.mp.PLine.src.feed.entity.Feed;
+import com.mp.PLine.src.member.entity.Member;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor
 public class GetFeedRes {
     // return feed info DTO
@@ -49,5 +55,22 @@ public class GetFeedRes {
         this.rh = rh;
         this.location = location;
         this.isReceiver = isReceiver;
+    }
+
+    public static GetFeedRes of(Feed feed, Member member, CommentInfo commentInfo) {
+        return GetFeedRes.builder()
+                .feedId(feed.getId())
+                .userId(member.getId())
+                .profileImg(member.getProfileImg())
+                .nickname(member.getNickname())
+                .context(feed.getContext())
+                .commentCnt(commentInfo.getCommentCnt())
+                .commentList(commentInfo.getCommentRes())
+                .date(FeedService.shortDate(feed.getCreatedAt()))
+                .abo(feed.getAbo())
+                .rh(feed.getRh())
+                .location(feed.getLocation())
+                .isReceiver(feed.getIsReceiver())
+                .build();
     }
 }
