@@ -18,6 +18,6 @@ public class PostFeedReq {
     private int rh;
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
-    @ApiModelProperty(example = "수혈자: T, 공혈자: F")
-    private String isReceiver;
+    @ApiModelProperty(example = "수혈자: true, 공혈자: false")
+    private Boolean isReceiver;
 }

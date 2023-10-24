@@ -63,7 +63,7 @@ class PLineApplicationTest {
 		Optional<Member> member = memberRepository.findByIdAndStatus(20L, Status.A);
 
 		if(member.isPresent()) {
-			Feed feed = new Feed(member.get(), null, 0, 1, "서울시 도봉구", "F", Status.A);
+			Feed feed = new Feed(member.get(), null, 0, 1, "서울시 도봉구", false, Status.A);
 			try {
 				feedRepository.save(feed);
 				System.out.println("게시물 생성에 성공했습니다.");
