@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostUserRes {
+public class PostMemberRes {
     // edit user information dto
     @ApiModelProperty(example = "jwt....")
     private String jwt;
     @ApiModelProperty(example = "1")
-    private Long userId;
+    private Long memberId;
 
-    public PostUserRes(String jwt, Long userId) {
+    public PostMemberRes(String jwt, Long memberId) {
         this.jwt = jwt;
-        this.userId = userId;
+        this.memberId = memberId;
     }
 }

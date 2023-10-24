@@ -1,6 +1,6 @@
 package com.mp.PLine.src.member.entity;
 
-import com.mp.PLine.src.member.dto.req.PostUserReq;
+import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.*;
@@ -50,18 +50,18 @@ public class Member extends BaseEntity {
         this.status = status;
     }
 
-    public static Member of(PostUserReq postUserReq, Long age, Long kakaoId, Status status) {
+    public static Member of(PostMemberReq postMemberReq, Long age, Long kakaoId, Status status) {
         return Member.builder()
-                .name(postUserReq.getName())
-                .nickname(postUserReq.getNickname())
-                .birth(postUserReq.getBirth())
+                .name(postMemberReq.getName())
+                .nickname(postMemberReq.getNickname())
+                .birth(postMemberReq.getBirth())
                 .age(age)
-                .phone(postUserReq.getPhone())
-                .gender(postUserReq.getGender())
-                .abo(postUserReq.getAbo())
-                .rh(postUserReq.getRh())
-                .location(postUserReq.getLocation())
-                .profileImg(postUserReq.getProfileImg())
+                .phone(postMemberReq.getPhone())
+                .gender(postMemberReq.getGender())
+                .abo(postMemberReq.getAbo())
+                .rh(postMemberReq.getRh())
+                .location(postMemberReq.getLocation())
+                .profileImg(postMemberReq.getProfileImg())
                 .kakaoId(kakaoId)
                 .status(status)
                 .build();

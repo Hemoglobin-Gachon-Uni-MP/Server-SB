@@ -12,10 +12,10 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor
-public class GetUserRes {
+public class GetMemberRes {
     // return user info DTO
     @ApiModelProperty(example = "1")
-    private Long userId;
+    private Long memberId;
     @ApiModelProperty(example = "정조은")
     private String name;
     @ApiModelProperty(example = "보리")
@@ -34,9 +34,9 @@ public class GetUserRes {
     private String profileImg;
     private List<FeedRes> feedList;
 
-    public GetUserRes(Long userId, String name, String nickname, String birth, String phone,
-                      String gender, String blood, String location, String profileImg, List<FeedRes> feedList) {
-        this.userId = userId;
+    public GetMemberRes(Long memberId, String name, String nickname, String birth, String phone,
+                        String gender, String blood, String location, String profileImg, List<FeedRes> feedList) {
+        this.memberId = memberId;
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;
@@ -48,9 +48,9 @@ public class GetUserRes {
         this.feedList = feedList;
     }
 
-    public static GetUserRes of(Member member, String genderStrKorean, List<FeedRes> feedList) {
-        return GetUserRes.builder()
-                .userId(member.getId())
+    public static GetMemberRes of(Member member, String genderStrKorean, List<FeedRes> feedList) {
+        return GetMemberRes.builder()
+                .memberId(member.getId())
                 .name(member.getName())
                 .nickname(member.getNickname())
                 .birth(member.getBirth())

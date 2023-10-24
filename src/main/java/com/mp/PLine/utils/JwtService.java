@@ -41,7 +41,7 @@ public class JwtService {
     }
 
     /* get userId from JWT */
-    public Long getUserId() throws BaseException {
+    public Long getMemberId() throws BaseException {
         // 1. get JWT
         String accessToken = getJwt();
         if(accessToken == null || accessToken.length() == 0){

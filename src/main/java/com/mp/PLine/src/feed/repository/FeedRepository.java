@@ -36,7 +36,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     // return all feed
     @Query(value = "select f.id as feedId," +
-            "   f.member.id as memberId, f.user.profileImg as profileImg, f.member.nickname as nickname, \n" +
+            "   f.member.id as memberId, f.member.profileImg as profileImg, f.member.nickname as nickname, \n" +
             "   f.context as context, \n" +
             "   (select count(*) from Comment c where c.feed.id = f.id and c.status = 'A') as replyCnt, \n" +
             "   (select count(*) from Reply r where r.feed.id = f.id and r.status = 'A') as commentCnt, \n" +

@@ -14,11 +14,11 @@ public class FeedRes {
     @ApiModelProperty(example = "1")
     private Long feedId;
     @ApiModelProperty(example = "1")
-    private Long userId;
+    private Long memberId;
     @ApiModelProperty(example = "보리")
     private String nickname;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
     @ApiModelProperty(example = "안녕 반갑수다")
     private String context;
     @ApiModelProperty(example = "3")
@@ -26,12 +26,12 @@ public class FeedRes {
     @ApiModelProperty(example = "05/18")
     private String date;
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
-    private String isReceiver;
+    private Boolean isReceiver;
 
     public static FeedRes from(FeedResI feedResInfo) {
         return FeedRes.builder()
                 .feedId(feedResInfo.getFeedId())
-                .userId(feedResInfo.getUserId())
+                .memberId(feedResInfo.getMemberId())
                 .nickname(feedResInfo.getNickname())
                 .profileImg(feedResInfo.getProfileImg())
                 .context(feedResInfo.getContext())

@@ -3,8 +3,8 @@ package com.mp.PLine.src.member;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.member.dto.req.PostUserReq;
-import com.mp.PLine.src.member.dto.res.PostUserRes;
+import com.mp.PLine.src.member.dto.req.PostMemberReq;
+import com.mp.PLine.src.member.dto.res.PostMemberRes;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.Validation;
@@ -68,9 +68,9 @@ public class MemberController {
             @ApiResponse(code = 2027, message = "이미 존재하는 유저입니다.")
     })
     @PostMapping("/kakao/sign-up")
-    public BaseResponse<PostUserRes> signUp(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse<PostMemberRes> signUp(@RequestBody PostMemberReq postMemberReq) {
         // blank & form check
-        BaseResponseStatus status = Validation.checkSignUp(postUserReq);
+        BaseResponseStatus status = Validation.checkSignUp(postMemberReq);
         if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
         try {
@@ -82,12 +82,12 @@ public class MemberController {
 
             // create user
             Long kakaoId = memberService.createKakaoUser(accessToken);
-            Long age = 2023 - Long.parseLong(postUserReq.getBirth().substring(0, 4)) + 1;
+            Long age = 2023 - Long.parseLong(postMemberReq.getBirth().substring(0, 4)) + 1;
 
-            Long userId = memberService.signUp(postUserReq, kakaoId, age);
-            String jwt = jwtService.createJwt(userId);
+            Long memberId = memberService.signUp(postMemberReq, kakaoId, age);
+            String jwt = jwtService.createJwt(memberId);
 
-            return new BaseResponse<>(new PostUserRes(jwt, userId));
+            return new BaseResponse<>(new PostMemberRes(jwt, memberId));
 
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -109,7 +109,7 @@ public class MemberController {
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
     })
     @PostMapping("/kakao/sign-in")
-    public BaseResponse<PostUserRes> signIn() {
+    public BaseResponse<PostMemberRes> signIn() {
         // get Kakao AccessToken
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String accessToken = request.getHeader("K-ACCESS-TOKEN");
@@ -120,14 +120,14 @@ public class MemberController {
         Long kakaoId = memberService.createKakaoUser(accessToken);
 
         // check user existence
-        Long userId;
+        Long memberId;
         Optional<Member> member = memberRepository.findByKakaoIdAndStatus(kakaoId, Status.A);
 
         // if user exist, return userId and jwt
         if (member.isPresent()) {
-            userId = member.get().getId();
-            String jwt = jwtService.createJwt(userId);
-            return new BaseResponse<>(new PostUserRes(jwt, userId));
+            memberId = member.get().getId();
+            String jwt = jwtService.createJwt(memberId);
+            return new BaseResponse<>(new PostMemberRes(jwt, memberId));
         } else {
             return new BaseResponse<>(BaseResponseStatus.INVALID_USER);
         }
@@ -146,16 +146,12 @@ public class MemberController {
             @ApiResponse(code = 2002, message = "유효하지 않은 JWT입니다."),
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
     })
-    @PatchMapping("/resign/{userId}")
-    public BaseResponse<String> resign(@PathVariable Long userId) {
+    @PatchMapping("/resign")
+    public BaseResponse<String> resign() {
         try {
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if(!userId.equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(memberService.resign(userId));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(memberService.resign(memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

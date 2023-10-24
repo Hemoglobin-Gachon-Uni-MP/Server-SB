@@ -19,7 +19,7 @@ public class GetFeedRes {
     @ApiModelProperty(example = "1")
     private Long feedId;
     @ApiModelProperty(example = "7")
-    private Long userId;
+    private Long memberId;
     @ApiModelProperty(example = "1 (1, 2)")
     private String profileImg;
     @ApiModelProperty(example = "보리")
@@ -40,11 +40,11 @@ public class GetFeedRes {
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
     private Boolean isReceiver;
 
-    public GetFeedRes(Long feedId, Long userId, String profileImg, String nickname, String context,
+    public GetFeedRes(Long feedId, Long memberId, String profileImg, String nickname, String context,
                       int commentCnt, List<CommentRes> commentList,
                       String date, int abo, int rh, String location, Boolean isReceiver) {
         this.feedId = feedId;
-        this.userId = userId;
+        this.memberId = memberId;
         this.profileImg = profileImg;
         this.nickname = nickname;
         this.context = context;
@@ -60,7 +60,7 @@ public class GetFeedRes {
     public static GetFeedRes of(Feed feed, Member member, CommentInfo commentInfo) {
         return GetFeedRes.builder()
                 .feedId(feed.getId())
-                .userId(member.getId())
+                .memberId(member.getId())
                 .profileImg(member.getProfileImg())
                 .nickname(member.getNickname())
                 .context(feed.getContext())

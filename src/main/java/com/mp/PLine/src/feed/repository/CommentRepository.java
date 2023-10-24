@@ -21,7 +21,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // return comment list for feed
     @Query("select c.id as commentId, \n" +
-            "   c.member.id as userId, c.member.profileImg as profileImg, c.member.nickname as nickname, \n" +
+            "   c.member.id as memberId, c.member.profileImg as profileImg, c.member.nickname as nickname, \n" +
             "   c.context as context, c.createdAt as date \n" +
             "from Comment c \n" +
             "where c.feed.id = :feedId and c.status = 'A' and c.member.status = 'A' \n" +

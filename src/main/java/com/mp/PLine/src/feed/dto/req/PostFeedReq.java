@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostFeedReq {
     // create feed DTO
-    @ApiModelProperty(example = "7")
-    private Long userId;
     @ApiModelProperty(example = "피가 필요하묘")
     private String context;
     @ApiModelProperty(example = "0: A, 1: B, 2: O, 3: AB")

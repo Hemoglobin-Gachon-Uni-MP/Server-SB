@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostUserReq {
+public class PostMemberReq {
     // create user DTO
     @ApiModelProperty(example = "정조은")
     private String name;

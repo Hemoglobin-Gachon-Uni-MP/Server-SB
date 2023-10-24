@@ -7,7 +7,7 @@ import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.repository.CommentRepository;
 import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
-import com.mp.PLine.src.member.dto.req.PostUserReq;
+import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -131,7 +130,7 @@ public class MemberService {
 
     /* Sign up with kakao API */
     @Transactional
-    public Long signUp(PostUserReq info, Long kakaoId, Long age) throws BaseException {
+    public Long signUp(PostMemberReq info, Long kakaoId, Long age) throws BaseException {
         // verify user existence using kakaoId
         if(memberRepository.findByKakaoIdAndStatus(kakaoId, Status.A).isPresent()) {
             throw new BaseException(BaseResponseStatus.EXIST_USER);
@@ -145,14 +144,14 @@ public class MemberService {
 
     /* Resign API */
     @Transactional
-    public String resign(Long userId) throws BaseException {
+    public String resign(Long memberId) throws BaseException {
         // verify user existence using userId
-        Member member = memberRepository.findByIdAndStatus(userId, Status.A)
+        Member member = memberRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         member.setStatus(Status.D);
-        feedRepository.setFeedByMemberStatus(userId);
-        commentRepository.setCommentByMemberStatus(userId);
-        replyRepository.setReplyByMemberStatus(userId);
+        feedRepository.setFeedByMemberStatus(memberId);
+        commentRepository.setCommentByMemberStatus(memberId);
+        replyRepository.setReplyByMemberStatus(memberId);
 
         return "회원 탈퇴가 완료되었습니다.";
     }
