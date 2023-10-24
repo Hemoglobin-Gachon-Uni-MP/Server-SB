@@ -31,11 +31,11 @@ public class GetUserRes {
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
     private List<FeedRes> feedList;
 
     public GetUserRes(Long userId, String name, String nickname, String birth, String phone,
-                      String gender, String blood, String location, int profileImg, List<FeedRes> feedList) {
+                      String gender, String blood, String location, String profileImg, List<FeedRes> feedList) {
         this.userId = userId;
         this.name = name;
         this.nickname = nickname;

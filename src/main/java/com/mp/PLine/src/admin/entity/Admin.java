@@ -18,19 +18,19 @@ import javax.persistence.Enumerated;
 @SuperBuilder
 @NoArgsConstructor
 public class Admin extends BaseEntity {
-    private String key;
+    private String adminKey;
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Admin(String key, Status status) {
-        this.key = key;
+    public Admin(String adminKey, Status status) {
+        this.adminKey = adminKey;
         this.status = status;
     }
 
-    public static Admin of(String key, Status status) {
+    public static Admin of(String adminKey, Status status) {
         return Admin.builder()
-                .key(key)
+                .adminKey(adminKey)
                 .status(status)
                 .build();
     }

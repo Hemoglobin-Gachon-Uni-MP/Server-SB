@@ -21,7 +21,7 @@ public class GetFeedRes {
     @ApiModelProperty(example = "7")
     private Long userId;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
     @ApiModelProperty(example = "보리")
     private String nickname;
     @ApiModelProperty(example = "안녕 반갑수다")
@@ -38,11 +38,11 @@ public class GetFeedRes {
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
-    private String isReceiver;
+    private Boolean isReceiver;
 
-    public GetFeedRes(Long feedId, Long userId, int profileImg, String nickname, String context,
+    public GetFeedRes(Long feedId, Long userId, String profileImg, String nickname, String context,
                       int commentCnt, List<CommentRes> commentList,
-                      String date, int abo, int rh, String location, String isReceiver) {
+                      String date, int abo, int rh, String location, Boolean isReceiver) {
         this.feedId = feedId;
         this.userId = userId;
         this.profileImg = profileImg;

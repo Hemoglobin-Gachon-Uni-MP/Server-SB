@@ -25,7 +25,6 @@ public class Validation {
         String birth = postUserReq.getBirth();
         String gender = postUserReq.getGender();
         int abo = postUserReq.getAbo(), rh = postUserReq.getRh();
-        int profileImg = postUserReq.getProfileImg();
 
         if(nickname.length() < 1 || nickname.length() > 8) return BaseResponseStatus.POST_USERS_INVAlID_NICKNAME;
         if(!ValidationRegex.isRegexPhone(phone)) return BaseResponseStatus.POST_USERS_INVAlID_PHONE;
@@ -33,7 +32,6 @@ public class Validation {
         if(!(gender.equals("M") || gender.equals("F"))) return BaseResponseStatus.POST_USERS_INVALID_GENDER;
         if(abo < 0 || abo > 3) return BaseResponseStatus.POST_USERS_INVALID_ABO;
         if(rh < 0 || rh > 1) return BaseResponseStatus.POST_USERS_INVALID_RH;
-        if(!(profileImg == 1 || profileImg == 2)) return BaseResponseStatus.POST_USERS_INVALID_PROFILE;
 
         return BaseResponseStatus.SUCCESS;
     }
@@ -58,14 +56,11 @@ public class Validation {
         if(postFeedReq.getUserId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_USER;
         if(postFeedReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
         if(postFeedReq.getLocation().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_LOCATION;
-        if(postFeedReq.getIsReceiver().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_IS_RECEIVER;
 
         // check form
         int abo = postFeedReq.getAbo(), rh = postFeedReq.getRh();
-        String isReceiver = postFeedReq.getIsReceiver();
         if(abo < 0 || abo > 3) return BaseResponseStatus.POST_FEEDS_INVALID_ABO;
         if(rh < 0 || rh > 1) return BaseResponseStatus.POST_FEEDS_INVALID_RH;
-        if(!(isReceiver.equals("T") || isReceiver.equals("F"))) return BaseResponseStatus.POST_FEEDS_INVALID_IS_RECEIVER;
 
         return BaseResponseStatus.SUCCESS;
     }
