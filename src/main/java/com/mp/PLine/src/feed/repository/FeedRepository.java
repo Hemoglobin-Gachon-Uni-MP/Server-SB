@@ -22,32 +22,34 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     // return user's feed list
     @Query(value = "select f.id as feedId, \n" +
-            "   f.user.id as userId, f.user.nickname as nickname, f.user.profileImg as profileImg, \n" +
+            "   f.member.id as memberId, f.member.nickname as nickname, f.member.profileImg as profileImg, \n" +
             "   f.context as context, \n" +
             "   (select count(*) from Comment c where c.feed.id = f.id and c.status = 'A') as replyCnt, \n" +
             "   (select count(*) from Reply r where r.feed.id = f.id and r.status = 'A') as commentCnt, \n" +
             "   function('date_format', f.createdAt, '%m/%d') as date, \n" +
             "   f.isReceiver as isReceiver \n" +
             "from Feed as f \n" +
-            "where f.user.id = :userId and f.status = :status and f.user.status = :status \n" +
-            " order by f.createdAt desc ")
-    List<FeedResI> findAllByUserIdAndStatus(@Param("userId") Long userId, @Param("status") Status status);
+            "where f.member.id = :memberId and f.status = :status and f.member.status = :status \n" +
+            " order by f.createdAt desc",
+    nativeQuery = true)
+    List<FeedResI> findAllByMemberIdAndStatus(@Param("memberId") Long memberId, @Param("status") Status status);
 
     // return all feed
     @Query(value = "select f.id as feedId," +
-            "   f.user.id as userId, f.user.profileImg as profileImg, f.user.nickname as nickname, \n" +
+            "   f.member.id as memberId, f.user.profileImg as profileImg, f.member.nickname as nickname, \n" +
             "   f.context as context, \n" +
             "   (select count(*) from Comment c where c.feed.id = f.id and c.status = 'A') as replyCnt, \n" +
             "   (select count(*) from Reply r where r.feed.id = f.id and r.status = 'A') as commentCnt, \n" +
             "   function('date_format', f.createdAt, '%m/%d') as date, \n" +
             "   f.abo as abo, f.rh as rh, f.location as location, f.isReceiver as isReceiver \n" +
             "from Feed f \n" +
-            "where f.status = 'A' and f.user.status = 'A' \n" +
-            "order by f.createdAt desc ")
+            "where f.status = 'A' and f.member.status = 'A' \n" +
+            "order by f.createdAt desc",
+    nativeQuery = true)
     List<GetFeedsResI> findAllByStatus();
 
     // delete user's feeds when deleting user
     @Modifying
-    @Query("update Feed f set f.status = 'D' where f.user.id = :userId")
-    void setFeedByUserStatus(@Param("userId") Long userId);
+    @Query("update Feed f set f.status = 'D' where f.member.id = :memberId")
+    void setFeedByMemberStatus(@Param("memberId") Long memberId);
 }

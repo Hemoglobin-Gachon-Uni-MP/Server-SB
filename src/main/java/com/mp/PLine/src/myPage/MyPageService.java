@@ -45,7 +45,7 @@ public class MyPageService {
         // verify user existence using userId
         Member member = myPageRepository.findByIdAndStatus(userId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
-        List<FeedResI> feedList = feedRepository.findAllByUserIdAndStatus(userId, Status.A);
+        List<FeedResI> feedList = feedRepository.findAllByMemberIdAndStatus(userId, Status.A);
         List<FeedRes> feedRes = feedList.stream()
                 .map(FeedRes::from)
                 .collect(Collectors.toList());

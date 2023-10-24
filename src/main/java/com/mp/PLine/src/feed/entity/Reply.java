@@ -16,8 +16,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Reply extends BaseEntity {
     // Reply Entity for JPA
-    @ManyToOne @JoinColumn(name = "user_id")
-    private Member user;
+    @ManyToOne @JoinColumn(name = "member_id")
+    private Member member;
     @ManyToOne @JoinColumn(name = "feed_id")
     private Feed feed;
     @ManyToOne @JoinColumn(name = "comment_id")
@@ -27,8 +27,8 @@ public class Reply extends BaseEntity {
     private Status status;
 
     @Builder
-    public Reply(Member user, Feed feed, Comment comment, String context, Status status) {
-        this.user = user;
+    public Reply(Member member, Feed feed, Comment comment, String context, Status status) {
+        this.member = member;
         this.feed = feed;
         this.comment = comment;
         this.context = context;
@@ -37,7 +37,7 @@ public class Reply extends BaseEntity {
 
     public static Reply of(Member member, Feed feed, Comment comment, String context, Status status) {
         return Reply.builder()
-                .user(member)
+                .member(member)
                 .feed(feed)
                 .comment(comment)
                 .context(context)

@@ -81,7 +81,7 @@ public class FeedService {
         if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
         Feed feedRes = feed.get();
 
-        return GetFeedRes.of(feedRes, feedRes.getUser(), getComments(feedId));
+        return GetFeedRes.of(feedRes, feedRes.getMember(), getComments(feedId));
     }
 
     /* get feed's comment list */
@@ -118,7 +118,7 @@ public class FeedService {
         // verify feed existence using feedId
         Feed updateFeed = feedRepository.findByIdAndStatus(feedId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
-        if (!patchFeedReq.getUserId().equals(updateFeed.getUser().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
+        if (!patchFeedReq.getUserId().equals(updateFeed.getMember().getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // save data
         updateFeed.setContext(patchFeedReq.getContext());
@@ -136,7 +136,7 @@ public class FeedService {
         // verify feed existence using feedId
         Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
-        Member feedOwner = feed.getUser();
+        Member feedOwner = feed.getMember();
         if (!userId.equals(feedOwner.getId())) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // delete feed and feed's comment & reply
@@ -170,7 +170,7 @@ public class FeedService {
         // verify feed existence using feedId
         Comment comment = commentRepository.findByIdAndStatus(commentId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
-        Member commentOwner = comment.getUser();
+        Member commentOwner = comment.getMember();
         if(!commentOwner.getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // delete comment and comment's reply
@@ -208,7 +208,7 @@ public class FeedService {
         // verify reply existence using replyId
         Reply updateReply = replyRepository.findByIdAndStatus(replyId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
-        Member replyOwner = updateReply.getUser();
+        Member replyOwner = updateReply.getMember();
         if(!replyOwner.getId().equals(userId)) throw new BaseException(BaseResponseStatus.INVALID_USER_JWT);
 
         // delete reply

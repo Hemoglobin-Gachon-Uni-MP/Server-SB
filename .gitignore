@@ -13,6 +13,8 @@
 .idea/**/shelf
 secret/
 application.yml
+build/
+gradle/
 
 *.iml
 *.idea

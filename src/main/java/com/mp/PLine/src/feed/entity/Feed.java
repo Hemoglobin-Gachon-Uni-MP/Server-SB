@@ -16,8 +16,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Feed extends BaseEntity {
     // Feed Entity for JPA
-    @ManyToOne @JoinColumn(name = "user_id")
-    private Member user;
+    @ManyToOne @JoinColumn(name = "member_id")
+    private Member member;
     private String context;
     private int abo;
     private int rh;
@@ -27,8 +27,8 @@ public class Feed extends BaseEntity {
     private Status status;
 
     @Builder
-    public Feed(Member user, String context, int abo, int rh, String location, String isReceiver, Status status) {
-        this.user = user;
+    public Feed(Member member, String context, int abo, int rh, String location, String isReceiver, Status status) {
+        this.member = member;
         this.context = context;
         this.abo = abo;
         this.rh = rh;
@@ -39,7 +39,7 @@ public class Feed extends BaseEntity {
 
     public static Feed of(Member member, PostFeedReq postFeedReq, Status status) {
         return Feed.builder()
-                .user(member)
+                .member(member)
                 .context(postFeedReq.getContext())
                 .abo(postFeedReq.getAbo())
                 .rh(postFeedReq.getRh())

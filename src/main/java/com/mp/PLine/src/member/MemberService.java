@@ -150,9 +150,9 @@ public class MemberService {
         Member member = memberRepository.findByIdAndStatus(userId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         member.setStatus(Status.D);
-        feedRepository.setFeedByUserStatus(userId);
-        commentRepository.setCommentByUserStatus(userId);
-        replyRepository.setReplyByUserStatus(userId);
+        feedRepository.setFeedByMemberStatus(userId);
+        commentRepository.setCommentByMemberStatus(userId);
+        replyRepository.setReplyByMemberStatus(userId);
 
         return "회원 탈퇴가 완료되었습니다.";
     }
