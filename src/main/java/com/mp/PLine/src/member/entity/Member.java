@@ -1,13 +1,9 @@
 package com.mp.PLine.src.member.entity;
 
-import com.mp.PLine.src.feed.entity.Comment;
-import com.mp.PLine.src.feed.entity.Feed;
-import com.mp.PLine.src.member.dto.req.PostUserReq;
+import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
@@ -15,7 +11,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Entity
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 public class Member extends BaseEntity {
@@ -30,7 +27,7 @@ public class Member extends BaseEntity {
     private int abo;
     private int rh;
     private String location;
-    private int profileImg;
+    private String profileImg;
     private Long kakaoId;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -38,7 +35,7 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(String name, String nickname, String birth, Long age, String phone, String gender, int abo,
-                  int rh, String location, int profileImg, Long kakaoId, Status status) {
+                  int rh, String location, String profileImg, Long kakaoId, Status status) {
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;
@@ -53,18 +50,18 @@ public class Member extends BaseEntity {
         this.status = status;
     }
 
-    public static Member of(PostUserReq postUserReq, Long age, Long kakaoId, Status status) {
+    public static Member of(PostMemberReq postMemberReq, Long age, Long kakaoId, Status status) {
         return Member.builder()
-                .name(postUserReq.getName())
-                .nickname(postUserReq.getNickname())
-                .birth(postUserReq.getBirth())
+                .name(postMemberReq.getName())
+                .nickname(postMemberReq.getNickname())
+                .birth(postMemberReq.getBirth())
                 .age(age)
-                .phone(postUserReq.getPhone())
-                .gender(postUserReq.getGender())
-                .abo(postUserReq.getAbo())
-                .rh(postUserReq.getRh())
-                .location(postUserReq.getLocation())
-                .profileImg(postUserReq.getProfileImg())
+                .phone(postMemberReq.getPhone())
+                .gender(postMemberReq.getGender())
+                .abo(postMemberReq.getAbo())
+                .rh(postMemberReq.getRh())
+                .location(postMemberReq.getLocation())
+                .profileImg(postMemberReq.getProfileImg())
                 .kakaoId(kakaoId)
                 .status(status)
                 .build();

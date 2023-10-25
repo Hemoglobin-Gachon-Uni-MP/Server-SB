@@ -19,9 +19,9 @@ public class CommentRes {
     @ApiModelProperty("1")
     private Long commentId;
     @ApiModelProperty("7")
-    private Long userId;
+    private Long memberId;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
     @ApiModelProperty(example = "보리")
     private String nickname;
     @ApiModelProperty(example = "댓글s")
@@ -30,10 +30,10 @@ public class CommentRes {
     @ApiModelProperty(example = "05/09 오후 5:15")
     private String date;
 
-    public CommentRes(Long commentId, Long userId, int profileImg, String nickname,
+    public CommentRes(Long commentId, Long memberId, String profileImg, String nickname,
                       String context, List<ReplyRes> reply, String date) {
         this.commentId = commentId;
-        this.userId = userId;
+        this.memberId = memberId;
         this.profileImg = profileImg;
         this.nickname = nickname;
         this.context = context;
@@ -44,7 +44,7 @@ public class CommentRes {
     public static CommentRes of(CommentResI commentResInfo, List<ReplyRes> replyRes) {
         return CommentRes.builder()
                 .commentId(commentResInfo.getCommentId())
-                .userId(commentResInfo.getUserId())
+                .memberId(commentResInfo.getMemberId())
                 .profileImg(commentResInfo.getProfileImg())
                 .nickname(commentResInfo.getNickname())
                 .context(commentResInfo.getContext())

@@ -21,18 +21,18 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     // return feed's comment list
     @Query("select r.id as replyId, \n" +
-            "   r.user.id as userId, r.user.profileImg as profileImg, r.user.nickname as nickname, \n" +
+            "   r.member.id as memberId, r.member.profileImg as profileImg, r.member.nickname as nickname, \n" +
             "   r.context as context, \n" +
             "   r.createdAt as date \n" +
             "from Reply r \n" +
-            "where r.comment.id = :commentId and r.status = 'A' and r.user.status = 'A' \n" +
+            "where r.comment.id = :commentId and r.status = 'A' and r.member.status = 'A' \n" +
             "order by r.createdAt")
     List<ReplyResI> findByCommentId(@Param("commentId") Long commentId);
 
     // delete user's replies when deleting user
     @Modifying
-    @Query("update Reply r set r.status = 'D' where r.user.id = :userId")
-    void setReplyByUserStatus(@Param("userId") Long userId);
+    @Query("update Reply r set r.status = 'D' where r.member.id = :memberId")
+    void setReplyByMemberStatus(@Param("memberId") Long memberId);
 
     // delete feed's replies when deleting feed
     @Modifying

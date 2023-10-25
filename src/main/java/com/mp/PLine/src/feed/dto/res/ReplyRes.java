@@ -17,9 +17,9 @@ public class ReplyRes {
     @ApiModelProperty("1")
     private Long replyId;
     @ApiModelProperty("7")
-    private Long userId;
+    private Long memberId;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
     @ApiModelProperty(example = "보리")
     private String nickname;
     @ApiModelProperty(example = "답글s")
@@ -30,7 +30,7 @@ public class ReplyRes {
     public static ReplyRes from(ReplyResI replyResInfo) {
         return ReplyRes.builder()
                 .replyId(replyResInfo.getReplyId())
-                .userId(replyResInfo.getUserId())
+                .memberId(replyResInfo.getMemberId())
                 .profileImg(replyResInfo.getProfileImg())
                 .nickname(replyResInfo.getNickname())
                 .context(replyResInfo.getContext())

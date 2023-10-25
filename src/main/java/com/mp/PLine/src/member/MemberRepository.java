@@ -16,5 +16,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByKakaoIdAndStatus(@Param("kakaoId") Long kakaoId, @Param("status") Status A);
 
     // check user existence
-    Optional<Member> findByIdAndStatus(@Param("userId") Long userId, @Param("status") Status A);
+    Optional<Member> findByIdAndStatus(@Param("memberId") Long memberId, @Param("status") Status A);
 }

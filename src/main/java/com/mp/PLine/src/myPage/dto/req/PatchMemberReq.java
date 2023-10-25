@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PatchUserReq {
+public class PatchMemberReq {
     // edit user DTO
     @ApiModelProperty(example = "보리")
     private String nickname;

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostUserReq {
+public class PostMemberReq {
     // create user DTO
     @ApiModelProperty(example = "정조은")
     private String name;
@@ -25,5 +25,5 @@ public class PostUserReq {
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
 }

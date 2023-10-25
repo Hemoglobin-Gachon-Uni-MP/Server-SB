@@ -12,9 +12,9 @@ public class GetFeedsRes {
     @ApiModelProperty(example = "1")
     private Long feedId;
     @ApiModelProperty(example = "7")
-    private Long userId;
+    private Long memberId;
     @ApiModelProperty(example = "1 (1, 2)")
-    private int profileImg;
+    private String profileImg;
     @ApiModelProperty(example = "보리")
     private String nickname;
     @ApiModelProperty(example = "안녕 반갑수다")
@@ -30,14 +30,15 @@ public class GetFeedsRes {
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
     @ApiModelProperty(example = "T: 수혈, F: 공혈")
-    private String isReceiver;
+    private Boolean isReceiver;
 
     public static GetFeedsRes from(GetFeedsResI feedMappingInfo) {
         return GetFeedsRes.builder()
                 .feedId(feedMappingInfo.getFeedId())
-                .userId(feedMappingInfo.getUserId())
+                .memberId(feedMappingInfo.getMemberId())
                 .profileImg(feedMappingInfo.getProfileImg())
                 .nickname(feedMappingInfo.getNickname())
+                .context(feedMappingInfo.getContext())
                 .commentCnt(feedMappingInfo.getCommentCnt())
                 .date(feedMappingInfo.getDate())
                 .abo(feedMappingInfo.getAbo())

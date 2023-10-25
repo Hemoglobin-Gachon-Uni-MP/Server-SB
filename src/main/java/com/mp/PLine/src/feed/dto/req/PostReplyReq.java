@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostReplyReq {
     // create reply DTO
-    @ApiModelProperty(example = "7")
-    private Long userId;
     @ApiModelProperty(example = "3")
     private Long feedId;
     @ApiModelProperty(example = "댓글댓글댓글댓글댓글")

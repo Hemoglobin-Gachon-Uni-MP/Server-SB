@@ -9,10 +9,8 @@ import com.mp.PLine.src.feed.dto.req.PostFeedReq;
 import com.mp.PLine.src.feed.dto.req.PostReplyReq;
 import com.mp.PLine.src.feed.dto.res.GetFeedRes;
 import com.mp.PLine.src.feed.dto.res.GetFeedsRes;
-import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.Validation;
-import com.mp.PLine.utils.entity.BaseUserIdReq;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -56,12 +54,8 @@ public class FeedController {
             if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
             // JWT 추출
-            Long userIdByJwt = jwtService.getUserId();
-            if (!postFeedReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.postFeed(postFeedReq));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.postFeed(postFeedReq, memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -131,12 +125,8 @@ public class FeedController {
             if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if (!patchFeedReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.updateFeed(feedId, patchFeedReq));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.updateFeed(feedId, memberId, patchFeedReq));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -160,15 +150,11 @@ public class FeedController {
     })
     @ResponseBody
     @PatchMapping("/{feedId}/status")
-    public BaseResponse<String> deleteFeed(@PathVariable Long feedId, @RequestBody BaseUserIdReq baseUserIdReq) {
+    public BaseResponse<String> deleteFeed(@PathVariable Long feedId) {
         try {
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.deleteFeed(feedId, baseUserIdReq.getUserId()));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.deleteFeed(feedId, memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -199,12 +185,8 @@ public class FeedController {
 
         try {
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if (!postCommentReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.postComment(feedId, postCommentReq));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.postComment(feedId, memberId, postCommentReq.getContext()));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -228,17 +210,11 @@ public class FeedController {
             @ApiResponse(code = 2046, message = "존재하지 않는 댓글입니다.")
     })
     @PatchMapping("/comment/{commentId}/status")
-    public BaseResponse<String> postComment(@PathVariable Long commentId, @RequestBody BaseUserIdReq baseUserIdReq) {
-        if(baseUserIdReq.getUserId() == null) return new BaseResponse<>(BaseResponseStatus.POST_FEEDS_EMPTY_USER);
-
+    public BaseResponse<String> postComment(@PathVariable Long commentId) {
         try {
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.deleteComment(commentId, baseUserIdReq.getUserId()));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.deleteComment(commentId, memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -273,12 +249,8 @@ public class FeedController {
 
         try {
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if (!postReplyReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.postReply(commentId, postReplyReq));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.postReply(commentId, memberId, postReplyReq));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
@@ -303,17 +275,11 @@ public class FeedController {
             @ApiResponse(code = 2047, message = "존재하지 않는 답글입니다.")
     })
     @PatchMapping("/reply/{replyId}/status")
-    public BaseResponse<String> postReply(@PathVariable Long replyId, @RequestBody BaseUserIdReq baseUserIdReq) {
-        if(baseUserIdReq.getUserId() == null) return new BaseResponse<>(BaseResponseStatus.POST_FEEDS_EMPTY_USER);
-
+    public BaseResponse<String> postReply(@PathVariable Long replyId) {
         try {
             // get jwt from header
-            Long userIdByJwt = jwtService.getUserId();
-            if (!baseUserIdReq.getUserId().equals(userIdByJwt)) {
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-
-            return new BaseResponse<>(feedService.deleteReply(replyId, baseUserIdReq.getUserId()));
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.deleteReply(replyId, memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

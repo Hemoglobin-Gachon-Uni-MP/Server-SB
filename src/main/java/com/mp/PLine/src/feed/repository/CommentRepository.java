@@ -21,17 +21,17 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // return comment list for feed
     @Query("select c.id as commentId, \n" +
-            "   c.user.id as userId, c.user.profileImg as profileImg, c.user.nickname as nickname, \n" +
+            "   c.member.id as memberId, c.member.profileImg as profileImg, c.member.nickname as nickname, \n" +
             "   c.context as context, c.createdAt as date \n" +
             "from Comment c \n" +
-            "where c.feed.id = :feedId and c.status = 'A' and c.user.status = 'A' \n" +
+            "where c.feed.id = :feedId and c.status = 'A' and c.member.status = 'A' \n" +
             "order by c.createdAt")
     List<CommentResI> findByFeedId(@Param("feedId") Long feedId);
 
     // delete user's comments when deleting user
     @Modifying
-    @Query("update Comment c set c.status = 'D' where c.user.id = :userId")
-    void setCommentByUserStatus(@Param("userId") Long userId);
+    @Query("update Comment c set c.status = 'D' where c.member.id = :memberId")
+    void setCommentByMemberStatus(@Param("memberId") Long memberId);
 
     // delete feed's comments when deleting feed
     @Modifying
