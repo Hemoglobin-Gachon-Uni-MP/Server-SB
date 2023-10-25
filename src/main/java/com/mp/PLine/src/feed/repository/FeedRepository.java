@@ -21,32 +21,34 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     Optional<Feed> findByIdAndStatus(@Param("id") Long id, @Param("status") Status status);
 
     // return user's feed list
-    @Query(value = "select f.id as feedId, \n" +
-            "   f.member.id as memberId, f.member.nickname as nickname, f.member.profileImg as profileImg, \n" +
-            "   f.context as context, \n" +
-            "   (select count(*) from Comment c where c.feed.id = f.id and c.status = 'A') as replyCnt, \n" +
-            "   (select count(*) from Reply r where r.feed.id = f.id and r.status = 'A') as commentCnt, \n" +
-            "   function('date_format', f.createdAt, '%m/%d') as date, \n" +
-            "   f.isReceiver as isReceiver \n" +
-            "from Feed as f \n" +
-            "where f.member.id = :memberId and f.status = :status and f.member.status = :status \n" +
-            " order by f.createdAt desc",
-    nativeQuery = true)
+    @Query(value = "SELECT f.id AS feedId, \n" +
+            "f.member_id AS memberId, m.nickname AS nickname, m.profile_img AS profileImg, \n" +
+            "f.context AS context, \n" +
+            "(SELECT COUNT(*) FROM Comment c WHERE c.feed_id = f.id AND c.status = 'A') AS replyCnt, \n" +
+            "(SELECT COUNT(*) FROM Reply r WHERE r.feed_id = f.id AND r.status = 'A') AS commentCnt, \n" +
+            "FORMATDATETIME(f.created_at, 'MM/dd') AS date, \n" +
+            "f.is_receiver AS isReceiver \n" +
+            "FROM feed AS f \n" +
+            "INNER JOIN member AS m ON f.member_id = m.id \n" +
+            "WHERE f.member_id = :memberId AND f.status = :status AND m.status = :status \n" +
+            "ORDER BY f.created_at DESC", nativeQuery = true)
     List<FeedResI> findAllByMemberIdAndStatus(@Param("memberId") Long memberId, @Param("status") Status status);
 
+
     // return all feed
-    @Query(value = "select f.id as feedId," +
-            "   f.member.id as memberId, f.member.profileImg as profileImg, f.member.nickname as nickname, \n" +
-            "   f.context as context, \n" +
-            "   (select count(*) from Comment c where c.feed.id = f.id and c.status = 'A') as replyCnt, \n" +
-            "   (select count(*) from Reply r where r.feed.id = f.id and r.status = 'A') as commentCnt, \n" +
-            "   function('date_format', f.createdAt, '%m/%d') as date, \n" +
-            "   f.abo as abo, f.rh as rh, f.location as location, f.isReceiver as isReceiver \n" +
-            "from Feed f \n" +
-            "where f.status = 'A' and f.member.status = 'A' \n" +
-            "order by f.createdAt desc",
-    nativeQuery = true)
+    @Query(value = "SELECT f.id AS feedId, \n" +
+            "f.member_id AS memberId, m.profile_img AS profileImg, m.nickname AS nickname, \n" +
+            "f.context AS context, \n" +
+            "(SELECT COUNT(*) FROM Comment c WHERE c.feed_id = f.id AND c.status = 'A') AS replyCnt, \n" +
+            "(SELECT COUNT(*) FROM Reply r WHERE r.feed_id = f.id AND r.status = 'A') AS commentCnt, \n" +
+            "FORMATDATETIME(f.created_at, 'MM/dd') AS date, \n" +
+            "f.abo AS abo, f.rh AS rh, f.location AS location, f.is_receiver AS isReceiver \n" +
+            "FROM feed AS f \n" +
+            "INNER JOIN member AS m ON f.member_id = m.id \n" +
+            "WHERE f.status = 'A' AND m.status = 'A' \n" +
+            "ORDER BY f.created_at DESC", nativeQuery = true)
     List<GetFeedsResI> findAllByStatus();
+
 
     // delete user's feeds when deleting user
     @Modifying

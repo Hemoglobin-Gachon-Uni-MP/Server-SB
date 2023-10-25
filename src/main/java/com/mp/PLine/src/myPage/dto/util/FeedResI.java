@@ -15,8 +15,9 @@ public interface FeedResI {
     @ApiModelProperty(example = "안녕 반갑수다")
     String getContext();
     @ApiModelProperty(example = "3")
-    int getCommentCnt();
     int getReplyCnt();
+    @ApiModelProperty(example = "3")
+    int getCommentCnt();
     @ApiModelProperty(example = "05/18")
     String getDate();
     @ApiModelProperty(example = "T: 수혈, F: 공혈")

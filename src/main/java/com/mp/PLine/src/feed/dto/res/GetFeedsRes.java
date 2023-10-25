@@ -38,6 +38,7 @@ public class GetFeedsRes {
                 .memberId(feedMappingInfo.getMemberId())
                 .profileImg(feedMappingInfo.getProfileImg())
                 .nickname(feedMappingInfo.getNickname())
+                .context(feedMappingInfo.getContext())
                 .commentCnt(feedMappingInfo.getCommentCnt())
                 .date(feedMappingInfo.getDate())
                 .abo(feedMappingInfo.getAbo())
