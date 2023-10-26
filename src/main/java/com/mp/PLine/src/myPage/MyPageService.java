@@ -3,6 +3,7 @@ package com.mp.PLine.src.myPage;
 import com.mp.PLine.S3Uploader;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.myPage.dto.res.GetCertificationRes;
 import com.mp.PLine.src.myPage.entity.Certification;
 import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.myPage.dto.req.PostCertificationReq;
@@ -84,11 +85,20 @@ public class MyPageService {
         return certifications.getId();
     }
 
-    public List<Certification> getDonationLists(Long memberId) throws BaseException {
+    public List<GetCertificationRes> getCertificationList(Long memberId) throws BaseException {
         Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
-        return certificationRepository.findAllByMemberIdAndStatus(memberId, Status.A);
+        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndStatus(memberId, Status.A);
+
+        return certificationList.stream()
+                .map(d -> GetCertificationRes.builder()
+                        .certificationId(d.getId())
+                        .memberId(memberId)
+                        .name(member.getName())
+                        .certificationNum(d.getCertificateNumber())
+                        .date(d.getDate()).build())
+                .collect(Collectors.toList());
     }
 
 }

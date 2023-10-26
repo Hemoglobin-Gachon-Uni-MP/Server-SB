@@ -3,6 +3,7 @@ package com.mp.PLine.src.myPage;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.myPage.dto.res.GetCertificationRes;
 import com.mp.PLine.src.myPage.entity.Certification;
 import com.mp.PLine.src.myPage.dto.req.PostCertificationReq;
 import com.mp.PLine.src.myPage.dto.res.GetMemberRes;
@@ -124,7 +125,7 @@ public class MyPageController {
 
     /**
      * Return Certification list API
-     * [GET] /mypages/certification-list
+     * [GET] /mypages/certification/list
      */
     @ApiOperation("헌혈 목록 반환 API")
     @ApiResponses({
@@ -134,11 +135,12 @@ public class MyPageController {
     })
     @ResponseBody
     @GetMapping("/certification/list")
-    public BaseResponse<List<Certification>> getDonationLists() {
+    public BaseResponse<List<GetCertificationRes>> getCertificationList() {
+        // 이름 날짜 증서번호
         try {
             // get jwt from header
             Long memberId = jwtService.getMemberId();
-            return new BaseResponse<>(myPageService.getDonationLists(memberId));
+            return new BaseResponse<>(myPageService.getCertificationList(memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
