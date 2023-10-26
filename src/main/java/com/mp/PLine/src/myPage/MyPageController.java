@@ -102,7 +102,8 @@ public class MyPageController {
             @ApiResponse(code = 2050, message = "이름을 입력해 주세요."),
             @ApiResponse(code = 2051, message = "헌혈 번호를 입력해주세요."),
             @ApiResponse(code = 2052, message = "헌혈 날짜를 입력해주세요."),
-            @ApiResponse(code = 2053, message = "헌혈 증서를 업로드해주세요.")
+            @ApiResponse(code = 2053, message = "헌혈 증서를 업로드해주세요."),
+            @ApiResponse(code = 2054, message = "본인이 한 헌혈 증서만 등록 가능합니다.")
     })
     @ResponseBody
     @PostMapping(value = "/certification", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

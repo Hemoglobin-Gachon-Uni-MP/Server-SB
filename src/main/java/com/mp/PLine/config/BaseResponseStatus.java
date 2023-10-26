@@ -62,6 +62,8 @@ public enum BaseResponseStatus {
     POST_CERTIFICATION_EMPTY_NUM(false, 2051, "헌혈 번호를 입력해주세요."),
     POST_CERTIFICATION_EMPTY_DATE(false, 2052, "헌혈 날짜를 입력해주세요."),
     POST_CERTIFICATION_EMPTY_IMAGE(false, 2053, "헌혈 증서를 업로드해주세요."),
+    POST_CERTIFICATION_INVALID_NAME(false, 2054, "본인이 한 헌혈 증서만 등록 가능합니다."),
+
 
 
 

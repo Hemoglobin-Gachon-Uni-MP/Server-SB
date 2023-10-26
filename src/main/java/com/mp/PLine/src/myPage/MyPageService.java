@@ -76,6 +76,8 @@ public class MyPageService {
         Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
+        // 이름, 이미지 확인 진행
+        if(!request.getName().equals(member.getName())) throw new BaseException(BaseResponseStatus.POST_CERTIFICATION_INVALID_NAME);
         if(image.isEmpty()) throw new BaseException(BaseResponseStatus.POST_CERTIFICATION_EMPTY_IMAGE);
 
         String fileUrl = s3Uploader.upload(image,"image");
