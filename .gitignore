@@ -15,7 +15,7 @@ secret/
 application.yml
 build/
 gradle/
-.gradle/
+.gradle
 
 *.iml
 *.idea
@@ -38,6 +38,8 @@ gradle/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+/build/
+.gradletasknamecache
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
