@@ -11,6 +11,9 @@ import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +24,7 @@ import java.net.URL;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService {
+public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
@@ -156,4 +159,9 @@ public class MemberService {
         return "회원 탈퇴가 완료되었습니다.";
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        return null;
+    }
 }
