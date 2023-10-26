@@ -1,4 +1,4 @@
-package com.mp.PLine.src.admin.entity;
+package com.mp.PLine.src.myPage.entity;
 
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.BaseEntity;

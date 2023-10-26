@@ -1,7 +1,7 @@
 package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.admin.dto.PostCertificationReq;
+import com.mp.PLine.src.myPage.dto.req.PostCertificationReq;
 import com.mp.PLine.src.feed.dto.req.PatchFeedReq;
 import com.mp.PLine.src.feed.dto.req.PostCommentReq;
 import com.mp.PLine.src.feed.dto.req.PostFeedReq;

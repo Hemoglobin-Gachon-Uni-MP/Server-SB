@@ -1,6 +1,6 @@
-package com.mp.PLine.src.admin;
+package com.mp.PLine.src.myPage;
 
-import com.mp.PLine.src.admin.entity.Certification;
+import com.mp.PLine.src.myPage.entity.Certification;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
