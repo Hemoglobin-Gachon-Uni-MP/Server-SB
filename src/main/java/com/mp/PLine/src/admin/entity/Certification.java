@@ -23,23 +23,26 @@ public class Certification extends BaseEntity {
 
     private String certificateNumber;
     private String certificateImg;
+    private String date;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Certification(Member member, String certificateNumber, String certificateImg, Status status) {
+    public Certification(Member member, String certificateNumber, String certificateImg, String date, Status status) {
         this.member = member;
         this.certificateNumber = certificateNumber;
         this.certificateImg = certificateImg;
+        this.date = date;
         this.status = status;
     }
 
-    public static Certification of(Member member, String certificateNumber, String certificateImg, Status status) {
+    public static Certification of(Member member, String certificateNumber, String certificateImg, String date, Status status) {
         return Certification.builder()
                 .member(member)
                 .certificateNumber(certificateNumber)
                 .certificateImg(certificateImg)
+                .date(date)
                 .status(status)
                 .build();
     }

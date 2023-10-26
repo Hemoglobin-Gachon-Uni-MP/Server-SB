@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.AmazonS3Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +18,11 @@ public class S3Config {
 
     @Bean
     public AmazonS3 amazonS3(){
-        String accessToken = env.getProperty("cloud.s3.access-id");
-        String refreshToken = env.getProperty("cloud.s3.secret-key");
+        String accessToken = env.getProperty("aws.s3.access-key");
+        String refreshToken = env.getProperty("aws.s3.secret-key");
+
+        assert accessToken != null;
+        assert refreshToken != null;
 
         return AmazonS3ClientBuilder
                 .standard()
