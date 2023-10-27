@@ -151,7 +151,7 @@ public class MyPageController {
      * Return Certification Reward List API
      * [GET] /mypages/certification/reward-list
      */
-    @ApiOperation("헌혈 목록 반환 API")
+    @ApiOperation("헌혈 리워드 반환 API")
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
