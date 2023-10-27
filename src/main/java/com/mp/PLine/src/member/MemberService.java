@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -136,9 +137,19 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.EXIST_USER);
         }
 
+        int profile = (int) (Math.random() * 2) + 1;
+        String profileImg = "";
+
+        if(profile == 1) {
+            profileImg = "https://p-line.s3.ap-northeast-2.amazonaws.com/profile/Group+20.png";
+        } else if(profile == 2) {
+            profileImg = "https://p-line.s3.ap-northeast-2.amazonaws.com/profile/Group+21.png";
+        }
+
         // if user is not exist, save user
-        Member newMember = Member.of(info, age, kakaoId, Status.A);
+        Member newMember = Member.of(info, age, profileImg, kakaoId, Status.A);
         Member savedMember = memberRepository.save(newMember);
+
         return savedMember.getId();
     }
 
