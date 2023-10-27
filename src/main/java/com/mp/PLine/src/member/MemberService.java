@@ -9,6 +9,7 @@ import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.src.member.entity.Member;
+import com.mp.PLine.src.myPage.CertificationRepository;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class MemberService {
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
+    private final CertificationRepository certificationRepository;
 
     /* Get AccessToken from kakao */
     public String getKaKaoAccessToken(String code) {
@@ -159,10 +161,12 @@ public class MemberService {
         // verify user existence using userId
         Member member = memberRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
+
         member.setStatus(Status.D);
         feedRepository.setFeedByMemberStatus(memberId);
         commentRepository.setCommentByMemberStatus(memberId);
         replyRepository.setReplyByMemberStatus(memberId);
+        certificationRepository.setCertificationByMemberStatus(memberId);
 
         return "회원 탈퇴가 완료되었습니다.";
     }
