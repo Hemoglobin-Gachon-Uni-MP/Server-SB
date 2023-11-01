@@ -1,5 +1,6 @@
 package com.mp.PLine.src.member.entity;
 
+import com.mp.PLine.src.login.SocialType;
 import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
@@ -14,11 +15,10 @@ import javax.persistence.Enumerated;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     // Member Entity for JPA
     private String name;
-
     private String nickname;
     private String birth;
     private Long age;
@@ -28,14 +28,19 @@ public class Member extends BaseEntity {
     private int rh;
     private String location;
     private String profileImg;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
     private Long kakaoId;
+    private String refreshToken;
     @Enumerated(EnumType.STRING)
     private Status status;
 
 
     @Builder
     public Member(String name, String nickname, String birth, Long age, String phone, String gender, int abo,
-                  int rh, String location, String profileImg, Long kakaoId, Status status) {
+                  int rh, String location, String profileImg, Long kakaoId, Role role, Status status) {
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;
@@ -47,6 +52,7 @@ public class Member extends BaseEntity {
         this.location = location;
         this.profileImg = profileImg;
         this.kakaoId = kakaoId;
+        this.role = role;
         this.status = status;
     }
 
@@ -63,8 +69,13 @@ public class Member extends BaseEntity {
                 .location(postMemberReq.getLocation())
                 .profileImg(postMemberReq.getProfileImg())
                 .kakaoId(kakaoId)
+                .role(Role.MEMBER)
                 .status(status)
                 .build();
+    }
+
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken = updateRefreshToken;
     }
 
 }
