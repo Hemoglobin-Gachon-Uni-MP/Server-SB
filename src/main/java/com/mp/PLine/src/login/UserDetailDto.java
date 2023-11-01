@@ -8,6 +8,7 @@ import java.util.Collection;
 public class UserDetailDto implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return null;
     }
 
@@ -40,4 +41,12 @@ public class UserDetailDto implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+//    public UserDto getUserDto(UserDetailDto userDetailDto) {
+//        return UserDto.builder()
+//                .userSq(userDetailDto.)
+//                .userPw(userDetailDto.getPassword())
+//                .
+//                .build();
+//    }
 }

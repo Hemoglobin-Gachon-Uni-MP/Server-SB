@@ -30,9 +30,11 @@ public class Member extends BaseEntity {
     private String profileImg;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String email;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-    private Long kakaoId;
+    private String socialId;
+//    private Long kakaoId;
     private String refreshToken;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -40,7 +42,7 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(String name, String nickname, String birth, Long age, String phone, String gender, int abo,
-                  int rh, String location, String profileImg, Long kakaoId, Role role, Status status) {
+                  int rh, String location, String profileImg, String email, String socialId, Role role, SocialType socialType, Status status) {
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;
@@ -51,12 +53,14 @@ public class Member extends BaseEntity {
         this.rh = rh;
         this.location = location;
         this.profileImg = profileImg;
-        this.kakaoId = kakaoId;
+        this.email = email;
+        this.socialId = socialId;
         this.role = role;
+        this.socialType = socialType;
         this.status = status;
     }
 
-    public static Member of(PostMemberReq postMemberReq, Long age, Long kakaoId, Status status) {
+    public static Member of(PostMemberReq postMemberReq, Long age, String socialId, Status status) {
         return Member.builder()
                 .name(postMemberReq.getName())
                 .nickname(postMemberReq.getNickname())
@@ -68,7 +72,7 @@ public class Member extends BaseEntity {
                 .rh(postMemberReq.getRh())
                 .location(postMemberReq.getLocation())
                 .profileImg(postMemberReq.getProfileImg())
-                .kakaoId(kakaoId)
+                .socialId(socialId)
                 .role(Role.MEMBER)
                 .status(status)
                 .build();

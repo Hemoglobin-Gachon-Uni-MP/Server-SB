@@ -2,6 +2,7 @@ package com.mp.PLine.config.security.handler;
 
 import com.mp.PLine.src.login.UserDetailDto;
 import com.mp.PLine.src.login.UserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -16,13 +17,14 @@ import java.util.HashMap;
 /**
  * 사용자의 ‘인증’에 대해 성공하였을 경우 수행되는 Handler로 성공에 대한 사용자에게 반환값을 구성하여 전달합니다
  */
+@Slf4j
 @Configuration
 public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-//        log.debug("3.CustomLoginSuccessHandler");
+        log.debug("CustomLoginSuccessHandler");
 
         // 사용자와 관련된 정보를 모두 조회
 //        UserDto userDto = ((UserDetailDto) authentication.getPrincipal()).getUserDto();

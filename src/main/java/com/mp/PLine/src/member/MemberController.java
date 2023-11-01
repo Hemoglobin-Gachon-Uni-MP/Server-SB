@@ -71,23 +71,23 @@ public class MemberController {
     public BaseResponse<PostMemberRes> signUp(@RequestBody PostMemberReq postMemberReq) {
         // blank & form check
         BaseResponseStatus status = Validation.checkSignUp(postMemberReq);
-        if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
+        if (status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
         try {
             // get Kakao AccessToken
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             String accessToken = request.getHeader("K-ACCESS-TOKEN");
 
-            if(accessToken.isBlank()) return new BaseResponse<>(BaseResponseStatus.EMPTY_ACCESS_TOKEN);
+            if (accessToken.isBlank()) return new BaseResponse<>(BaseResponseStatus.EMPTY_ACCESS_TOKEN);
 
             // create user
             Long kakaoId = memberService.createKakaoUser(accessToken);
             Long age = 2023 - Long.parseLong(postMemberReq.getBirth().substring(0, 4)) + 1;
 
             Long memberId = memberService.signUp(postMemberReq, kakaoId, age);
-            String jwt = jwtService.createJwt(memberId);
+//            String jwt = jwtService.createAccessToken(memberId);
 
-            return new BaseResponse<>(new PostMemberRes(jwt, memberId));
+            return new BaseResponse<>(new PostMemberRes(null, memberId));
 
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -126,7 +126,7 @@ public class MemberController {
         // if user exist, return userId and jwt
         if (member.isPresent()) {
             memberId = member.get().getId();
-            String jwt = jwtService.createJwt(memberId);
+            String jwt = jwtService.createAccessToken(null);
             return new BaseResponse<>(new PostMemberRes(jwt, memberId));
         } else {
             return new BaseResponse<>(BaseResponseStatus.INVALID_USER);

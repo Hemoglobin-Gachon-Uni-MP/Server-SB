@@ -36,7 +36,7 @@ public class MemberService implements UserDetailsService {
         String refresh_Token ="";
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
-        try{
+        try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -135,14 +135,14 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public Long signUp(PostMemberReq info, Long kakaoId, Long age) throws BaseException {
         // verify user existence using kakaoId
-        if(memberRepository.findByKakaoIdAndStatus(kakaoId, Status.A).isPresent()) {
+        if (memberRepository.findByKakaoIdAndStatus(kakaoId, Status.A).isPresent()) {
             throw new BaseException(BaseResponseStatus.EXIST_USER);
         }
-
+        return null;
         // if user is not exist, save user
-        Member newMember = Member.of(info, age, kakaoId, Status.A);
-        Member savedMember = memberRepository.save(newMember);
-        return savedMember.getId();
+//        Member newMember = Member.of(info, age, kakaoId, Status.A);
+//        Member savedMember = memberRepository.save(newMember);
+//        return savedMember.getId();
     }
 
     /* Resign API */
