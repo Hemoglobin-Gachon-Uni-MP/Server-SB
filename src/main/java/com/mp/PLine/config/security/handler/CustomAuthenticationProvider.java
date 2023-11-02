@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.mp.PLine.src.login.UserDetailDto;
+import com.mp.PLine.source.login.UserDetailDto;
 
 import javax.annotation.Resource;
 

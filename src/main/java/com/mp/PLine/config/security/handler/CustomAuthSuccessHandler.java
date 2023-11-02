@@ -1,7 +1,5 @@
 package com.mp.PLine.config.security.handler;
 
-import com.mp.PLine.src.login.UserDetailDto;
-import com.mp.PLine.src.login.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
