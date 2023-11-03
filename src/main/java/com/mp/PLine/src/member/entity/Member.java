@@ -50,7 +50,7 @@ public class Member extends BaseEntity {
         this.status = status;
     }
 
-    public static Member of(PostMemberReq postMemberReq, Long age, Long kakaoId, Status status) {
+    public static Member of(PostMemberReq postMemberReq, Long age, String profileImg, Long kakaoId, Status status) {
         return Member.builder()
                 .name(postMemberReq.getName())
                 .nickname(postMemberReq.getNickname())
@@ -61,7 +61,7 @@ public class Member extends BaseEntity {
                 .abo(postMemberReq.getAbo())
                 .rh(postMemberReq.getRh())
                 .location(postMemberReq.getLocation())
-                .profileImg(postMemberReq.getProfileImg())
+                .profileImg(profileImg)
                 .kakaoId(kakaoId)
                 .status(status)
                 .build();

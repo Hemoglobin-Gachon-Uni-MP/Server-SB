@@ -1,6 +1,7 @@
-package com.mp.PLine.src.admin.entity;
+package com.mp.PLine.src.report.entity;
 
 import com.mp.PLine.src.member.entity.Member;
+import com.mp.PLine.src.report.dto.PostReportReq;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.Builder;
@@ -43,14 +44,13 @@ public class Report extends BaseEntity {
         this.status = status;
     }
 
-    public static Report of(Member fromMember, Member toMember, String category,
-                            Long feedOrCommentId, String reason, Status status) {
+    public static Report of(Member member, Member toMember, PostReportReq postReportReq, Status status) {
         return Report.builder()
-                .fromMember(fromMember)
+                .fromMember(member)
                 .toMember(toMember)
-                .category(category)
-                .feedOrCommentId(feedOrCommentId)
-                .reason(reason)
+                .category(postReportReq.getCategory())
+                .feedOrCommentId(postReportReq.getFeedOrCommentId())
+                .reason(postReportReq.getReason())
                 .status(status)
                 .build();
     }

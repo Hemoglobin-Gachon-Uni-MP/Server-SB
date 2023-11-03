@@ -4,7 +4,7 @@ import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.myPage.dto.res.GetCertificationRes;
-import com.mp.PLine.src.myPage.entity.Certification;
+import com.mp.PLine.src.myPage.dto.res.GetRewardRes;
 import com.mp.PLine.src.myPage.dto.req.PostCertificationReq;
 import com.mp.PLine.src.myPage.dto.res.GetMemberRes;
 import com.mp.PLine.src.myPage.dto.req.PatchMemberReq;
@@ -142,6 +142,29 @@ public class MyPageController {
             // get jwt from header
             Long memberId = jwtService.getMemberId();
             return new BaseResponse<>(myPageService.getCertificationList(memberId));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * Return Certification Reward List API
+     * [GET] /mypages/certification/reward-list
+     */
+    @ApiOperation("헌혈 리워드 반환 API")
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
+            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다."),
+    })
+    @ResponseBody
+    @GetMapping("/certification/reward-list")
+    public BaseResponse<GetRewardRes> getRewardList() {
+        // 이름 날짜 증서번호
+        try {
+            // get jwt from header
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(myPageService.getRewardList(memberId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

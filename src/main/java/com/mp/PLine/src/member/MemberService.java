@@ -9,6 +9,7 @@ import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.src.member.entity.Member;
+import com.mp.PLine.src.myPage.CertificationRepository;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ public class MemberService {
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
+    private final CertificationRepository certificationRepository;
 
     /* Get AccessToken from kakao */
     public String getKaKaoAccessToken(String code) {
@@ -136,9 +139,19 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.EXIST_USER);
         }
 
+        int profile = (int) (Math.random() * 2) + 1;
+        String profileImg = "";
+
+        if(profile == 1) {
+            profileImg = "https://p-line.s3.ap-northeast-2.amazonaws.com/profile/Group+20.png";
+        } else if(profile == 2) {
+            profileImg = "https://p-line.s3.ap-northeast-2.amazonaws.com/profile/Group+21.png";
+        }
+
         // if user is not exist, save user
-        Member newMember = Member.of(info, age, kakaoId, Status.A);
+        Member newMember = Member.of(info, age, profileImg, kakaoId, Status.A);
         Member savedMember = memberRepository.save(newMember);
+
         return savedMember.getId();
     }
 
@@ -148,10 +161,12 @@ public class MemberService {
         // verify user existence using userId
         Member member = memberRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
+
         member.setStatus(Status.D);
         feedRepository.setFeedByMemberStatus(memberId);
         commentRepository.setCommentByMemberStatus(memberId);
         replyRepository.setReplyByMemberStatus(memberId);
+        certificationRepository.setCertificationByMemberStatus(memberId);
 
         return "회원 탈퇴가 완료되었습니다.";
     }

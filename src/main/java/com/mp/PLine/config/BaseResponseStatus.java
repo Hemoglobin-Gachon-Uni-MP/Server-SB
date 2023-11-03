@@ -64,6 +64,9 @@ public enum BaseResponseStatus {
     POST_CERTIFICATION_EMPTY_IMAGE(false, 2053, "헌혈 증서를 업로드해주세요."),
     POST_CERTIFICATION_INVALID_NAME(false, 2054, "본인이 한 헌혈 증서만 등록 가능합니다."),
 
+    /* Report */
+    INVALID_REPORT_USER(false,2060,"신고하려는 유저가 존재하지 않는 유저입니다."),
+    INVALID_REPORT_SAME_USER(false,2061,"자기 자신은 신고할 수 없습니다."),
 
 
 
