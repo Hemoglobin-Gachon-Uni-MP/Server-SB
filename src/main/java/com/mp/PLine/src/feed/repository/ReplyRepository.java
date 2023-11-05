@@ -26,7 +26,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
             "   r.createdAt as date, \n" +
             "   case when((select count(*) from Report re \n" +
             "           where re.fromMember.id = :memberId and re.toMember.id = r.member.id \n" +
-            "           and re.feedOrCommentId = r.id and re.category = 'C' and re.status = 'A') > 0) then true \n" +
+            "           and re.feedOrCommentId = r.id and re.category = 'R' and re.status = 'A') > 0) then true \n" +
             "        else false \n" +
             "   end as isReported \n" +
             "from Reply r \n" +
