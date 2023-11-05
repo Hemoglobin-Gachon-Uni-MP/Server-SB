@@ -19,6 +19,8 @@ import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.myPage.MyPageRepository;
+import com.mp.PLine.src.report.ReportRepository;
+import com.mp.PLine.src.report.entity.Report;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class FeedService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
     private final MyPageRepository myPageRepository;
+    private final ReportRepository reportRepository;
 
     /* date format */
     public static String shortDate(Timestamp createdAt) {
@@ -75,13 +78,18 @@ public class FeedService {
     }
 
     /* Return feed detail API */
-    public GetFeedRes getFeed(Long feedId) throws BaseException {
+    public GetFeedRes getFeed(Long memberId, Long feedId) throws BaseException {
         // verify feed existence using feedId
-        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
-        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
-        Feed feedRes = feed.get();
+        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
 
-        return GetFeedRes.of(feedRes, feedRes.getMember(), getComments(feedId));
+        Member member = feed.getMember();
+
+        // fromMember, toMember, category, feedId, Status가 같은 Report Entity를 찾아야 함
+        Optional<Report> report = reportRepository.findReportedFeed(memberId, member.getId(), feedId);
+        boolean isReported = report.isPresent();
+
+        return GetFeedRes.of(feed, member, getComments(feedId), isReported);
     }
 
     /* get feed's comment list */
