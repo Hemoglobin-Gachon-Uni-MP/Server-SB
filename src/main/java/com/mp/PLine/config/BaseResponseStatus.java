@@ -67,8 +67,8 @@ public enum BaseResponseStatus {
     /* Report */
     INVALID_REPORT_USER(false,2060,"신고하려는 유저가 존재하지 않는 유저입니다."),
     INVALID_REPORT_SAME_USER(false,2061,"자기 자신은 신고할 수 없습니다."),
-
-
+    INVALID_EXIST_REPORT(false,2062, "이미 신고가 완료되었습니다."),
+    INVALID_NON_EXIST_REPORT(false,2063, "신고가 접수되지 않았습니다."),
 
 
     /**

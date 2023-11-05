@@ -60,13 +60,47 @@ public class ReportService {
                 break;
         }
 
-        Optional<Report> report = reportRepository.findAllByFromMemberIdAndStatus(memberId, Status.A);
-        if(report.isPresent()) {
-            report.get().setStatus(Status.D);  // 신고 취소
-            return "신고가 취소되었습니다.";
-        } else {
-            reportRepository.save(Report.of(member, reportedMember, postReportReq, Status.A));  // 신고 완료
-            return "신고가 완료되었습니다.";
+        // 이미 신고한 게시물일 경우 예외 처리
+        if(reportRepository.findReport(memberId, reportedMember.getId(), postReportReq.getCategory(), postReportReq.getFeedOrCommentId()).isPresent())
+            throw new BaseException(BaseResponseStatus.INVALID_EXIST_REPORT);
+
+        reportRepository.save(Report.of(member, reportedMember, postReportReq, Status.A));  // 신고 완료
+        return "신고가 완료되었습니다.";
+    }
+
+    /* Delete Report API */
+    @Transactional
+    public String deleteReport(Long memberId, PostReportReq postReportReq) throws BaseException {
+        // verify user existence using userID
+        Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
+
+        Member reportedMember = myPageRepository.findByIdAndStatus(postReportReq.getReportedMemberId(), Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT_USER));
+
+//        if(Objects.equals(postReportReq.getMemberId(), postReportReq.getReportedMemberId())) throw new BaseException(BaseResponseStatus.INVALID_REPORT_SAME_USER);
+
+        // 존재하는 게시물, 댓글, 답글인지 확인
+        String category = postReportReq.getCategory();
+        switch (category) {
+            case "F":
+                Feed reportedFeed = feedRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
+                break;
+            case "C":
+                Comment reportedComment = commentRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
+                break;
+            case "R":
+                Reply reportedReply = replyRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
+                break;
         }
+
+        Optional<Report> report = reportRepository.findReport(memberId, reportedMember.getId(), postReportReq.getCategory(), postReportReq.getFeedOrCommentId());
+        report.orElseThrow(() ->  new BaseException(BaseResponseStatus.INVALID_NON_EXIST_REPORT));
+
+        report.get().setStatus(Status.D);
+        return "신고 취소가 완료되었습니다.";
     }
 }
