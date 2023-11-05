@@ -41,7 +41,7 @@ public class ReportController {
         try {
             // get jwt from header
             Long memberId = jwtService.getMemberId();
-            return new BaseResponse<>(reportService.re드port(memberId, postReportReq));
+            return new BaseResponse<>(reportService.report(memberId, postReportReq));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

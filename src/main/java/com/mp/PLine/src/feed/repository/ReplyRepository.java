@@ -23,11 +23,16 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("select r.id as replyId, \n" +
             "   r.member.id as memberId, r.member.profileImg as profileImg, r.member.nickname as nickname, \n" +
             "   r.context as context, \n" +
-            "   r.createdAt as date \n" +
+            "   r.createdAt as date, \n" +
+            "   case when((select count(*) from Report re \n" +
+            "           where re.fromMember.id = :memberId and re.toMember.id = r.member.id \n" +
+            "           and re.feedOrCommentId = r.id and re.category = 'C' and re.status = 'A') > 0) then true \n" +
+            "        else false \n" +
+            "   end as isReported \n" +
             "from Reply r \n" +
             "where r.comment.id = :commentId and r.status = 'A' and r.member.status = 'A' \n" +
             "order by r.createdAt")
-    List<ReplyResI> findByCommentId(@Param("commentId") Long commentId);
+    List<ReplyResI> findByCommentId(@Param("memberId") Long memberId, @Param("commentId") Long commentId);
 
     // delete user's replies when deleting user
     @Modifying

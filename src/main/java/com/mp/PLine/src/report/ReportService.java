@@ -41,7 +41,7 @@ public class ReportService {
         Member reportedMember = myPageRepository.findByIdAndStatus(postReportReq.getReportedMemberId(), Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT_USER));
 
-        if(Objects.equals(postReportReq.getMemberId(), postReportReq.getReportedMemberId())) throw new BaseException(BaseResponseStatus.INVALID_REPORT_SAME_USER);
+//        if(Objects.equals(postReportReq.getMemberId(), postReportReq.getReportedMemberId())) throw new BaseException(BaseResponseStatus.INVALID_REPORT_SAME_USER);
 
         // 존재하는 게시물, 댓글, 답글인지 확인
         String category = postReportReq.getCategory();

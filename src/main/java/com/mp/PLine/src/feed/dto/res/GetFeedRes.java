@@ -39,7 +39,7 @@ public class GetFeedRes {
     private String location;
     @ApiModelProperty(example = "true: 수혈, false: 공혈")
     private Boolean isReceiver;
-    @ApiModelProperty(example = "true: 수혈, false: 공혈")
+    @ApiModelProperty(example = "true: 신고 O, false: 신고 X")
     private Boolean isReported;
 
     public GetFeedRes(Long feedId, Long memberId, String profileImg, String nickname, String context,

@@ -89,18 +89,18 @@ public class FeedService {
         Optional<Report> report = reportRepository.findReportedFeed(memberId, member.getId(), feedId);
         boolean isReported = report.isPresent();
 
-        return GetFeedRes.of(feed, member, getComments(feedId), isReported);
+        return GetFeedRes.of(feed, member, getComments(memberId, feedId), isReported);
     }
 
     /* get feed's comment list */
-    public CommentInfo getComments(Long feedId) {
-        List<CommentResI> commentResI = commentRepository.findByFeedId(feedId);
+    public CommentInfo getComments(Long memberId, Long feedId) {
+        List<CommentResI> commentResI = commentRepository.findByFeedId(memberId, feedId);
         List<CommentRes> commentRes = new ArrayList<>();
 
         int replyCnt = 0;
         for (CommentResI cur : commentResI) {
-            List<ReplyRes> replyRes = getReplies(cur.getCommentId());
-            commentRes.add(CommentRes.of(cur,replyRes));
+            List<ReplyRes> replyRes = getReplies(memberId, cur.getCommentId());
+            commentRes.add(CommentRes.of(cur, replyRes));
             replyCnt += replyRes.size();
         }
 
@@ -108,12 +108,12 @@ public class FeedService {
     }
 
     /* get comment's reply list */
-    public List<ReplyRes> getReplies(Long commentId) {
+    public List<ReplyRes> getReplies(Long memberId, Long commentId) {
         // mapping received values to list
-        List<ReplyResI> replyResI = replyRepository.findByCommentId(commentId);
+        List<ReplyResI> replyResI = replyRepository.findByCommentId(memberId, commentId);
 
-        return replyResI.stream().
-                map(ReplyRes::from)
+        return replyResI.stream()
+                .map(ReplyRes::from)
                 .collect(Collectors.toList());
     }
 
