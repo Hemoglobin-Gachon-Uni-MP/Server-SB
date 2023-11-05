@@ -138,7 +138,7 @@ public class MyPageService {
         return GetRewardRes.of(member, length, rewardList);
     }
 
-    public String date(Timestamp createdAt) {
+    private String date(Timestamp createdAt) {
         SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd");
         return format.format(createdAt);
     }
