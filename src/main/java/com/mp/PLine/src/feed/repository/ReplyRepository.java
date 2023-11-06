@@ -28,7 +28,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
             "           where re.fromMember.id = :memberId and re.toMember.id = r.member.id \n" +
             "           and re.feedOrCommentId = r.id and re.category = 'R' and re.status = 'A') > 0) then true \n" +
             "        else false \n" +
-            "   end as isReported \n" +
+            "   end as isReportedFromUser \n" +
             "from Reply r \n" +
             "where r.comment.id = :commentId and r.status = 'A' and r.member.status = 'A' \n" +
             "order by r.createdAt")

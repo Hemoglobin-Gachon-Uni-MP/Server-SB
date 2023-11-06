@@ -27,7 +27,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "           where r.fromMember.id = :memberId and r.toMember.id = c.member.id \n" +
             "           and r.feedOrCommentId = c.id and r.category = 'C' and r.status = 'A') > 0) then true \n" +
             "        else false \n" +
-            "   end as isReported \n" +
+            "   end as isReportedFromUser \n" +
             "from Comment c \n" +
             "where c.feed.id = :feedId and c.status = 'A' and c.member.status = 'A' \n" +
             "order by c.createdAt")

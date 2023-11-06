@@ -30,10 +30,10 @@ public class CommentRes {
     @ApiModelProperty(example = "05/09 오후 5:15")
     private String date;
     @ApiModelProperty(example = "true: 신고 O, false: 신고 X")
-    private Boolean isReported;
+    private Boolean isReportedFromUser;
 
     public CommentRes(Long commentId, Long memberId, String profileImg, String nickname,
-                      String context, List<ReplyRes> reply, String date, Boolean isReported) {
+                      String context, List<ReplyRes> reply, String date, Boolean isReportedFromUser) {
         this.commentId = commentId;
         this.memberId = memberId;
         this.profileImg = profileImg;
@@ -41,7 +41,7 @@ public class CommentRes {
         this.context = context;
         this.replyList = reply;
         this.date = date;
-        this.isReported = isReported;
+        this.isReportedFromUser = isReportedFromUser;
     }
 
     public static CommentRes of(CommentResI commentResInfo, List<ReplyRes> replyRes) {
@@ -53,7 +53,7 @@ public class CommentRes {
                 .context(commentResInfo.getContext())
                 .replyList(replyRes)
                 .date(FeedService.longDate(commentResInfo.getDate()))
-                .isReported(commentResInfo.getIsReported())
+                .isReportedFromUser(commentResInfo.getIsReportedFromUser())
                 .build();
     }
 }

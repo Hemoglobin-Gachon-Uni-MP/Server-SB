@@ -13,5 +13,5 @@ public interface CommentResI {
     String getNickname();
     String getContext();
     Timestamp getDate();
-    Boolean getIsReported();
+    Boolean getIsReportedFromUser();
 }

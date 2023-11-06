@@ -40,11 +40,11 @@ public class GetFeedRes {
     @ApiModelProperty(example = "true: 수혈, false: 공혈")
     private Boolean isReceiver;
     @ApiModelProperty(example = "true: 신고 O, false: 신고 X")
-    private Boolean isReported;
+    private Boolean isReportedFromUser;
 
     public GetFeedRes(Long feedId, Long memberId, String profileImg, String nickname, String context,
                       int commentCnt, List<CommentRes> commentList,
-                      String date, int abo, int rh, String location, Boolean isReceiver, Boolean isReported) {
+                      String date, int abo, int rh, String location, Boolean isReceiver, Boolean isReportedFromUser) {
         this.feedId = feedId;
         this.memberId = memberId;
         this.profileImg = profileImg;
@@ -57,10 +57,10 @@ public class GetFeedRes {
         this.rh = rh;
         this.location = location;
         this.isReceiver = isReceiver;
-        this.isReported = isReported;
+        this.isReportedFromUser = isReportedFromUser;
     }
 
-    public static GetFeedRes of(Feed feed, Member member, CommentInfo commentInfo, Boolean isReported) {
+    public static GetFeedRes of(Feed feed, Member member, CommentInfo commentInfo, Boolean isReportedFromUser) {
         return GetFeedRes.builder()
                 .feedId(feed.getId())
                 .memberId(member.getId())
@@ -74,7 +74,7 @@ public class GetFeedRes {
                 .rh(feed.getRh())
                 .location(feed.getLocation())
                 .isReceiver(feed.getIsReceiver())
-                .isReported(isReported)
+                .isReportedFromUser(isReportedFromUser)
                 .build();
     }
 }

@@ -2,10 +2,6 @@ package com.mp.PLine.src.report;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.feed.dto.req.PostFeedReq;
-import com.mp.PLine.src.feed.entity.Comment;
-import com.mp.PLine.src.feed.entity.Feed;
-import com.mp.PLine.src.feed.entity.Reply;
 import com.mp.PLine.src.feed.repository.CommentRepository;
 import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
@@ -47,15 +43,15 @@ public class ReportService {
         String category = postReportReq.getCategory();
         switch (category) {
             case "F":
-                Feed reportedFeed = feedRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                feedRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
                 break;
             case "C":
-                Comment reportedComment = commentRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                commentRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
                 break;
             case "R":
-                Reply reportedReply = replyRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                replyRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
                 break;
         }
@@ -84,23 +80,23 @@ public class ReportService {
         String category = postReportReq.getCategory();
         switch (category) {
             case "F":
-                Feed reportedFeed = feedRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                feedRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
                 break;
             case "C":
-                Comment reportedComment = commentRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                commentRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
                 break;
             case "R":
-                Reply reportedReply = replyRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
+                replyRepository.findByIdAndStatus(postReportReq.getFeedOrCommentId(), Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
                 break;
         }
 
-        Optional<Report> report = reportRepository.findReport(memberId, reportedMember.getId(), postReportReq.getCategory(), postReportReq.getFeedOrCommentId());
-        report.orElseThrow(() ->  new BaseException(BaseResponseStatus.INVALID_NON_EXIST_REPORT));
+        Report report = reportRepository.findReport(memberId, reportedMember.getId(), postReportReq.getCategory(), postReportReq.getFeedOrCommentId())
+                .orElseThrow(() ->  new BaseException(BaseResponseStatus.INVALID_NON_EXIST_REPORT));
 
-        report.get().setStatus(Status.D);
+        report.setStatus(Status.D);
         return "신고 취소가 완료되었습니다.";
     }
 }

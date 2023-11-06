@@ -3,14 +3,16 @@ package com.mp.PLine.src.feed;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.dto.req.PatchFeedReq;
-import com.mp.PLine.src.feed.dto.req.PostCommentReq;
+import com.mp.PLine.src.feed.dto.req.PostFeedReq;
 import com.mp.PLine.src.feed.dto.req.PostReplyReq;
 import com.mp.PLine.src.feed.dto.res.CommentRes;
 import com.mp.PLine.src.feed.dto.res.GetFeedRes;
 import com.mp.PLine.src.feed.dto.res.GetFeedsRes;
 import com.mp.PLine.src.feed.dto.res.ReplyRes;
-import com.mp.PLine.src.feed.dto.util.*;
-import com.mp.PLine.src.feed.dto.req.PostFeedReq;
+import com.mp.PLine.src.feed.dto.util.CommentInfo;
+import com.mp.PLine.src.feed.dto.util.CommentResI;
+import com.mp.PLine.src.feed.dto.util.GetFeedsResI;
+import com.mp.PLine.src.feed.dto.util.ReplyResI;
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.src.feed.entity.Reply;
@@ -87,9 +89,9 @@ public class FeedService {
 
         // fromMember, toMember, category, feedId, Status가 같은 Report Entity를 찾아야 함
         Optional<Report> report = reportRepository.findReportedFeed(memberId, member.getId(), feedId);
-        boolean isReported = report.isPresent();
+        boolean isReportedFromUser = report.isPresent();
 
-        return GetFeedRes.of(feed, member, getComments(memberId, feedId), isReported);
+        return GetFeedRes.of(feed, member, getComments(memberId, feedId), isReportedFromUser);
     }
 
     /* get feed's comment list */
