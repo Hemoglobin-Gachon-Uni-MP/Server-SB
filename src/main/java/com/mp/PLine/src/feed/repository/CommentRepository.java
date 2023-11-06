@@ -22,11 +22,16 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     // return comment list for feed
     @Query("select c.id as commentId, \n" +
             "   c.member.id as memberId, c.member.profileImg as profileImg, c.member.nickname as nickname, \n" +
-            "   c.context as context, c.createdAt as date \n" +
+            "   c.context as context, c.createdAt as date, \n" +
+            "   case when((select count(*) from Report r \n" +
+            "           where r.fromMember.id = :memberId and r.toMember.id = c.member.id \n" +
+            "           and r.feedOrCommentId = c.id and r.category = 'C' and r.status = 'A') > 0) then true \n" +
+            "        else false \n" +
+            "   end as isReportedFromUser \n" +
             "from Comment c \n" +
             "where c.feed.id = :feedId and c.status = 'A' and c.member.status = 'A' \n" +
             "order by c.createdAt")
-    List<CommentResI> findByFeedId(@Param("feedId") Long feedId);
+    List<CommentResI> findByFeedId(@Param("memberId") Long memberId, @Param("feedId") Long feedId);
 
     // delete user's comments when deleting user
     @Modifying

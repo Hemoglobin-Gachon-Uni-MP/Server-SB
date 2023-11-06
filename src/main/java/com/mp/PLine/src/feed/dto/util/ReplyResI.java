@@ -10,4 +10,5 @@ public interface ReplyResI {
     String getNickname();
     String getContext();
     Timestamp getDate();
+    Boolean getIsReportedFromUser();
 }

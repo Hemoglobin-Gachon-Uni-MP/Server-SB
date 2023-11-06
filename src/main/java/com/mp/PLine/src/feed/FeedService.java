@@ -3,14 +3,16 @@ package com.mp.PLine.src.feed;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.feed.dto.req.PatchFeedReq;
-import com.mp.PLine.src.feed.dto.req.PostCommentReq;
+import com.mp.PLine.src.feed.dto.req.PostFeedReq;
 import com.mp.PLine.src.feed.dto.req.PostReplyReq;
 import com.mp.PLine.src.feed.dto.res.CommentRes;
 import com.mp.PLine.src.feed.dto.res.GetFeedRes;
 import com.mp.PLine.src.feed.dto.res.GetFeedsRes;
 import com.mp.PLine.src.feed.dto.res.ReplyRes;
-import com.mp.PLine.src.feed.dto.util.*;
-import com.mp.PLine.src.feed.dto.req.PostFeedReq;
+import com.mp.PLine.src.feed.dto.util.CommentInfo;
+import com.mp.PLine.src.feed.dto.util.CommentResI;
+import com.mp.PLine.src.feed.dto.util.GetFeedsResI;
+import com.mp.PLine.src.feed.dto.util.ReplyResI;
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.src.feed.entity.Reply;
@@ -19,6 +21,8 @@ import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.myPage.MyPageRepository;
+import com.mp.PLine.src.report.ReportRepository;
+import com.mp.PLine.src.report.entity.Report;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +45,7 @@ public class FeedService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
     private final MyPageRepository myPageRepository;
+    private final ReportRepository reportRepository;
 
     /* date format */
     public static String shortDate(Timestamp createdAt) {
@@ -75,24 +80,29 @@ public class FeedService {
     }
 
     /* Return feed detail API */
-    public GetFeedRes getFeed(Long feedId) throws BaseException {
+    public GetFeedRes getFeed(Long memberId, Long feedId) throws BaseException {
         // verify feed existence using feedId
-        Optional<Feed> feed = feedRepository.findByIdAndStatus(feedId, Status.A);
-        if(feed.isEmpty()) throw new BaseException(BaseResponseStatus.INVALID_FEED);
-        Feed feedRes = feed.get();
+        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
 
-        return GetFeedRes.of(feedRes, feedRes.getMember(), getComments(feedId));
+        Member member = feed.getMember();
+
+        // fromMember, toMember, category, feedId, Status가 같은 Report Entity를 찾아야 함
+        Optional<Report> report = reportRepository.findReportedFeed(memberId, member.getId(), feedId);
+        boolean isReportedFromUser = report.isPresent();
+
+        return GetFeedRes.of(feed, member, getComments(memberId, feedId), isReportedFromUser);
     }
 
     /* get feed's comment list */
-    public CommentInfo getComments(Long feedId) {
-        List<CommentResI> commentResI = commentRepository.findByFeedId(feedId);
+    public CommentInfo getComments(Long memberId, Long feedId) {
+        List<CommentResI> commentResI = commentRepository.findByFeedId(memberId, feedId);
         List<CommentRes> commentRes = new ArrayList<>();
 
         int replyCnt = 0;
         for (CommentResI cur : commentResI) {
-            List<ReplyRes> replyRes = getReplies(cur.getCommentId());
-            commentRes.add(CommentRes.of(cur,replyRes));
+            List<ReplyRes> replyRes = getReplies(memberId, cur.getCommentId());
+            commentRes.add(CommentRes.of(cur, replyRes));
             replyCnt += replyRes.size();
         }
 
@@ -100,12 +110,12 @@ public class FeedService {
     }
 
     /* get comment's reply list */
-    public List<ReplyRes> getReplies(Long commentId) {
+    public List<ReplyRes> getReplies(Long memberId, Long commentId) {
         // mapping received values to list
-        List<ReplyResI> replyResI = replyRepository.findByCommentId(commentId);
+        List<ReplyResI> replyResI = replyRepository.findByCommentId(memberId, commentId);
 
-        return replyResI.stream().
-                map(ReplyRes::from)
+        return replyResI.stream()
+                .map(ReplyRes::from)
                 .collect(Collectors.toList());
     }
 
