@@ -68,10 +68,10 @@ public class OAuthAttributes {
     public Member toMember(SocialType socialType, OAuth2UserInfo oauth2UserInfo) {
         return Member.builder()
                 .socialType(socialType)
-                .socialId(oauth2UserInfo.getId())
+                .socialId(Long.parseLong(oauth2UserInfo.getId()))
                 .nickname(oauth2UserInfo.getNickname())
                 .profileImg(oauth2UserInfo.getImageUrl())
-                .role(Role.MEMBER)
+                .role(Role.GUEST)
                 .build();
     }
 }

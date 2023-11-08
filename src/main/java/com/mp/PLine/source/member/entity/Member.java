@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     private String email;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-    private String socialId;
+    private Long socialId;
 //    private Long kakaoId;
     private String refreshToken;
     @Enumerated(EnumType.STRING)
@@ -42,7 +42,7 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(String name, String nickname, String birth, Long age, String phone, String gender, int abo,
-                  int rh, String location, String profileImg, String email, String socialId, Role role, SocialType socialType, Status status) {
+                  int rh, String location, String profileImg, String email, Long socialId, Role role, SocialType socialType, Status status) {
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;
@@ -60,7 +60,7 @@ public class Member extends BaseEntity {
         this.status = status;
     }
 
-    public static Member of(PostMemberReq postMemberReq, Long age, String socialId, Status status) {
+    public static Member of(PostMemberReq postMemberReq, long age) {
         return Member.builder()
                 .name(postMemberReq.getName())
                 .nickname(postMemberReq.getNickname())
@@ -72,14 +72,18 @@ public class Member extends BaseEntity {
                 .rh(postMemberReq.getRh())
                 .location(postMemberReq.getLocation())
                 .profileImg(postMemberReq.getProfileImg())
-                .socialId(socialId)
+                .socialId(postMemberReq.getSocialId())
                 .role(Role.MEMBER)
-                .status(status)
+                .status(Status.A)
                 .build();
     }
 
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
+    }
+
+    public static long parseAge(String birth) {
+        return 2023 - Long.parseLong(birth.substring(0, 4)) + 1;
     }
 
 }

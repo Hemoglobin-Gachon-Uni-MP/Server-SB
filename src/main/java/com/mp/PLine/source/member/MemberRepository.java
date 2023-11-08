@@ -30,4 +30,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
 
     Optional<Member> findByEmail(String email);
+
+    Optional<Member> findBySocialId(Long socialId);
 }

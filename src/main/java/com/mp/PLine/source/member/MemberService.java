@@ -3,12 +3,16 @@ package com.mp.PLine.source.member;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mp.PLine.config.BaseException;
+import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.source.feed.repository.CommentRepository;
 import com.mp.PLine.source.feed.repository.FeedRepository;
 import com.mp.PLine.source.feed.repository.ReplyRepository;
+import com.mp.PLine.source.login.dto.LoginRequestDto;
 import com.mp.PLine.source.member.dto.req.PostMemberReq;
+import com.mp.PLine.source.member.dto.res.PostMemberRes;
 import com.mp.PLine.source.member.entity.Member;
+import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +33,7 @@ public class MemberService implements UserDetailsService {
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
+    private final JwtService jwtService;
 
     /* Get AccessToken from kakao */
     public String getKaKaoAccessToken(String code) {
@@ -48,10 +53,6 @@ public class MemberService implements UserDetailsService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=add1a9f7abd5d86e163dbcc6fad723d5");  // REST_API_KEY
-            sb.append("&redirect_uri=http://localhost:9000/kakao");  // redirect_uri
-            sb.append("&code=").append(code);
-            bw.write(sb.toString());
             bw.flush();
 
             // success if code is 200
@@ -133,16 +134,13 @@ public class MemberService implements UserDetailsService {
 
     /* Sign up with kakao API */
     @Transactional
-    public Long signUp(PostMemberReq info, Long kakaoId, Long age) throws BaseException {
-        // verify user existence using kakaoId
-//        if (memberRepository.findByKakaoIdAndStatus(kakaoId, Status.A).isPresent()) {
-//            throw new BaseException(BaseResponseStatus.EXIST_USER);
-//        }
-        return null;
-        // if user is not exist, save user
-//        Member newMember = Member.of(info, age, kakaoId, Status.A);
-//        Member savedMember = memberRepository.save(newMember);
-//        return savedMember.getId();
+    public String signUp(PostMemberReq info) throws BaseException {
+        if (memberRepository.findBySocialId(info.getSocialId()).isPresent()) {
+            throw new BaseException(BaseResponseStatus.EXIST_USER);
+        }
+        Member member = Member.of(info, Member.parseAge(info.getBirth()));
+        memberRepository.save(member);
+        return jwtService.createAccessToken(member.getId());
     }
 
     /* Resign API */
@@ -159,9 +157,15 @@ public class MemberService implements UserDetailsService {
         return "회원 탈퇴가 완료되었습니다.";
     }
 
+    public BaseResponse<PostMemberRes> findMember(LoginRequestDto.LoginDto loginDto) throws BaseException {
+        Member member = memberRepository.findBySocialId(loginDto.getSocialId())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
+        Long memberId = member.getId();
+        return new BaseResponse<>(new PostMemberRes(jwtService.createAccessToken(memberId), memberId));
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         return null;
     }
 }

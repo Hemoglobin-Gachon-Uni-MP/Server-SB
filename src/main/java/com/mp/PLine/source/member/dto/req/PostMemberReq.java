@@ -26,4 +26,6 @@ public class PostMemberReq {
     private String location;
     @ApiModelProperty(example = "1 (1, 2)")
     private String profileImg;
+    @ApiModelProperty(example = "2797627999")
+    private Long socialId;
 }
