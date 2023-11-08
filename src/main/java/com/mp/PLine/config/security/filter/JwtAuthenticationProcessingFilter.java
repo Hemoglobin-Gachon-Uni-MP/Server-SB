@@ -85,7 +85,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         memberRepository.findByRefreshToken(refreshToken)
                 .ifPresent(user -> {
                     String reIssuedRefreshToken = reIssueRefreshToken(user);
-                    jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getEmail()),
+                    jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getId()),
                             reIssuedRefreshToken);
                 });
     }
@@ -115,8 +115,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         log.info("checkAccessTokenAndAuthentication() 호출");
         jwtService.extractAccessToken(request)
                 .filter(jwtService::isTokenValid)
-                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-                        .ifPresent(email -> memberRepository.findByEmail(email)
+                .ifPresent(accessToken -> jwtService.extractId(accessToken)
+                        .ifPresent(userId -> memberRepository.findById(userId)
                                 .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
@@ -137,16 +137,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * SecurityContextHolder.getContext()로 SecurityContext를 꺼낸 후,
      * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
      */
-    public void saveAuthentication(Member myMember) {
-//        String password = myMember.getPassword();
+    public void saveAuthentication(Member member) {
+//        String password = member.getPassword();
 //        if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
 //            password = PasswordUtil.generateRandomPassword();
 //        }
 
         UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
-                .username(myMember.getEmail())
+                .username(member.getId().toString())
 //                .password(password)
-                .roles(myMember.getRole().name())
+                .roles(member.getRole().name())
                 .build();
 
         Authentication authentication =

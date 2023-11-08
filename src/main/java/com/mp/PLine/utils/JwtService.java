@@ -2,11 +2,14 @@ package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.security.secret.Secret;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,7 +20,6 @@ import java.util.Optional;
 
 import static com.mp.PLine.config.BaseResponseStatus.EMPTY_JWT;
 import static com.mp.PLine.config.BaseResponseStatus.INVALID_JWT;
-import static org.springframework.security.config.Elements.JWT;
 import static org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType.BEARER;
 
 @Getter
@@ -31,12 +33,12 @@ public class JwtService {
      * Create JWT
      * @return String
      */
-    public String createAccessToken(String email){
+    public String createAccessToken(Long userId){
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type","jwt")
-                .claim("email", email)
-//                .claim("userId", userId)
+//                .claim("email", email)
+                .claim("userId", userId)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
                 .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY)
@@ -139,12 +141,12 @@ public class JwtService {
     }
 
     /**
-     * AccessToken에서 Email 추출
+     * AccessToken에서 UserId 추출
      * verify로 AceessToken 검증 후
      * 유효하다면 getClaim()으로 이메일 추출
      * 유효하지 않다면 빈 Optional 객체 반환
      */
-    public Optional<String> extractEmail(String accessToken) {
+    public Optional<Long> extractId(String accessToken) {
         try {
             Jws<Claims> jwt = Jwts.parserBuilder()
                     .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
@@ -152,8 +154,7 @@ public class JwtService {
                     .parseClaimsJws(accessToken); // 액세스 토큰 파싱
 
             Claims claims = jwt.getBody();
-
-            return Optional.ofNullable(claims.get("email", String.class));
+            return Optional.ofNullable(claims.get("userId", Long.class));
         } catch (Exception e) {
             log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
@@ -171,5 +172,27 @@ public class JwtService {
             log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
             return false;
         }
+    }
+
+    public Long getUserId() throws BaseException {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String jwtToken = extractToken(request)
+                .orElseThrow(() -> new BaseException(EMPTY_JWT));
+        jwtToken = jwtToken.substring("Bearer ".length());
+        return extractId(jwtToken).orElseThrow(() -> new BaseException(EMPTY_JWT));
+    }
+
+
+    public static Optional<String> extractToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (isEmptyAuthorizationHeader(token)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(token);
+    }
+
+    private static boolean isEmptyAuthorizationHeader(String token) {
+        return !StringUtils.hasText(token);
     }
 }
