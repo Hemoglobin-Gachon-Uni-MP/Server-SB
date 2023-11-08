@@ -62,6 +62,4 @@ dependencies {
 	// XML -> JSON
 	implementation 'org.json:json:20230227'
 
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
 }
