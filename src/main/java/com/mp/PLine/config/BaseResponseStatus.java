@@ -57,6 +57,18 @@ public enum BaseResponseStatus {
     INVALID_COMMENT(false,2046,"존재하지 않는 댓글입니다."),
     INVALID_REPLY(false,2047,"존재하지 않는 답글입니다."),
 
+    /* Admin */
+    POST_CERTIFICATION_EMPTY_NAME(false, 2050, "이름을 입력해주세요."),
+    POST_CERTIFICATION_EMPTY_NUM(false, 2051, "헌혈 번호를 입력해주세요."),
+    POST_CERTIFICATION_EMPTY_DATE(false, 2052, "헌혈 날짜를 입력해주세요."),
+    POST_CERTIFICATION_EMPTY_IMAGE(false, 2053, "헌혈 증서를 업로드해주세요."),
+    POST_CERTIFICATION_INVALID_NAME(false, 2054, "본인이 한 헌혈 증서만 등록 가능합니다."),
+
+    /* Report */
+    INVALID_REPORT_USER(false,2060,"신고하려는 유저가 존재하지 않는 유저입니다."),
+    INVALID_REPORT_SAME_USER(false,2061,"자기 자신은 신고할 수 없습니다."),
+    INVALID_EXIST_REPORT(false,2062, "이미 신고가 완료되었습니다."),
+    INVALID_NON_EXIST_REPORT(false,2063, "신고가 접수되지 않았습니다."),
 
 
     /**

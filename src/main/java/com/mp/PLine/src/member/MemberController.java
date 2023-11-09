@@ -126,7 +126,7 @@ public class MemberController {
 
     /**
      * Resign API
-     * [PATCH] /{userId}/status
+     * [PATCH] /resign
      */
     @ApiOperation("회원 탈퇴 API")
     @ApiImplicitParams({

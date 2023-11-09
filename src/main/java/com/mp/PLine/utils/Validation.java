@@ -1,6 +1,7 @@
 package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.myPage.dto.req.PostCertificationReq;
 import com.mp.PLine.src.feed.dto.req.PatchFeedReq;
 import com.mp.PLine.src.feed.dto.req.PostCommentReq;
 import com.mp.PLine.src.feed.dto.req.PostFeedReq;
@@ -85,6 +86,16 @@ public class Validation {
         // check blank
         if(postReplyReq.getFeedId() == null) return BaseResponseStatus.POST_FEEDS_EMPTY_FEED;
         if(postReplyReq.getContext().isBlank()) return BaseResponseStatus.POST_FEEDS_EMPTY_CONTEXT;
+
+        return BaseResponseStatus.SUCCESS;
+    }
+
+    /** check blank & form when upload certification **/
+    public static BaseResponseStatus checkCertification(PostCertificationReq postCertificationReq) {
+        // check blank
+        if(postCertificationReq.getName().isBlank()) return BaseResponseStatus.POST_CERTIFICATION_EMPTY_NAME;
+        if(postCertificationReq.getCertificationNum().isBlank()) return BaseResponseStatus.POST_CERTIFICATION_EMPTY_NUM;
+        if(postCertificationReq.getDate().isBlank()) return BaseResponseStatus.POST_CERTIFICATION_EMPTY_DATE;
 
         return BaseResponseStatus.SUCCESS;
     }

@@ -92,7 +92,9 @@ public class FeedController {
     @GetMapping("/info/{feedId}")
     public BaseResponse<GetFeedRes> getFeed(@PathVariable Long feedId) {
         try {
-            return new BaseResponse<>(feedService.getFeed(feedId));
+            // get jwt from header
+            Long memberId = jwtService.getMemberId();
+            return new BaseResponse<>(feedService.getFeed(memberId, feedId));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

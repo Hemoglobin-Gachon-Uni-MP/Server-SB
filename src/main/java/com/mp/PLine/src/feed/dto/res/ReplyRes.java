@@ -24,6 +24,8 @@ public class ReplyRes {
     private String context;
     @ApiModelProperty(example = "05/09 오후 5:15")
     private String date;
+    @ApiModelProperty(example = "true: 신고 O, false: 신고 X")
+    private Boolean isReportedFromUser;
 
     public static ReplyRes from(ReplyResI replyResInfo) {
         return ReplyRes.builder()
@@ -33,6 +35,7 @@ public class ReplyRes {
                 .nickname(replyResInfo.getNickname())
                 .context(replyResInfo.getContext())
                 .date(FeedService.longDate(replyResInfo.getDate()))
+                .isReportedFromUser(replyResInfo.getIsReportedFromUser())
                 .build();
     }
 }
