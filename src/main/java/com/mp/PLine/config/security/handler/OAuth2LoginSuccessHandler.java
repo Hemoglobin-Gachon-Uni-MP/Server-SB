@@ -1,6 +1,6 @@
 package com.mp.PLine.config.security.handler;
 
-import com.mp.PLine.source.login.CustomOAuth2User;
+import com.mp.PLine.source.login.oauth.CustomOAuth2User;
 import com.mp.PLine.source.member.MemberRepository;
 import com.mp.PLine.source.member.entity.Role;
 import com.mp.PLine.utils.JwtService;

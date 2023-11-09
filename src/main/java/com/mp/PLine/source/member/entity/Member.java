@@ -1,6 +1,6 @@
 package com.mp.PLine.source.member.entity;
 
-import com.mp.PLine.source.login.SocialType;
+import com.mp.PLine.source.login.oauth.SocialType;
 import com.mp.PLine.source.member.dto.req.PostMemberReq;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;

@@ -1,4 +1,4 @@
-package com.mp.PLine.source.login;
+package com.mp.PLine.source.login.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

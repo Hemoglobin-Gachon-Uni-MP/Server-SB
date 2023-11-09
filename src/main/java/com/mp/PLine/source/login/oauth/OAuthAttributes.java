@@ -1,4 +1,4 @@
-package com.mp.PLine.source.login;
+package com.mp.PLine.source.login.oauth;
 
 import com.mp.PLine.source.member.entity.Member;
 import com.mp.PLine.source.member.entity.Role;

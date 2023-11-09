@@ -1,4 +1,4 @@
-package com.mp.PLine.source.login;
+package com.mp.PLine.source.login.oauth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

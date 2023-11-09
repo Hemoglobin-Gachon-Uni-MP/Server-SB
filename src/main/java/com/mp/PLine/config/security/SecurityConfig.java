@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mp.PLine.config.security.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.mp.PLine.config.security.filter.JwtAuthenticationProcessingFilter;
 import com.mp.PLine.config.security.handler.*;
-import com.mp.PLine.source.login.CustomOAuth2UserService;
+import com.mp.PLine.source.login.oauth.CustomOAuth2UserService;
 import com.mp.PLine.source.login.UserLoginService;
 import com.mp.PLine.source.member.MemberRepository;
 import com.mp.PLine.utils.JwtService;

@@ -1,6 +1,6 @@
 package com.mp.PLine.source.member;
 
-import com.mp.PLine.source.login.SocialType;
+import com.mp.PLine.source.login.oauth.SocialType;
 import com.mp.PLine.source.member.entity.Member;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
