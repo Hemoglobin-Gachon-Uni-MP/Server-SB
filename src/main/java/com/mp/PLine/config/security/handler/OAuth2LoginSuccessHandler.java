@@ -1,8 +1,8 @@
 package com.mp.PLine.config.security.handler;
 
-import com.mp.PLine.source.login.oauth.CustomOAuth2User;
-import com.mp.PLine.source.member.MemberRepository;
-import com.mp.PLine.source.member.entity.Role;
+import com.mp.PLine.src.login.oauth.CustomOAuth2User;
+import com.mp.PLine.src.member.MemberRepository;
+import com.mp.PLine.src.member.entity.Role;
 import com.mp.PLine.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

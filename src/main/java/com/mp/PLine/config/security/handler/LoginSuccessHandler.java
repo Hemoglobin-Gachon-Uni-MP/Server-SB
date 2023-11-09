@@ -1,6 +1,6 @@
 package com.mp.PLine.config.security.handler;
 
-import com.mp.PLine.source.member.MemberRepository;
+import com.mp.PLine.src.member.MemberRepository;
 import com.mp.PLine.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

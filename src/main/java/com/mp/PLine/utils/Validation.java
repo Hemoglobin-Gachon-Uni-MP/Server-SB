@@ -1,12 +1,12 @@
 package com.mp.PLine.utils;
 
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.source.feed.dto.req.PatchFeedReq;
-import com.mp.PLine.source.feed.dto.req.PostCommentReq;
-import com.mp.PLine.source.feed.dto.req.PostFeedReq;
-import com.mp.PLine.source.feed.dto.req.PostReplyReq;
-import com.mp.PLine.source.member.dto.req.PostMemberReq;
-import com.mp.PLine.source.myPage.dto.req.PatchMemberReq;
+import com.mp.PLine.src.feed.dto.req.PatchFeedReq;
+import com.mp.PLine.src.feed.dto.req.PostCommentReq;
+import com.mp.PLine.src.feed.dto.req.PostFeedReq;
+import com.mp.PLine.src.feed.dto.req.PostReplyReq;
+import com.mp.PLine.src.member.dto.req.PostMemberReq;
+import com.mp.PLine.src.myPage.dto.req.PatchMemberReq;
 
 public class Validation {
     /** check blank & form when sign-up **/

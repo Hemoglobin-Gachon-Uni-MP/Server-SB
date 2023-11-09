@@ -1,11 +1,11 @@
 package com.mp.PLine;
 
-import com.mp.PLine.source.feed.entity.Comment;
-import com.mp.PLine.source.feed.entity.Feed;
-import com.mp.PLine.source.feed.repository.CommentRepository;
-import com.mp.PLine.source.feed.repository.FeedRepository;
-import com.mp.PLine.source.member.MemberRepository;
-import com.mp.PLine.source.member.entity.Member;
+import com.mp.PLine.src.feed.entity.Comment;
+import com.mp.PLine.src.feed.entity.Feed;
+import com.mp.PLine.src.feed.repository.CommentRepository;
+import com.mp.PLine.src.feed.repository.FeedRepository;
+import com.mp.PLine.src.member.MemberRepository;
+import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
