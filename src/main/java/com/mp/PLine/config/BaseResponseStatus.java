@@ -92,7 +92,9 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
+
+    WRONG_STATUS_CODE(false, 4020, "존재하지 않은 상태코드입니다");
 
 
     // BaseResponseStatus Mapping
@@ -104,5 +106,14 @@ public enum BaseResponseStatus {
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
+    }
+
+    public static BaseResponseStatus getBaseStatusByCode(int code) throws BaseException {
+        for (BaseResponseStatus baseStatus: BaseResponseStatus.values()) {
+            if (baseStatus.code == code) {
+                return baseStatus;
+            }
+        }
+        throw new BaseException(BaseResponseStatus.WRONG_STATUS_CODE);
     }
 }
