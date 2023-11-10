@@ -77,7 +77,7 @@ public class MyPageController {
             // get jwt from header
             Long memberId = jwtService.getMemberId();
             BaseResponseStatus status = Validation.checkUpdateMember(patchMemberReq);
-            if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
+            if (status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
             return new BaseResponse<>(myPageService.updateMember(memberId, patchMemberReq));
 

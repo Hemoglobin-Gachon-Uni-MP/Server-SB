@@ -3,10 +3,8 @@ package com.mp.PLine.src.member.dto.req;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class PostMemberReq {
     // create user DTO
@@ -26,4 +24,8 @@ public class PostMemberReq {
     private int rh;
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
+    @ApiModelProperty(example = "1 (1, 2)")
+    private String profileImg;
+    @ApiModelProperty(example = "2797627999")
+    private Long socialId;
 }

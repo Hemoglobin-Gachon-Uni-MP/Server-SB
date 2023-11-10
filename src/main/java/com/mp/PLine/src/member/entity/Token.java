@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 
 @Entity
@@ -23,23 +22,23 @@ public class Token extends BaseEntity {
 
     private String tokenKey;
     @Enumerated(EnumType.STRING)
-    private Roles roles;
+    private Role role;
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Token(Member member, String tokenKey, Roles roles, Status status) {
+    public Token(Member member, String tokenKey, Role role, Status status) {
         this.member = member;
         this.tokenKey = tokenKey;
-        this.roles = roles;
+        this.role = role;
         this.status = status;
     }
 
-    public static Token of(Member member, String tokenKey, Roles roles, Status status) {
+    public static Token of(Member member, String tokenKey, Role role, Status status) {
         return Token.builder()
                 .member(member)
                 .tokenKey(tokenKey)
-                .roles(roles)
+                .role(role)
                 .status(status)
                 .build();
     }
