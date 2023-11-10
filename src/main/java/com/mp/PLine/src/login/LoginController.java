@@ -39,7 +39,6 @@ public class LoginController {
     @PostMapping("/kakao/login")
     public BaseResponse<PostMemberRes> login(@RequestBody LoginRequestDto.LoginDto loginDto) throws BaseException {
         return memberService.findMember(loginDto);
-
     }
 
     @PostMapping("/kakao/sign-up")
