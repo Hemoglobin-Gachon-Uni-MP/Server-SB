@@ -46,6 +46,10 @@ public class Report extends BaseEntity {
 //        this.status = status;
 //    }
 
+    public void execute() {
+        this.processStatus = true;
+    }
+
     public static Report of(Member member, Member toMember, PostReportReq postReportReq, Status status) {
         return Report.builder()
                 .fromMember(member)

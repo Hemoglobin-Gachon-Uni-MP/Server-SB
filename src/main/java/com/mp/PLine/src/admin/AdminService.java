@@ -1,5 +1,7 @@
 package com.mp.PLine.src.admin;
 
+import com.mp.PLine.config.BaseException;
+import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.report.ReportRepository;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
 import com.mp.PLine.src.report.entity.Report;
@@ -24,5 +26,11 @@ public class AdminService {
                 .stream()
                 .map(Report::toReportResponse)
                 .collect(Collectors.toList());
+    }
+
+    public void executeReport(Long id) throws BaseException {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
+        report.execute();
     }
 }
