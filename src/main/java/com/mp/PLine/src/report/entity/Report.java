@@ -5,7 +5,6 @@ import com.mp.PLine.src.report.dto.PostReportReq;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +29,7 @@ public class Report extends BaseEntity {
     private String category;  // 신고 카테고리 (게시물, 댓글)
     private Long feedOrCommentId;
     private String reason;
-    private Boolean processStatus;
+    private Boolean isProcessed;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -47,7 +46,7 @@ public class Report extends BaseEntity {
 //    }
 
     public void execute() {
-        this.processStatus = true;
+        this.isProcessed = true;
     }
 
     public static Report of(Member member, Member toMember, PostReportReq postReportReq, Status status) {
@@ -57,13 +56,13 @@ public class Report extends BaseEntity {
                 .category(postReportReq.getCategory())
                 .feedOrCommentId(postReportReq.getFeedOrCommentId())
                 .reason(postReportReq.getReason())
-                .processStatus(false)
+                .isProcessed(false)
                 .status(status)
                 .build();
     }
 
-    public static ReportResponseDto.ReportReadResponseDto toReportResponse(Report report) {
-        return ReportResponseDto.ReportReadResponseDto.builder()
+    public static ReportResponseDto toReportResponse(Report report) {
+        return ReportResponseDto.builder()
                 .fromMember(report.getFromMember().getNickname())
                 .toMember(report.getToMember().getNickname())
                 .category(report.getCategory())

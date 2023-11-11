@@ -2,7 +2,9 @@ package com.mp.PLine.src.admin;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.myPage.CertificationRepository;
 import com.mp.PLine.src.report.ReportRepository;
+import com.mp.PLine.src.report.dto.CertificationResponseDto;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
 import com.mp.PLine.src.report.entity.Report;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +21,11 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AdminService {
     private final ReportRepository reportRepository;
+    private final CertificationRepository certificationRepository;
 
-    public List<ReportResponseDto.ReportReadResponseDto> readReports(int page) {
+    public List<ReportResponseDto> readReports(int page) {
         Pageable pageable = PageRequest.of(page, 20);
-        return reportRepository.findAllByProcessStatusIsFalse(pageable)
+        return reportRepository.findAllByIsProcessedFalse(pageable)
                 .stream()
                 .map(Report::toReportResponse)
                 .collect(Collectors.toList());
@@ -32,5 +35,9 @@ public class AdminService {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
         report.execute();
+    }
+
+    public List<CertificationResponseDto> readCertifications() {
+        return certificationRepository.
     }
 }

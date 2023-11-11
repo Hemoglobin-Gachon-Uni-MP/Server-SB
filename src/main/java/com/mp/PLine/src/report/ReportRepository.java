@@ -25,5 +25,5 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "   and r.status = 'A'")
     Optional<Report> findReportedFeed(@Param("fromMember") Long fromMember, @Param("toMember") Long toMember, @Param("feedId")Long feedId);
 
-    List<Report> findAllByProcessStatusIsFalse(Pageable pageable);
+    List<Report> findAllByIsProcessedFalse(Pageable pageable);
 }
