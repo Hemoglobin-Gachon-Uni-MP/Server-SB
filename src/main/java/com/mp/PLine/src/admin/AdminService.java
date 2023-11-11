@@ -44,4 +44,11 @@ public class AdminService {
                 .map(Certification::toCertificationResponseDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void executeCertification(Long id) throws BaseException {
+        Certification certification = certificationRepository.findById(id)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
+        certification.excecute();
+    }
 }

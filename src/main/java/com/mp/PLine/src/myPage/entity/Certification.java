@@ -39,6 +39,10 @@ public class Certification extends BaseEntity {
 //        this.status = status;
 //    }
 
+    public void excecute() {
+        this.isProcessed = true;
+    }
+
     public static Certification of(Member member, String certificateNumber, String certificateImg, String date, Status status) {
         return Certification.builder()
                 .member(member)

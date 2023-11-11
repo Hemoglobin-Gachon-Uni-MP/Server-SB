@@ -34,4 +34,10 @@ public class AdminController {
         return new BaseResponse<>(adminService.readCertifications());
     }
 
+    @PutMapping("/certifications/execute")
+    public BaseResponse<BaseResponseStatus> executeCertification(@RequestParam Long id) throws BaseException {
+        adminService.executeCertification(id);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
 }
