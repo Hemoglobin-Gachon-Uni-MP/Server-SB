@@ -3,6 +3,7 @@ package com.mp.PLine.src.admin;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.myPage.CertificationRepository;
+import com.mp.PLine.src.myPage.entity.Certification;
 import com.mp.PLine.src.report.ReportRepository;
 import com.mp.PLine.src.report.dto.CertificationResponseDto;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
@@ -31,6 +32,7 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void executeReport(Long id) throws BaseException {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
@@ -38,6 +40,8 @@ public class AdminService {
     }
 
     public List<CertificationResponseDto> readCertifications() {
-        return certificationRepository.
+        return certificationRepository.findAllByIsProcessedFalse().stream()
+                .map(Certification::toCertificationResponseDto)
+                .collect(Collectors.toList());
     }
 }
