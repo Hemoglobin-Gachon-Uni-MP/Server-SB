@@ -1,5 +1,7 @@
 package com.mp.PLine.config.security.filter;
 
+import com.mp.PLine.src.admin.AdminRepository;
+import com.mp.PLine.src.admin.entity.Admin;
 import com.mp.PLine.src.member.MemberRepository;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.JwtService;
@@ -36,16 +38,17 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL = "/kakao/"; // "/login"으로 들어오는 요청은 Filter 작동 X
+    private static final String NO_CHECK_URL = "/accounts/"; // "/accounts/"으로 들어오는 요청은 Filter 작동 X
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final AdminRepository adminRepository;
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().startsWith(NO_CHECK_URL)) {
+        if (request.getRequestURI().contains(NO_CHECK_URL)) {
             filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
             return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
         }
@@ -117,10 +120,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         log.info("checkAccessTokenAndAuthentication() 호출");
         jwtService.extractAccessToken(request)
                 .filter(jwtService::isTokenValid)
-                .ifPresent(accessToken -> jwtService.extractId(accessToken)
-                        .ifPresent(userId -> memberRepository.findById(userId)
-                                .ifPresent(this::saveAuthentication)));
-
+                .ifPresent(accessToken -> {
+                    jwtService.extractAdminKey(accessToken).ifPresent(adminKey ->
+                            adminRepository.findAdminByAdminKey(adminKey)
+                                    .ifPresent(this::saveAuthentication)
+                    );
+                    jwtService.extractId(accessToken).ifPresent(userId ->
+                            memberRepository.findById(userId)
+                                    .ifPresent(this::saveAuthentication)
+                    );
+                });
         filterChain.doFilter(request, response);
     }
 
@@ -140,21 +149,40 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
      */
     public void saveAuthentication(Member member) {
-//        String password = member.getPassword();
+        log.info("인증 객체 저장");
+        String password = member.getSocialId().toString();
 //        if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
 //            password = PasswordUtil.generateRandomPassword();
 //        }
 
         UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
                 .username(member.getId().toString())
-//                .password(password)
+                .password(password)
                 .roles(member.getRole().name())
                 .build();
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetailsUser, null,
                         authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
+    public void saveAuthentication(Admin admin) {
+        log.info("어드민 인증 객체 저장");
+        String password = admin.getAdminKey();
+//        if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
+//            password = PasswordUtil.generateRandomPassword();
+//        }
+
+        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+                .username(admin.getAdminKey())
+                .password(password)
+                .roles(admin.getRole().name())
+                .build();
+
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetailsUser, null,
+                        authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

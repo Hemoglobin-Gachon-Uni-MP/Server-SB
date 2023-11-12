@@ -9,6 +9,7 @@ import com.mp.PLine.src.report.ReportRepository;
 import com.mp.PLine.src.report.dto.CertificationResponseDto;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
 import com.mp.PLine.src.report.entity.Report;
+import com.mp.PLine.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +24,22 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AdminService {
     private final AdminRepository adminRepository;
+    private final JwtService jwtService;
     private final ReportRepository reportRepository;
     private final CertificationRepository certificationRepository;
 
     @Transactional
-    public void signUp(AdminRequestDto adminRequest) throws BaseException {
+    public void signUp(AdminDto.RequestDto adminRequest) throws BaseException {
         if (!adminRequest.getKey().startsWith("a")) {
-            throw new BaseException(BaseResponseStatus.NOT_VALID_ADMIN_ACCOUNT);
+            throw new BaseException(BaseResponseStatus.INVALID_ADMIN_KEY);
         }
         adminRepository.save(Admin.from(adminRequest.getKey()));
+    }
+
+    public AdminDto.ResponseDto login(AdminDto.RequestDto adminRequest) throws BaseException {
+        Admin admin = adminRepository.findAdminByAdminKey(adminRequest.getKey())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_ADMIN_ACCOUNT));
+        return new AdminDto.ResponseDto(jwtService.createAccessToken(admin.getAdminKey()));
     }
 
     public List<ReportResponseDto> readReports(int page) {

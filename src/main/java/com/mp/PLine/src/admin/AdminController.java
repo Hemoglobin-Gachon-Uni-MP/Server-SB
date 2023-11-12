@@ -19,9 +19,14 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/accounts/sign-up")
-    public BaseResponse<BaseResponseStatus> adminSignUp(@RequestBody AdminRequestDto adminRequest) throws BaseException {
+    public BaseResponse<BaseResponseStatus> adminSignUp(@RequestBody AdminDto.RequestDto adminRequest) throws BaseException {
         adminService.signUp(adminRequest);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @PostMapping("/accounts/login")
+    public BaseResponse<AdminDto.ResponseDto> adminLogin(@RequestBody AdminDto.RequestDto adminRequest) throws BaseException {
+        return new BaseResponse<>(adminService.login(adminRequest));
     }
 
     @GetMapping("/reports")

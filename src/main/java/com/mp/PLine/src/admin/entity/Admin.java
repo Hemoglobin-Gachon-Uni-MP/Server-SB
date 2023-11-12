@@ -22,6 +22,7 @@ public class Admin {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String adminKey;
+    @Enumerated(EnumType.STRING)
     private Role role;
     @Enumerated(EnumType.STRING)
     private Status status;
