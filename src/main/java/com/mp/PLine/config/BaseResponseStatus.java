@@ -63,6 +63,7 @@ public enum BaseResponseStatus {
     POST_CERTIFICATION_EMPTY_DATE(false, 2052, "헌혈 날짜를 입력해주세요."),
     POST_CERTIFICATION_EMPTY_IMAGE(false, 2053, "헌혈 증서를 업로드해주세요."),
     POST_CERTIFICATION_INVALID_NAME(false, 2054, "본인이 한 헌혈 증서만 등록 가능합니다."),
+    NOT_VALID_ADMIN_ACCOUNT(false, 2055, "올바르지 못한 어드민 키입니다."),
 
     /* Report */
     INVALID_REPORT(false,2060,"유효하지 않은 신고입니다."),

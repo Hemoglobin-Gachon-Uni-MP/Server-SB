@@ -14,9 +14,15 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "관리자 앱")
-@RequestMapping("/admins")
+@RequestMapping("/admin")
 public class AdminController {
     private final AdminService adminService;
+
+    @PostMapping("/accounts/sign-up")
+    public BaseResponse<BaseResponseStatus> adminSignUp(@RequestBody AdminRequestDto adminRequest) throws BaseException {
+        adminService.signUp(adminRequest);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
 
     @GetMapping("/reports")
     public BaseResponse<List<ReportResponseDto>> readReports(@RequestParam(required = false, defaultValue = "0", value = "page") int page) {

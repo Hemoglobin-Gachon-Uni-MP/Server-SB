@@ -2,6 +2,7 @@ package com.mp.PLine.src.admin;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.admin.entity.Admin;
 import com.mp.PLine.src.myPage.CertificationRepository;
 import com.mp.PLine.src.myPage.entity.Certification;
 import com.mp.PLine.src.report.ReportRepository;
@@ -21,8 +22,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AdminService {
+    private final AdminRepository adminRepository;
     private final ReportRepository reportRepository;
     private final CertificationRepository certificationRepository;
+
+    @Transactional
+    public void signUp(AdminRequestDto adminRequest) throws BaseException {
+        if (!adminRequest.getKey().startsWith("a")) {
+            throw new BaseException(BaseResponseStatus.NOT_VALID_ADMIN_ACCOUNT);
+        }
+        adminRepository.save(Admin.from(adminRequest.getKey()));
+    }
 
     public List<ReportResponseDto> readReports(int page) {
         Pageable pageable = PageRequest.of(page, 20);

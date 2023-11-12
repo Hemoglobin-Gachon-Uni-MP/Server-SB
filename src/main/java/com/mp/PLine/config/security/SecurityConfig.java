@@ -49,6 +49,8 @@ public class SecurityConfig {
         http.headers().frameOptions().disable();
         http.authorizeHttpRequests(auth -> auth
                 .antMatchers("/kakao/**").permitAll()
+                // 어드민 계정 신청, 로그인만 예외적으로 전부 허용
+                .antMatchers("/admin/accounts/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/**").hasRole("USER")
                 .anyRequest().permitAll()); // 토큰 사용시 모든 요청에 대해 인가 사용

@@ -1,37 +1,36 @@
 package com.mp.PLine.src.admin.entity;
 
+import com.mp.PLine.src.member.entity.Role;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Admin extends BaseEntity {
+public class Admin {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    private Long id;
     private String adminKey;
+    private Role role;
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Builder
-    public Admin(String adminKey, Status status) {
-        this.adminKey = adminKey;
-        this.status = status;
-    }
-
-    public static Admin of(String adminKey, Status status) {
+    public static Admin from(String adminKey) {
         return Admin.builder()
                 .adminKey(adminKey)
-                .status(status)
+                .role(Role.ADMIN)
+                .status(Status.A)
                 .build();
     }
 }
