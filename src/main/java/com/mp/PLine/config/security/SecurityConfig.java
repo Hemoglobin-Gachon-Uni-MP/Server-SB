@@ -5,7 +5,7 @@ import com.mp.PLine.config.security.filter.CustomJsonUsernamePasswordAuthenticat
 import com.mp.PLine.config.security.filter.JwtAuthenticationProcessingFilter;
 import com.mp.PLine.config.security.handler.*;
 import com.mp.PLine.src.login.oauth.CustomOAuth2UserService;
-import com.mp.PLine.src.login.UserLoginService;
+import com.mp.PLine.src.login.LoginService;
 import com.mp.PLine.src.member.MemberRepository;
 import com.mp.PLine.utils.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService oAuthUserService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final UserLoginService loginService;
+    private final LoginService loginService;
     private final ObjectMapper objectMapper;
 
     /**
@@ -47,12 +47,15 @@ public class SecurityConfig {
         http.csrf().disable(); // 서버에 인증정보를 저장하지 않기에 csrf를 사용하지 않는다.
         http.formLogin().disable(); // form 기반 로그인 비활성화
         http.headers().frameOptions().disable();
-//        http.authorizeHttpRequests((authz) -> authz.anyRequest().permitAll()); // 토큰 사용시 모든 요청에 대해 인가 사용
+        http.authorizeHttpRequests(auth -> auth
+                .antMatchers("/kakao/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/**").hasRole("USER")
+                .anyRequest().permitAll()); // 토큰 사용시 모든 요청에 대해 인가 사용
 //        http.addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // Form '인증'에 대해서 사용
 
         // 세션 사용 X. STATELESS로 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeHttpRequests().anyRequest().permitAll();
 
         // 소셜 로그인
         http.oauth2Login()

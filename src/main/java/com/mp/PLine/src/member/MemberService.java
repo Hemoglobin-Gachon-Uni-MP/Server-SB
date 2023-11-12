@@ -12,8 +12,8 @@ import com.mp.PLine.src.login.dto.LoginRequestDto;
 import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.src.member.dto.res.PostMemberRes;
 import com.mp.PLine.src.member.entity.Member;
-import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.src.myPage.CertificationRepository;
+import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
