@@ -26,6 +26,6 @@ public class PostMemberReq {
     private String location;
     @ApiModelProperty(example = "1 (1, 2)")
     private String profileImg;
-    @ApiModelProperty(example = "2797627999")
+    @ApiModelProperty(example = "2797627와 같은 숫자로 이루어진 socialID")
     private Long socialId;
 }

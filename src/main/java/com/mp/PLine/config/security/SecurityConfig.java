@@ -55,6 +55,7 @@ public class SecurityConfig {
         http.formLogin().disable(); // form 기반 로그인 비활성화
         http.headers().frameOptions().disable();
         http.authorizeHttpRequests(auth -> auth
+                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
                 .antMatchers("/accounts/**", "/admin/accounts/**").permitAll()
                 // 어드민 계정 신청, 로그인만 예외적으로 전부 허용
                 .antMatchers("/admin/**").hasRole("ADMIN")

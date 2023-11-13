@@ -1,7 +1,5 @@
 package com.mp.PLine.src.member;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
@@ -22,10 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -36,103 +30,6 @@ public class MemberService implements UserDetailsService {
     private final ReplyRepository replyRepository;
     private final JwtService jwtService;
     private final CertificationRepository certificationRepository;
-
-    /* Get AccessToken from kakao */
-    public String getKaKaoAccessToken(String code) {
-        String access_Token="";
-        String refresh_Token ="";
-        String reqURL = "https://kauth.kakao.com/oauth/token";
-
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            // set setDoOutput true for Post request
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-
-            // send parameter using stream that required for Post request
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            bw.flush();
-
-            // success if code is 200
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-
-            // read response message
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            StringBuilder result = new StringBuilder();
-
-            while ((line = br.readLine()) != null) {
-                result.append(line);
-            }
-            System.out.println("response body : " + result);
-
-            // create JsonParser
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result.toString());
-
-            access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
-
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
-
-            br.close();
-            bw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return access_Token;
-    }
-
-    /* Get kakaoId using AccessToken and create user */
-    public Long createKakaoUser(String token) {
-        String reqURL = "https://kapi.kakao.com/v2/user/me";
-        String id = "";
-
-        // get user information using AccessToken
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
-
-            // success if code is 200
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-
-            // read response message
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            StringBuilder result = new StringBuilder();
-
-            while ((line = br.readLine()) != null) {
-                result.append(line);
-            }
-            System.out.println("response body : " + result);
-
-            // get kakaoId from response
-            JsonElement element = JsonParser.parseString(result.toString());
-            id = element.getAsJsonObject().get("id").toString();
-
-            System.out.println("User ID : " + id);
-
-            br.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return Long.parseLong(id);
-    }
 
     /* Sign up with kakao API */
     @Transactional
