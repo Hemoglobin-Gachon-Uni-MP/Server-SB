@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CertificationRepository extends JpaRepository<Certification, Long> {
-    List<Certification> findAllByMemberIdAndStatus(Long memberId, Status status);
+    List<Certification> findAllByMemberIdAndIsProcessedAndStatus(Long memberId, Boolean isProcessed, Status status);
 
     // delete user's feeds when deleting user
     @Modifying
