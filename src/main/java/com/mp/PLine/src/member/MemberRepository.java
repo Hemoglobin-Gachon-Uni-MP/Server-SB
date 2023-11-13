@@ -13,8 +13,6 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    // check user existence by kakaoId
-//    Optional<Member> findByKakaoIdAndStatus(@Param("kakaoId") Long kakaoId, @Param("status") Status A);
 
     // check user existence
     Optional<Member> findByIdAndStatus(@Param("memberId") Long memberId, @Param("status") Status A);

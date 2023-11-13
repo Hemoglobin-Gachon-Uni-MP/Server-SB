@@ -2,6 +2,7 @@ package com.mp.PLine.src.admin;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
+import com.mp.PLine.src.admin.dto.AdminDto;
 import com.mp.PLine.src.admin.entity.Admin;
 import com.mp.PLine.src.myPage.CertificationRepository;
 import com.mp.PLine.src.myPage.entity.Certification;

@@ -28,10 +28,7 @@ public class LoginController {
      * compare kakaoId using AccessToken
      * [POST} /kakao/sign-in
      */
-    @ApiOperation("카카오 로그인 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "K-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
-    })
+    @ApiOperation("로그인 API")
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")

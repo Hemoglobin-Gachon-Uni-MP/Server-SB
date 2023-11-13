@@ -1,4 +1,4 @@
-package com.mp.PLine.src.admin;
+package com.mp.PLine.src.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
