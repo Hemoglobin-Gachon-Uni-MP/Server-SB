@@ -63,12 +63,15 @@ public enum BaseResponseStatus {
     POST_CERTIFICATION_EMPTY_DATE(false, 2052, "헌혈 날짜를 입력해주세요."),
     POST_CERTIFICATION_EMPTY_IMAGE(false, 2053, "헌혈 증서를 업로드해주세요."),
     POST_CERTIFICATION_INVALID_NAME(false, 2054, "본인이 한 헌혈 증서만 등록 가능합니다."),
+    INVALID_ADMIN_KEY(false, 2055, "올바르지 못한 어드민 키입니다."),
+    NOT_EXIST_ADMIN_ACCOUNT(false, 2056, "존재하지 않는 어드민입니다."),
 
     /* Report */
-    INVALID_REPORT_USER(false,2060,"신고하려는 유저가 존재하지 않는 유저입니다."),
-    INVALID_REPORT_SAME_USER(false,2061,"자기 자신은 신고할 수 없습니다."),
-    INVALID_EXIST_REPORT(false,2062, "이미 신고가 완료되었습니다."),
-    INVALID_NON_EXIST_REPORT(false,2063, "신고가 접수되지 않았습니다."),
+    INVALID_REPORT(false,2060,"유효하지 않은 신고입니다."),
+    INVALID_REPORT_USER(false,2061,"신고하려는 유저가 존재하지 않는 유저입니다."),
+    INVALID_REPORT_SAME_USER(false,2062,"자기 자신은 신고할 수 없습니다."),
+    INVALID_EXIST_REPORT(false,2063, "이미 신고가 완료되었습니다."),
+    INVALID_NON_EXIST_REPORT(false,2064, "신고가 접수되지 않았습니다."),
 
 
     /**

@@ -20,4 +20,6 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
     @Modifying
     @Query("update Certification c set c.status = 'D' where c.member.id = :memberId")
     void setCertificationByMemberStatus(@Param("memberId") Long memberId);
+
+    List<Certification> findAllByIsProcessedFalse();
 }

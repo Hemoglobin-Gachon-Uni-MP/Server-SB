@@ -1,12 +1,14 @@
 package com.mp.PLine.src.report;
 
 import com.mp.PLine.src.report.entity.Report;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +24,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "   and r.category = 'F' and r.feedOrCommentId = :feedId \n" +
             "   and r.status = 'A'")
     Optional<Report> findReportedFeed(@Param("fromMember") Long fromMember, @Param("toMember") Long toMember, @Param("feedId")Long feedId);
+
+    List<Report> findAllByIsProcessedFalse(Pageable pageable);
 }

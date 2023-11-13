@@ -3,12 +3,17 @@ package com.mp.PLine.config.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mp.PLine.config.security.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.mp.PLine.config.security.filter.JwtAuthenticationProcessingFilter;
-import com.mp.PLine.config.security.handler.*;
+import com.mp.PLine.config.security.handler.LoginFailureHandler;
+import com.mp.PLine.config.security.handler.LoginSuccessHandler;
+import com.mp.PLine.config.security.handler.OAuth2LoginFailureHandler;
+import com.mp.PLine.config.security.handler.OAuth2LoginSuccessHandler;
+import com.mp.PLine.src.admin.AdminRepository;
+import com.mp.PLine.src.login.LoginService;
 import com.mp.PLine.src.login.oauth.CustomOAuth2UserService;
-import com.mp.PLine.src.login.UserLoginService;
 import com.mp.PLine.src.member.MemberRepository;
 import com.mp.PLine.utils.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
@@ -31,7 +37,8 @@ public class SecurityConfig {
     private final CustomOAuth2UserService oAuthUserService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final UserLoginService loginService;
+    private final AdminRepository adminRepository;
+    private final LoginService loginService;
     private final ObjectMapper objectMapper;
 
     /**
@@ -47,12 +54,17 @@ public class SecurityConfig {
         http.csrf().disable(); // 서버에 인증정보를 저장하지 않기에 csrf를 사용하지 않는다.
         http.formLogin().disable(); // form 기반 로그인 비활성화
         http.headers().frameOptions().disable();
-//        http.authorizeHttpRequests((authz) -> authz.anyRequest().permitAll()); // 토큰 사용시 모든 요청에 대해 인가 사용
+        http.authorizeHttpRequests(auth -> auth
+                .antMatchers("/accounts/**", "/admin/accounts/**").permitAll()
+                // 어드민 계정 신청, 로그인만 예외적으로 전부 허용
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().hasAnyRole("MEMBER", "ADMIN"));
+
+//                .anyRequest().permitAll()); // 토큰 사용시 모든 요청에 대해 인가 사용
 //        http.addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // Form '인증'에 대해서 사용
 
         // 세션 사용 X. STATELESS로 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeHttpRequests().anyRequest().permitAll();
 
         // 소셜 로그인
         http.oauth2Login()
@@ -62,7 +74,6 @@ public class SecurityConfig {
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class); // Spring Security JWT Filter
-
         return http.build();
     }
 
@@ -121,7 +132,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository, adminRepository);
         return jwtAuthenticationFilter;
     }
 

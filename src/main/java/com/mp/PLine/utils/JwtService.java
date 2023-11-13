@@ -26,14 +26,22 @@ import static org.springframework.security.oauth2.core.OAuth2AccessToken.TokenTy
 @Slf4j
 @Service
 public class JwtService {
-    private final String accessHeader = "Authorization";
-    private final String refreshHeader = "Authorization-refresh";
+    private static final String accessHeader = "Authorization";
+    private static final String refreshHeader = "Authorization-refresh";
+
+    public String getAccessHeader() {
+        return accessHeader;
+    }
+
+    public String getRefreshHeader() {
+        return refreshHeader;
+    }
 
     /**
      * Create JWT
      * @return String
      */
-    public String createAccessToken(Long userId){
+    public String createAccessToken(Long userId) {
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type","jwt")
@@ -41,7 +49,19 @@ public class JwtService {
                 .claim("userId", userId)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
-                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY)
+                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
+                .compact();
+    }
+
+    public String createAccessToken(String adminKey) {
+        Date now = new Date();
+        return Jwts.builder()
+                .setHeaderParam("type","jwt")
+//                .claim("email", email)
+                .claim("key", adminKey)
+                .setIssuedAt(now)
+                .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
+                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
                 .compact();
     }
 
@@ -51,36 +71,8 @@ public class JwtService {
                 .setHeaderParam("type","jwt")
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
-                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY)
+                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
                 .compact();
-    }
-
-    /* Get JWT from header */
-    public String getJwt(){
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getHeader("X-ACCESS-TOKEN");
-    }
-
-    /* get userId from JWT */
-    public Long getMemberId() throws BaseException {
-        // 1. get JWT
-        String accessToken = getJwt();
-        if(accessToken == null || accessToken.length() == 0){
-            throw new BaseException(EMPTY_JWT);
-        }
-
-        // 2. JWT parsing
-        Jws<Claims> claims;
-        try{
-            claims = Jwts.parser()
-                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY)
-                    .parseClaimsJws(accessToken);
-        } catch (Exception ignored) {
-            throw new BaseException(INVALID_JWT);
-        }
-
-        // 3. get userId
-        return claims.getBody().get("userId", Long.class);
     }
 
     /**
@@ -156,7 +148,24 @@ public class JwtService {
             Claims claims = jwt.getBody();
             return Optional.ofNullable(claims.get("userId", Long.class));
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("액세스 토큰이 유효하지 않습니다.");
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> extractAdminKey(String accessToken) {
+        try {
+            Jws<Claims> jwt = Jwts.parserBuilder()
+                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
+                    .build()
+                    .parseClaimsJws(accessToken); // 액세스 토큰 파싱
+
+            Claims claims = jwt.getBody();
+            return Optional.ofNullable(claims.get("key", String.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("어드민 액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
     }
@@ -164,7 +173,7 @@ public class JwtService {
     public boolean isTokenValid(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY)
+                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
                     .build()
                     .parseClaimsJws(token);
             return true;
@@ -174,17 +183,17 @@ public class JwtService {
         }
     }
 
-    public Long getUserId() throws BaseException {
+    public Long getMemberId() throws BaseException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String jwtToken = extractToken(request)
                 .orElseThrow(() -> new BaseException(EMPTY_JWT));
         jwtToken = jwtToken.substring("Bearer ".length());
-        return extractId(jwtToken).orElseThrow(() -> new BaseException(EMPTY_JWT));
+        return extractId(jwtToken)
+                .orElseThrow(() -> new BaseException(INVALID_JWT));
     }
 
-
     public static Optional<String> extractToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(accessHeader);
         if (isEmptyAuthorizationHeader(token)) {
             return Optional.empty();
         }
@@ -195,4 +204,5 @@ public class JwtService {
     private static boolean isEmptyAuthorizationHeader(String token) {
         return !StringUtils.hasText(token);
     }
+
 }
