@@ -37,7 +37,11 @@ public class LoginController {
     public BaseResponse<PostMemberRes> login(@RequestBody LoginRequestDto.LoginDto loginDto) throws BaseException {
         return memberService.findMember(loginDto);
     }
-
+    @ApiOperation("회원가입 API")
+    @ApiResponses({
+            @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
+    })
     @PostMapping("/accounts/sign-up/kakao")
     public BaseResponse<Object> signUp(@RequestBody PostMemberReq postMemberReq, HttpServletResponse response) throws BaseException {
         jwtService.setAccessTokenHeader(response, memberService.signUp(postMemberReq));

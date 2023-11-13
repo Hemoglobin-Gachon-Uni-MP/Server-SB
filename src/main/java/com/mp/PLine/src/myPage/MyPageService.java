@@ -95,7 +95,7 @@ public class MyPageService {
         Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
-        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndStatus(memberId, Status.A);
+        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndIsProcessedAndStatus(memberId, true, Status.A);
 
         return certificationList.stream()
                 .map(d -> GetCertificationRes.builder()
@@ -113,7 +113,7 @@ public class MyPageService {
         Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
-        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndStatus(memberId, Status.A);
+        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndIsProcessedAndStatus(memberId, true, Status.A);
         long length = certificationList.size();
 
         List<RewardRes> rewardList = new ArrayList<>();
