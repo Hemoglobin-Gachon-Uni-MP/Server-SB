@@ -65,8 +65,9 @@ public class MemberService implements UserDetailsService {
         return "회원 탈퇴가 완료되었습니다.";
     }
 
-    public BaseResponse<PostMemberRes> findMember(LoginRequestDto.LoginDto loginDto) throws BaseException {
-        Member member = memberRepository.findBySocialId(loginDto.getSocialId())
+    public BaseResponse<PostMemberRes> findMember(LoginRequestDto loginDto) throws BaseException {
+        Member member = memberRepository.findBySocialId(jwtService.extractSocialId(loginDto.getIdToken())
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN)))
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         Long memberId = member.getId();
         return new BaseResponse<>(new PostMemberRes(jwtService.createAccessToken(memberId), memberId));

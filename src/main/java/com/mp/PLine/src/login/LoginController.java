@@ -34,7 +34,7 @@ public class LoginController {
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
     })
     @PostMapping("/accounts/login")
-    public BaseResponse<PostMemberRes> login(@RequestBody LoginRequestDto.LoginDto loginDto) throws BaseException {
+    public BaseResponse<PostMemberRes> login(@RequestBody LoginRequestDto loginDto) throws BaseException {
         return memberService.findMember(loginDto);
     }
     @ApiOperation("회원가입 API")

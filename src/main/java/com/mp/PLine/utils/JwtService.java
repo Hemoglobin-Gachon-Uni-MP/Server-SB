@@ -132,6 +132,22 @@ public class JwtService {
                 .map(refreshToken -> refreshToken.replace(BEARER.getValue(), ""));
     }
 
+    public Optional<Long> extractSocialId(String token) {
+        try {
+            Jws<Claims> jwt = Jwts.parserBuilder()
+                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
+                    .build()
+                    .parseClaimsJws(token); // 액세스 토큰 파싱
+
+            Claims claims = jwt.getBody();
+            return Optional.ofNullable(claims.get("sub", Long.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("액세스 토큰이 유효하지 않습니다.");
+            return Optional.empty();
+        }
+    }
+
     /**
      * AccessToken에서 UserId 추출
      * verify로 AceessToken 검증 후
