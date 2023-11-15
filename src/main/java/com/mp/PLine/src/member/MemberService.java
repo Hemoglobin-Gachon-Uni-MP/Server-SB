@@ -33,7 +33,7 @@ public class MemberService implements UserDetailsService {
 
     /* Sign up with kakao API */
     @Transactional
-    public String signUp(PostMemberReq info) throws BaseException {
+    public PostMemberRes signUp(PostMemberReq info) throws BaseException {
         if (memberRepository.findBySocialId(info.getSocialId()).isPresent()) {
             throw new BaseException(BaseResponseStatus.EXIST_USER);
         }
@@ -47,7 +47,7 @@ public class MemberService implements UserDetailsService {
         }
         Member member = Member.of(info, Member.parseAge(info.getBirth()), profileImg);
         memberRepository.save(member);
-        return jwtService.createAccessToken(member.getId());
+        return Member.toPostMemberRes(jwtService.createAccessToken(member.getId()), member.getId());
     }
 
     /* Resign API */
