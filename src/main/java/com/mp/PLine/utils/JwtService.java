@@ -1,5 +1,12 @@
 package com.mp.PLine.utils;
 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.JwkProviderBuilder;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.security.secret.Secret;
 import io.jsonwebtoken.Claims;
@@ -15,8 +22,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static com.mp.PLine.config.BaseResponseStatus.EMPTY_JWT;
 import static com.mp.PLine.config.BaseResponseStatus.INVALID_JWT;
@@ -132,15 +141,26 @@ public class JwtService {
                 .map(refreshToken -> refreshToken.replace(BEARER.getValue(), ""));
     }
 
-    public Optional<Long> extractSocialId(String token) {
+    public Optional<String> extractSocialId(String token) {
         try {
-            Jws<Claims> jwt = Jwts.parserBuilder()
-                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
-                    .build()
-                    .parseClaimsJws(token); // 액세스 토큰 파싱
+            // 1. 검증없이 디코딩
+            DecodedJWT jwtOrigin = JWT.decode(token);
 
-            Claims claims = jwt.getBody();
-            return Optional.ofNullable(claims.get("sub", Long.class));
+            // 2. 공개키 프로바이더 준비
+            JwkProvider provider = new JwkProviderBuilder("https://kauth.kakao.com")
+                    .cached(10, 7, TimeUnit.DAYS) // 7일간 최대 10개 캐시
+                    .build();
+            Jwk jwk = provider.get(jwtOrigin.getKeyId());
+
+            // 3. 검증 및 디코딩
+            Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build();
+            DecodedJWT jwt = verifier.verify(token);
+
+            // 4. "sub" 값을 추출하여 반환
+            String socialId = jwt.getClaim("sub").asString();
+            return Optional.ofNullable(socialId);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("액세스 토큰이 유효하지 않습니다.");
