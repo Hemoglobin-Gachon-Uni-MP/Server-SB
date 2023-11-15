@@ -10,12 +10,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CertificationRepository extends JpaRepository<Certification, Long> {
-    List<Certification> findAllByMemberIdAndIsProcessedAndStatus(Long memberId, Boolean isProcessed, Status status);
+    List<Certification> findAllByMemberIdAndStatus(Long memberId, Status status);
 
     // delete user's feeds when deleting user
     @Modifying
     @Query("update Certification c set c.status = 'D' where c.member.id = :memberId")
     void setCertificationByMemberStatus(@Param("memberId") Long memberId);
 
-    List<Certification> findAllByIsProcessedFalse();
+    List<Certification> findAllByStatus(Status status);
 }
