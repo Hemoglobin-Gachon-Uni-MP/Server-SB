@@ -121,19 +121,19 @@ public class MyPageService {
         if(1 <= length) rewardList.add(RewardRes.from("헌혈 입문자",
                 "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(0).getCreatedAt())));
         if(3 <= length) rewardList.add(RewardRes.from("생명의 씨앗",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(2).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal2.png", date(certificationList.get(2).getCreatedAt())));
         if(6 <= length) rewardList.add(RewardRes.from("헌혈하는 기쁨",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(5).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal3.png", date(certificationList.get(5).getCreatedAt())));
         if(9 <= length) rewardList.add(RewardRes.from("생명의 빛",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(8).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal4.png", date(certificationList.get(8).getCreatedAt())));
         if(12 <= length) rewardList.add(RewardRes.from("우리 모두의 힘",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(11).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal5.png", date(certificationList.get(11).getCreatedAt())));
         if(15 <= length) rewardList.add(RewardRes.from("헌혈 히어로",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(14).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal6.png", date(certificationList.get(14).getCreatedAt())));
         if(18 <= length) rewardList.add(RewardRes.from("헌혈 마스터",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(17).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal7.png", date(certificationList.get(17).getCreatedAt())));
         if(21 <= length) rewardList.add(RewardRes.from("헌혈의 전설",
-                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal1.png", date(certificationList.get(20).getCreatedAt())));
+                "https://p-line.s3.ap-northeast-2.amazonaws.com/medal/medal8.png", date(certificationList.get(20).getCreatedAt())));
 
         return GetRewardRes.of(member, length, rewardList);
     }
