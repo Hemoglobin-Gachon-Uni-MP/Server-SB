@@ -34,7 +34,7 @@ public class MyPageController {
      */
     @ApiOperation("내 정보 반환 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -60,7 +60,7 @@ public class MyPageController {
      */
     @ApiOperation("내 정보 수정 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
