@@ -39,10 +39,17 @@ public class AdminController {
         return new BaseResponse<>(adminService.readReports(page));
     }
 
-    @ApiOperation("신고 처리 API")
+    @ApiOperation("신고글 삭제 및 처리 API")
     @PutMapping("/reports/execute")
     public BaseResponse<BaseResponseStatus> executeReport(@RequestParam Long id) throws BaseException {
-        adminService.executeReport(id);
+//        adminService.executeReport(id);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @ApiOperation("신고 반려 API")
+    @PutMapping("/reports/execute")
+    public BaseResponse<BaseResponseStatus> rejectReport(@RequestParam Long id) throws BaseException {
+        adminService.rejectReport(id);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 

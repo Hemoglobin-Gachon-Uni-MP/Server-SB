@@ -52,10 +52,10 @@ public class AdminService {
     }
 
     @Transactional
-    public void executeReport(Long id) throws BaseException {
+    public void rejectReport(Long id) throws BaseException {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
-        report.execute();
+        report.reject();
     }
 
     public List<CertificationResponseDto> readCertifications() {
