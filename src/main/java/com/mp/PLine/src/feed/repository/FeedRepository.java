@@ -26,7 +26,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "f.context AS context, \n" +
             "(SELECT COUNT(*) FROM Comment c WHERE c.feed_id = f.id AND c.status = 'A') AS replyCnt, \n" +
             "(SELECT COUNT(*) FROM Reply r WHERE r.feed_id = f.id AND r.status = 'A') AS commentCnt, \n" +
-            "FORMATDATETIME(f.created_at, 'MM/dd') AS date, \n" +
+            "function('date_format', f.createdAt, '%m/%d') as date, \n" +
             "f.is_receiver AS isReceiver \n" +
             "FROM feed AS f \n" +
             "INNER JOIN member AS m ON f.member_id = m.id \n" +
@@ -41,7 +41,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "f.context AS context, \n" +
             "(SELECT COUNT(*) FROM Comment c WHERE c.feed_id = f.id AND c.status = 'A') AS replyCnt, \n" +
             "(SELECT COUNT(*) FROM Reply r WHERE r.feed_id = f.id AND r.status = 'A') AS commentCnt, \n" +
-            "FORMATDATETIME(f.created_at, 'MM/dd') AS date, \n" +
+            "function('date_format', f.createdAt, '%m/%d') as date, \n" +
             "f.abo AS abo, f.rh AS rh, f.location AS location, f.is_receiver AS isReceiver \n" +
             "FROM feed AS f \n" +
             "INNER JOIN member AS m ON f.member_id = m.id \n" +
