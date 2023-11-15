@@ -22,16 +22,16 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     // return user's feed list
     @Query(value = "SELECT f.id AS feedId, \n" +
-            "f.member_id AS memberId, m.nickname AS nickname, m.profile_img AS profileImg, \n" +
+            "f.member.id AS memberId, m.nickname AS nickname, m.profileImg AS profileImg, \n" +
             "f.context AS context, \n" +
-            "(SELECT COUNT(*) FROM comment c WHERE c.feed_id = f.id AND c.status = 'A') AS replyCnt, \n" +
-            "(SELECT COUNT(*) FROM reply r WHERE r.feed_id = f.id AND r.status = 'A') AS commentCnt, \n" +
-            "DATE_FORMAT(f.created_at, '%m/%d') as date, \n" +
-            "f.is_receiver AS isReceiver \n" +
-            "FROM feed AS f \n" +
-            "INNER JOIN member AS m ON f.member_id = m.id \n" +
-            "WHERE f.member_id = :memberId AND f.status = :status AND m.status = :status \n" +
-            "ORDER BY f.created_at DESC", nativeQuery = true)
+            "(SELECT COUNT(*) FROM Comment c WHERE c.feed.id = f.id AND c.status = 'A') AS replyCnt, \n" +
+            "(SELECT COUNT(*) FROM Reply r WHERE r.feed.id = f.id AND r.status = 'A') AS commentCnt, \n" +
+            "DATE_FORMAT(f.createdAt, '%m/%d') as date, \n" +
+            "f.isReceiver AS isReceiver \n" +
+            "FROM Feed AS f \n" +
+            "INNER JOIN Member AS m ON f.member.id = m.id \n" +
+            "WHERE f.member.id = :memberId AND f.status = :status AND m.status = :status \n" +
+            "ORDER BY f.createdAt DESC")
     List<FeedResI> findAllByMemberIdAndStatus(@Param("memberId") Long memberId, @Param("status") Status status);
 
 
