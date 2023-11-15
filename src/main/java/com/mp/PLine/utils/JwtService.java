@@ -37,6 +37,9 @@ import static org.springframework.security.oauth2.core.OAuth2AccessToken.TokenTy
 public class JwtService {
     private static final String accessHeader = "Authorization";
     private static final String refreshHeader = "Authorization-refresh";
+    private static final JwkProvider provider = new JwkProviderBuilder("https://kauth.kakao.com")
+            .cached(10, 7, TimeUnit.DAYS) // 7일간 최대 10개 캐시
+            .build();
 
     public String getAccessHeader() {
         return accessHeader;
@@ -141,25 +144,22 @@ public class JwtService {
                 .map(refreshToken -> refreshToken.replace(BEARER.getValue(), ""));
     }
 
-    public Optional<String> extractSocialId(String token) {
+    public Optional<Long> extractSocialId(String token) {
         try {
-            // 1. 검증없이 디코딩
+            // 검증없이 디코딩
             DecodedJWT jwtOrigin = JWT.decode(token);
 
-            // 2. 공개키 프로바이더 준비
-            JwkProvider provider = new JwkProviderBuilder("https://kauth.kakao.com")
-                    .cached(10, 7, TimeUnit.DAYS) // 7일간 최대 10개 캐시
-                    .build();
+            // 공개키 프로바이더 준비 => 싱긑톤으로 구현
             Jwk jwk = provider.get(jwtOrigin.getKeyId());
 
-            // 3. 검증 및 디코딩
+            // 검증 및 디코딩
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
             JWTVerifier verifier = JWT.require(algorithm)
                     .build();
             DecodedJWT jwt = verifier.verify(token);
 
-            // 4. "sub" 값을 추출하여 반환
-            String socialId = jwt.getClaim("sub").asString();
+            // "sub" 값을 추출하여 반환
+            Long socialId = Long.valueOf(jwt.getClaim("sub").asString());
             return Optional.ofNullable(socialId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,7 +174,7 @@ public class JwtService {
      * 유효하다면 getClaim()으로 이메일 추출
      * 유효하지 않다면 빈 Optional 객체 반환
      */
-    public Optional<Long> extractId(String accessToken) {
+    public Optional<Long> extractUserId(String accessToken) {
         try {
             Jws<Claims> jwt = Jwts.parserBuilder()
                     .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
@@ -224,7 +224,7 @@ public class JwtService {
         String jwtToken = extractToken(request)
                 .orElseThrow(() -> new BaseException(EMPTY_JWT));
         jwtToken = jwtToken.substring("Bearer ".length());
-        return extractId(jwtToken)
+        return extractUserId(jwtToken)
                 .orElseThrow(() -> new BaseException(INVALID_JWT));
     }
 

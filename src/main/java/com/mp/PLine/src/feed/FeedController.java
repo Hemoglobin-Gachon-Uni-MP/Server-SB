@@ -51,7 +51,7 @@ public class FeedController {
         try {
             // blank & form check
             BaseResponseStatus status = Validation.checkPostFeed(postFeedReq);
-            if(status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
+            if (status != BaseResponseStatus.SUCCESS) return new BaseResponse<>(status);
 
             // JWT 추출
             Long memberId = jwtService.getMemberId();
