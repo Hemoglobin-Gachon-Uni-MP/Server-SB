@@ -72,7 +72,6 @@ public class Member extends BaseEntity {
                 .rh(postMemberReq.getRh())
                 .location(postMemberReq.getLocation())
                 .profileImg(profileImg)
-                .profileImg(postMemberReq.getProfileImg())
                 .socialId(postMemberReq.getSocialId())
                 .role(Role.MEMBER)
                 .status(Status.A)
