@@ -70,4 +70,11 @@ public class AdminService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
         certification.excecute();
     }
+
+    @Transactional
+    public void rejectCertification(Long id) throws BaseException {
+        Certification certification = certificationRepository.findById(id)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
+        certification.reject();
+    }
 }

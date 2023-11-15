@@ -32,6 +32,10 @@ public class Certification extends BaseEntity {
         this.isVerified = true;
     }
 
+    public void reject() {
+        this.status = Status.D;
+    }
+
     public static Certification of(Member member, String certificateNumber, String certificateImg, String date, Status status) {
         return Certification.builder()
                 .member(member)

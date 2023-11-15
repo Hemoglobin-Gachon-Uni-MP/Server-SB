@@ -52,10 +52,17 @@ public class AdminController {
         return new BaseResponse<>(adminService.readCertifications());
     }
 
-    @ApiOperation("인증 처리 API")
+    @ApiOperation("인증 수락 API")
     @PutMapping("/certifications/execute")
     public BaseResponse<BaseResponseStatus> executeCertification(@RequestParam Long id) throws BaseException {
         adminService.executeCertification(id);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @ApiOperation("인증 반려 API")
+    @PutMapping("/certifications/reject")
+    public BaseResponse<BaseResponseStatus> rejectCertification(@RequestParam Long id) throws BaseException {
+        adminService.rejectCertification(id);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
