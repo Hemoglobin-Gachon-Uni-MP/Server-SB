@@ -27,10 +27,17 @@ public class LoginService implements UserDetailsService {
                     .username(admin.getAdminKey())
                     .roles(admin.getRole().name())
                     .build();
+        } else if (id.matches("^[0-9]+$")) {
+            Member member = memberRepository.findById(Long.valueOf(id))
+                    .orElseThrow(() -> new UsernameNotFoundException("해당 계정이 존재하지 않습니다."));
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(Long.toString(member.getId()))
+                    .roles(member.getRole().name())
+                    .build();
         }
+
         Member member = memberRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new UsernameNotFoundException("해당 계정이 존재하지 않습니다."));
-
         return org.springframework.security.core.userdetails.User.builder()
                 .username(Long.toString(member.getId()))
                 .roles(member.getRole().name())

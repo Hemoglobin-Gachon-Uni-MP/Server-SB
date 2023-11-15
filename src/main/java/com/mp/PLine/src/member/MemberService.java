@@ -66,8 +66,15 @@ public class MemberService implements UserDetailsService {
     }
 
     public BaseResponse<PostMemberRes> findMember(LoginRequestDto loginDto) throws BaseException {
-        Member member = memberRepository.findBySocialId(jwtService.extractSocialId(loginDto.getIdToken())
-                        .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN)))
+        Long id;
+        if (!loginDto.getIdToken().matches("^[0-9]+$")) {
+            System.out.println("동작");
+            id = Long.valueOf(jwtService.extractSocialId(loginDto.getIdToken())
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN)));
+        } else {
+            id = Long.parseLong(loginDto.getIdToken());
+        }
+        Member member = memberRepository.findBySocialId(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         Long memberId = member.getId();
         return new BaseResponse<>(new PostMemberRes(jwtService.createAccessToken(memberId), memberId));
