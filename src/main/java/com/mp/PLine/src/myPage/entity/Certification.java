@@ -4,10 +4,7 @@ import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.src.report.dto.CertificationResponseDto;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -16,7 +13,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Certification extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -25,22 +23,13 @@ public class Certification extends BaseEntity {
     private String certificateNumber;
     private String certificateImg;
     private String date;
-    private Boolean isProcessed;
+    private Boolean isVerified;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-//    @Builder
-//    public Certification(Member member, String certificateNumber, String certificateImg, String date, Status status) {
-//        this.member = member;
-//        this.certificateNumber = certificateNumber;
-//        this.certificateImg = certificateImg;
-//        this.date = date;
-//        this.status = status;
-//    }
-
     public void excecute() {
-        this.isProcessed = true;
+        this.isVerified = true;
     }
 
     public static Certification of(Member member, String certificateNumber, String certificateImg, String date, Status status) {
@@ -49,7 +38,7 @@ public class Certification extends BaseEntity {
                 .certificateNumber(certificateNumber)
                 .certificateImg(certificateImg)
                 .date(date)
-                .isProcessed(false)
+                .isVerified(false)
                 .status(status)
                 .build();
     }
