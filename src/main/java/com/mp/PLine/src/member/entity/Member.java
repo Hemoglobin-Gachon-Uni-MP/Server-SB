@@ -2,6 +2,7 @@ package com.mp.PLine.src.member.entity;
 
 import com.mp.PLine.src.login.oauth.SocialType;
 import com.mp.PLine.src.member.dto.req.PostMemberReq;
+import com.mp.PLine.src.member.dto.res.PostMemberRes;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.*;
@@ -76,6 +77,13 @@ public class Member extends BaseEntity {
                 .socialId(postMemberReq.getSocialId())
                 .role(Role.MEMBER)
                 .status(Status.A)
+                .build();
+    }
+
+    public static PostMemberRes toPostMemberRes(String token, long memberId) {
+        return PostMemberRes.builder()
+                .jwt(token)
+                .memberId(memberId)
                 .build();
     }
 

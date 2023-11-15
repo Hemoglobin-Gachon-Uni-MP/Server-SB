@@ -31,7 +31,7 @@ public class FeedController {
      */
     @ApiOperation("게시물 생성 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -106,7 +106,7 @@ public class FeedController {
      */
     @ApiOperation("게시물 수정 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -140,7 +140,7 @@ public class FeedController {
      */
     @ApiOperation("게시물 삭제 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -168,7 +168,7 @@ public class FeedController {
      */
     @ApiOperation("댓글 달기 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -200,7 +200,7 @@ public class FeedController {
      */
     @ApiOperation("댓글 삭제 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -228,7 +228,7 @@ public class FeedController {
      */
     @ApiOperation("답글 달기 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -264,7 +264,7 @@ public class FeedController {
      */
     @ApiOperation("답글 삭제 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),

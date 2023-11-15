@@ -2,20 +2,19 @@ package com.mp.PLine.src.login;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
-import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.login.dto.LoginRequestDto;
 import com.mp.PLine.src.member.MemberService;
 import com.mp.PLine.src.member.dto.req.PostMemberReq;
 import com.mp.PLine.src.member.dto.res.PostMemberRes;
 import com.mp.PLine.utils.JwtService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -34,7 +33,7 @@ public class LoginController {
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
     })
     @PostMapping("/accounts/login")
-    public BaseResponse<PostMemberRes> login(@RequestBody LoginRequestDto.LoginDto loginDto) throws BaseException {
+    public BaseResponse<PostMemberRes> login(@RequestBody LoginRequestDto loginDto) throws BaseException {
         return memberService.findMember(loginDto);
     }
     @ApiOperation("회원가입 API")
@@ -43,9 +42,8 @@ public class LoginController {
             @ApiResponse(code = 2028, message = "존재하지 않는 유저입니다.")
     })
     @PostMapping("/accounts/sign-up/kakao")
-    public BaseResponse<Object> signUp(@RequestBody PostMemberReq postMemberReq, HttpServletResponse response) throws BaseException {
-        jwtService.setAccessTokenHeader(response, memberService.signUp(postMemberReq));
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    public BaseResponse<PostMemberRes> signUp(@RequestBody PostMemberReq postMemberReq) throws BaseException {
+        return new BaseResponse<>(memberService.signUp(postMemberReq));
     }
 
 }

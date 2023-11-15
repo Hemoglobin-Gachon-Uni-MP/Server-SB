@@ -33,7 +33,7 @@ public class MemberService implements UserDetailsService {
 
     /* Sign up with kakao API */
     @Transactional
-    public String signUp(PostMemberReq info) throws BaseException {
+    public PostMemberRes signUp(PostMemberReq info) throws BaseException {
         if (memberRepository.findBySocialId(info.getSocialId()).isPresent()) {
             throw new BaseException(BaseResponseStatus.EXIST_USER);
         }
@@ -47,7 +47,7 @@ public class MemberService implements UserDetailsService {
         }
         Member member = Member.of(info, Member.parseAge(info.getBirth()), profileImg);
         memberRepository.save(member);
-        return jwtService.createAccessToken(member.getId());
+        return Member.toPostMemberRes(jwtService.createAccessToken(member.getId()), member.getId());
     }
 
     /* Resign API */
@@ -65,8 +65,9 @@ public class MemberService implements UserDetailsService {
         return "회원 탈퇴가 완료되었습니다.";
     }
 
-    public BaseResponse<PostMemberRes> findMember(LoginRequestDto.LoginDto loginDto) throws BaseException {
-        Member member = memberRepository.findBySocialId(loginDto.getSocialId())
+    public BaseResponse<PostMemberRes> findMember(LoginRequestDto loginDto) throws BaseException {
+        Member member = memberRepository.findBySocialId(jwtService.extractSocialId(loginDto.getIdToken())
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN)))
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
         Long memberId = member.getId();
         return new BaseResponse<>(new PostMemberRes(jwtService.createAccessToken(memberId), memberId));

@@ -23,7 +23,7 @@ public class MemberController {
      */
     @ApiOperation("회원 탈퇴 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-ACCESS-TOKEN", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
     })
     @ApiResponses({
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
