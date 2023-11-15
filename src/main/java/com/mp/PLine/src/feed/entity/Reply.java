@@ -34,6 +34,10 @@ public class Reply extends BaseEntity {
         this.status = status;
     }
 
+    public void delete() {
+        this.status = Status.D;
+    }
+
     public static Reply of(Member member, Feed feed, Comment comment, String context, Status status) {
         return Reply.builder()
                 .member(member)
