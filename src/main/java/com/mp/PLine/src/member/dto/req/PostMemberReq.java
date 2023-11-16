@@ -24,6 +24,6 @@ public class PostMemberReq {
     private int rh;
     @ApiModelProperty(example = "서울시 관악구")
     private String location;
-    @ApiModelProperty(example = "2797627와 같은 숫자로 이루어진 socialID")
-    private Long socialId;
+    @ApiModelProperty("엑세스 토큰에서 뽑아낸 IdToken 값")
+    private String idToken;
 }

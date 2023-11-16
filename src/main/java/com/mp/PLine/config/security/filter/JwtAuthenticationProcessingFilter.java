@@ -125,7 +125,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                             adminRepository.findAdminByAdminKey(adminKey)
                                     .ifPresent(this::saveAuthentication)
                     );
-                    jwtService.extractId(accessToken).ifPresent(userId ->
+                    jwtService.extractUserId(accessToken).ifPresent(userId ->
                             memberRepository.findById(userId)
                                     .ifPresent(this::saveAuthentication)
                     );

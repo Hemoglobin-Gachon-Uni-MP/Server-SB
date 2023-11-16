@@ -39,4 +39,8 @@ public class Comment extends BaseEntity {
                 .status(status)
                 .build();
     }
+
+    public void delete() {
+        this.status = Status.D;
+    }
 }

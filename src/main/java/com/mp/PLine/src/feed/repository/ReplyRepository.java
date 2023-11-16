@@ -34,6 +34,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
             "order by r.createdAt")
     List<ReplyResI> findByCommentId(@Param("memberId") Long memberId, @Param("commentId") Long commentId);
 
+    List<Reply> findByCommentId(Long commentId);
+
     // delete user's replies when deleting user
     @Modifying
     @Query("update Reply r set r.status = 'D' where r.member.id = :memberId")

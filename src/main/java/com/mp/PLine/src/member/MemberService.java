@@ -34,9 +34,9 @@ public class MemberService implements UserDetailsService {
     /* Sign up with kakao API */
     @Transactional
     public PostMemberRes signUp(PostMemberReq info) throws BaseException {
-        if (memberRepository.findBySocialId(info.getSocialId()).isPresent()) {
-            throw new BaseException(BaseResponseStatus.EXIST_USER);
-        }
+        Member member = memberRepository.findBySocialId(jwtService.extractSocialId(info.getIdToken())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN)))
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.EXIST_USER));
         int profile = (int) (Math.random() * 2) + 1;
         String profileImg = "";
 
@@ -45,8 +45,7 @@ public class MemberService implements UserDetailsService {
         } else if(profile == 2) {
             profileImg = "https://p-line.s3.ap-northeast-2.amazonaws.com/profile/Group+21.png";
         }
-        Member member = Member.of(info, Member.parseAge(info.getBirth()), profileImg);
-        memberRepository.save(member);
+        member.signUpMember(info, Member.parseAge(info.getBirth()), profileImg);
         return Member.toPostMemberRes(jwtService.createAccessToken(member.getId()), member.getId());
     }
 
@@ -68,14 +67,17 @@ public class MemberService implements UserDetailsService {
     public BaseResponse<PostMemberRes> findMember(LoginRequestDto loginDto) throws BaseException {
         Long id;
         if (!loginDto.getIdToken().matches("^[0-9]+$")) {
-            System.out.println("동작");
-            id = Long.valueOf(jwtService.extractSocialId(loginDto.getIdToken())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN)));
+            System.out.println(" " + jwtService.extractSocialId(loginDto.getIdToken()).isEmpty());
+            id = jwtService.extractSocialId(loginDto.getIdToken())
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN));
         } else {
             id = Long.parseLong(loginDto.getIdToken());
         }
         Member member = memberRepository.findBySocialId(id)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
+                .orElseThrow(() -> {
+                    memberRepository.save(Member.setEmptyMember(id));
+                    return new BaseException(BaseResponseStatus.INVALID_USER);
+                });
         Long memberId = member.getId();
         return new BaseResponse<>(new PostMemberRes(jwtService.createAccessToken(memberId), memberId));
     }

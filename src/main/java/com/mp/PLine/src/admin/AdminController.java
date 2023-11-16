@@ -5,6 +5,7 @@ import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.admin.dto.AdminDto;
 import com.mp.PLine.src.report.dto.CertificationResponseDto;
+import com.mp.PLine.src.report.dto.ReportRequestDto;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,10 +40,17 @@ public class AdminController {
         return new BaseResponse<>(adminService.readReports(page));
     }
 
-    @ApiOperation("신고 처리 API")
+    @ApiOperation("신고 (대)댓글 삭제 및 처리 API")
+    @PutMapping("/reports/comments/execute")
+    public BaseResponse<BaseResponseStatus> executeCommentsReport(@RequestBody ReportRequestDto.commentReportDto reportDto) throws BaseException {
+        adminService.executeCommentsReport(reportDto);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @ApiOperation("신고 반려 API")
     @PutMapping("/reports/execute")
-    public BaseResponse<BaseResponseStatus> executeReport(@RequestParam Long id) throws BaseException {
-        adminService.executeReport(id);
+    public BaseResponse<BaseResponseStatus> rejectReport(@RequestParam Long id) throws BaseException {
+        adminService.rejectReport(id);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
@@ -52,10 +60,17 @@ public class AdminController {
         return new BaseResponse<>(adminService.readCertifications());
     }
 
-    @ApiOperation("인증 처리 API")
+    @ApiOperation("인증 수락 API")
     @PutMapping("/certifications/execute")
     public BaseResponse<BaseResponseStatus> executeCertification(@RequestParam Long id) throws BaseException {
         adminService.executeCertification(id);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @ApiOperation("인증 반려 API")
+    @PutMapping("/certifications/reject")
+    public BaseResponse<BaseResponseStatus> rejectCertification(@RequestParam Long id) throws BaseException {
+        adminService.rejectCertification(id);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 

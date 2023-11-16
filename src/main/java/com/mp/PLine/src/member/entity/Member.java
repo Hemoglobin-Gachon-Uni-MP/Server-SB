@@ -16,6 +16,7 @@ import javax.persistence.Enumerated;
 @Getter
 @Setter
 @SuperBuilder
+@AllArgsConstructor(access= AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     // Member Entity for JPA
@@ -35,31 +36,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
     private Long socialId;
-//    private Long kakaoId;
     private String refreshToken;
     @Enumerated(EnumType.STRING)
     private Status status;
-
-
-    @Builder
-    public Member(String name, String nickname, String birth, Long age, String phone, String gender, int abo,
-                  int rh, String location, String profileImg, String email, Long socialId, Role role, SocialType socialType, Status status) {
-        this.name = name;
-        this.nickname = nickname;
-        this.birth = birth;
-        this.age = age;
-        this.phone = phone;
-        this.gender = gender;
-        this.abo = abo;
-        this.rh = rh;
-        this.location = location;
-        this.profileImg = profileImg;
-        this.email = email;
-        this.socialId = socialId;
-        this.role = role;
-        this.socialType = socialType;
-        this.status = status;
-    }
 
     public static Member of(PostMemberReq postMemberReq, long age, String profileImg) {
         return Member.builder()
@@ -73,9 +52,30 @@ public class Member extends BaseEntity {
                 .rh(postMemberReq.getRh())
                 .location(postMemberReq.getLocation())
                 .profileImg(profileImg)
-                .socialId(postMemberReq.getSocialId())
                 .role(Role.MEMBER)
                 .status(Status.A)
+                .build();
+    }
+
+    public void signUpMember(PostMemberReq info, long age, String profileImg) {
+        this.name = info.getName();
+        this.nickname = info.getNickname();
+        this.birth = info.getBirth();
+        this.age = age;
+        this.phone = info.getPhone();
+        this.gender = info.getGender();
+        this.abo = info.getAbo();
+        this.rh = info.getRh();
+        this.location = info.getLocation();
+        this.profileImg = profileImg;
+        this.role = Role.MEMBER;
+        this.status = Status.A;
+    }
+
+    public static Member setEmptyMember(Long socialId) {
+        return Member.builder()
+                .socialType(SocialType.KAKAO)
+                .socialId(socialId)
                 .build();
     }
 
