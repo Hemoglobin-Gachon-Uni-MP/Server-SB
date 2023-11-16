@@ -58,7 +58,20 @@ public class MyPageService {
                 .map(FeedRes::from)
                 .collect(Collectors.toList());
 
-        return GetMemberRes.of(member, member.getGender().equals("F") ? "여" : "남", feedRes);
+        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndIsVerifiedAndStatus(memberId, true, Status.A);
+        long certificationCnt = certificationList.size();
+        long rewardCnt = 0;
+
+        if(1 <= certificationCnt) rewardCnt++;
+        if(3 <= certificationCnt) rewardCnt++;
+        if(6 <= certificationCnt) rewardCnt++;
+        if(9 <= certificationCnt) rewardCnt++;
+        if(12 <= certificationCnt) rewardCnt++;
+        if(15 <= certificationCnt) rewardCnt++;
+        if(18 <= certificationCnt) rewardCnt++;
+        if(21 <= certificationCnt) rewardCnt++;
+
+        return GetMemberRes.of(member, member.getGender().equals("F") ? "여" : "남", certificationCnt, rewardCnt, feedRes);
     }
 
     /* Edit user information API */
@@ -95,7 +108,7 @@ public class MyPageService {
         Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
-        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndStatus(memberId, Status.A);
+        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndIsVerifiedAndStatus(memberId, true, Status.A);
 
         return certificationList.stream()
                 .map(d -> GetCertificationRes.builder()
@@ -113,7 +126,7 @@ public class MyPageService {
         Member member = myPageRepository.findByIdAndStatus(memberId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_USER));
 
-        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndStatus(memberId, Status.A);
+        List<Certification> certificationList = certificationRepository.findAllByMemberIdAndIsVerifiedAndStatus(memberId, true, Status.A);
         long length = certificationList.size();
 
         List<RewardRes> rewardList = new ArrayList<>();

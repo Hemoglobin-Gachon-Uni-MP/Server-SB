@@ -32,10 +32,15 @@ public class GetMemberRes {
     private String location;
     @ApiModelProperty(example = "1 (1, 2)")
     private String profileImg;
+    @ApiModelProperty(example = "10")
+    private Long certificationCnt;
+    @ApiModelProperty(example = "10")
+    private Long rewardCnt;
     private List<FeedRes> feedList;
 
     public GetMemberRes(Long memberId, String name, String nickname, String birth, String phone,
-                        String gender, String blood, String location, String profileImg, List<FeedRes> feedList) {
+                        String gender, String blood, String location, String profileImg,
+                        Long certificationCnt, Long rewardCnt, List<FeedRes> feedList) {
         this.memberId = memberId;
         this.name = name;
         this.nickname = nickname;
@@ -45,10 +50,12 @@ public class GetMemberRes {
         this.blood = blood;
         this.location = location;
         this.profileImg = profileImg;
+        this.certificationCnt = certificationCnt;
+        this.rewardCnt = rewardCnt;
         this.feedList = feedList;
     }
 
-    public static GetMemberRes of(Member member, String genderStrKorean, List<FeedRes> feedList) {
+    public static GetMemberRes of(Member member, String genderStrKorean, Long certificationCnt, Long rewardCnt, List<FeedRes> feedList) {
         return GetMemberRes.builder()
                 .memberId(member.getId())
                 .name(member.getName())
@@ -59,6 +66,8 @@ public class GetMemberRes {
                 .blood(MyPageService.blood(member.getRh(), member.getAbo()))
                 .location(member.getLocation())
                 .profileImg(member.getProfileImg())
+                .certificationCnt(certificationCnt)
+                .rewardCnt(rewardCnt)
                 .feedList(feedList)
                 .build();
     }
