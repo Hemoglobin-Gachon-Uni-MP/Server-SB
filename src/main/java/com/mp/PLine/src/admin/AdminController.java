@@ -40,9 +40,16 @@ public class AdminController {
         return new BaseResponse<>(adminService.readReports(page));
     }
 
+    @ApiOperation("신고 게시물 삭제 및 처리 API")
+    @PutMapping("/reports/feeds/execute")
+    public BaseResponse<BaseResponseStatus> executeFeedsReport(@RequestBody ReportRequestDto.FeedReportDto reportDto) throws BaseException {
+        adminService.executeFeedReport(reportDto);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
     @ApiOperation("신고 (대)댓글 삭제 및 처리 API")
     @PutMapping("/reports/comments/execute")
-    public BaseResponse<BaseResponseStatus> executeCommentsReport(@RequestBody ReportRequestDto.commentReportDto reportDto) throws BaseException {
+    public BaseResponse<BaseResponseStatus> executeCommentsReport(@RequestBody ReportRequestDto.CommentReportDto reportDto) throws BaseException {
         adminService.executeCommentsReport(reportDto);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }

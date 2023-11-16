@@ -64,17 +64,13 @@ public class MemberService implements UserDetailsService {
         return "회원 탈퇴가 완료되었습니다.";
     }
 
+    @Transactional
     public BaseResponse<PostMemberRes> findMember(LoginRequestDto loginDto) throws BaseException {
-        Long id;
-        if (!loginDto.getIdToken().matches("^[0-9]+$")) {
-            System.out.println(" " + jwtService.extractSocialId(loginDto.getIdToken()).isEmpty());
-            id = jwtService.extractSocialId(loginDto.getIdToken())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN));
-        } else {
-            id = Long.parseLong(loginDto.getIdToken());
-        }
+        Long id = jwtService.extractSocialId(loginDto.getIdToken())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_SOCIAL_ID_TOKEN));
         Member member = memberRepository.findBySocialId(id)
                 .orElseThrow(() -> {
+                    // 처음 접근한 사용자는 소셜아이디를 저장
                     memberRepository.save(Member.setEmptyMember(id));
                     return new BaseException(BaseResponseStatus.INVALID_USER);
                 });

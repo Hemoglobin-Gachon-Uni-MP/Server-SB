@@ -73,7 +73,7 @@ public enum BaseResponseStatus {
     INVALID_REPORT_SAME_USER(false,2062,"자기 자신은 신고할 수 없습니다."),
     INVALID_EXIST_REPORT(false,2063, "이미 신고가 완료되었습니다."),
     INVALID_NON_EXIST_REPORT(false,2064, "신고가 접수되지 않았습니다."),
-
+    INVALID_REPORT_CATEGORY(false,2065, "잘못된 카테고리 신고입니다."),
 
     /**
      * 3000 : Response error

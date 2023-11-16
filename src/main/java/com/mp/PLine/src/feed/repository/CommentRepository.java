@@ -31,7 +31,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "from Comment c \n" +
             "where c.feed.id = :feedId and c.status = 'A' and c.member.status = 'A' \n" +
             "order by c.createdAt")
-    List<CommentResI> findByFeedId(@Param("memberId") Long memberId, @Param("feedId") Long feedId);
+    List<CommentResI> findAllByFeedId(@Param("memberId") Long memberId, @Param("feedId") Long feedId);
 
     // delete user's comments when deleting user
     @Modifying
@@ -42,4 +42,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Modifying
     @Query("update Comment c set c.status = 'D' where c.feed.id = :feedId")
     void setCommentByFeedStatus(@Param("feedId") Long feedId);
+
+    Optional<List<Comment>> findAllByFeedId(Long feedId);
 }

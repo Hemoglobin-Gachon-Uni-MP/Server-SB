@@ -49,4 +49,7 @@ public class Feed extends BaseEntity {
                 .build();
     }
 
+    public void delete() {
+        this.status = Status.D;
+    }
 }
