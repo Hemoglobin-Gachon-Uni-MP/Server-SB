@@ -7,8 +7,8 @@ public interface GetFeedsResI {
     String getProfileImg();
     String getNickname();
     String getContext();
-    int getReplyCnt();
     int getCommentCnt();
+    int getReplyCnt();
     String getDate();
     int getAbo();
     int getRh();

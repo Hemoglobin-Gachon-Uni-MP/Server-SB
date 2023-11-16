@@ -39,8 +39,8 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query(value = "SELECT f.id AS feedId, \n" +
             "f.member_id AS memberId, m.profile_img AS profileImg, m.nickname AS nickname, \n" +
             "f.context AS context, \n" +
-            "(SELECT COUNT(*) FROM comment c WHERE c.feed_id = f.id AND c.status = 'A') AS replyCnt, \n" +
-            "(SELECT COUNT(*) FROM reply r WHERE r.feed_id = f.id AND r.status = 'A') AS commentCnt, \n" +
+            "(SELECT COUNT(*) FROM comment c WHERE c.feed_id = f.id AND c.status = 'A') AS commentCnt, \n" +
+            "(SELECT COUNT(*) FROM reply r WHERE r.feed_id = f.id AND r.status = 'A') AS replyCnt, \n" +
             "DATE_FORMAT(f.created_at, '%m/%d') as date, \n" +
             "f.abo AS abo, f.rh AS rh, f.location AS location, f.is_receiver AS isReceiver \n" +
             "FROM feed AS f \n" +
