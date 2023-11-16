@@ -5,8 +5,10 @@ import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.admin.dto.AdminDto;
 import com.mp.PLine.src.admin.entity.Admin;
 import com.mp.PLine.src.feed.entity.Comment;
+import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.src.feed.entity.Reply;
 import com.mp.PLine.src.feed.repository.CommentRepository;
+import com.mp.PLine.src.feed.repository.FeedRepository;
 import com.mp.PLine.src.feed.repository.ReplyRepository;
 import com.mp.PLine.src.myPage.CertificationRepository;
 import com.mp.PLine.src.myPage.entity.Certification;
@@ -36,6 +38,7 @@ public class AdminService {
     private final CertificationRepository certificationRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
+    private final FeedRepository feedRepository;
 
     @Transactional
     public void signUp(AdminDto.RequestDto adminRequest) throws BaseException {
@@ -60,7 +63,26 @@ public class AdminService {
     }
 
     @Transactional
-    public void executeCommentsReport(ReportRequestDto.commentReportDto reportDto) throws BaseException {
+    public void executeFeedReport(ReportRequestDto.FeedReportDto reportDto) throws BaseException {
+        Long feedId = reportDto.getFeedId();
+        Report report = reportRepository.findById(reportDto.getId())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
+        if (reportDto.getCategory().equals("F")) {
+            Feed feed = feedRepository.findById(reportDto.getFeedId())
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
+            feed.delete();
+            commentRepository.findAllByFeedId(feedId)
+                    .ifPresent(comments -> comments.forEach(Comment::delete));
+            replyRepository.findAllByFeedId(feedId).
+                    ifPresent(replies -> replies.forEach(Reply::delete));
+        } else {
+            throw new BaseException(BaseResponseStatus.INVALID_REPORT_CATEGORY);
+        }
+        report.reject();
+    }
+
+    @Transactional
+    public void executeCommentsReport(ReportRequestDto.CommentReportDto reportDto) throws BaseException {
         Report report = reportRepository.findById(reportDto.getId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
         if (reportDto.getCategory().equals("C")) {

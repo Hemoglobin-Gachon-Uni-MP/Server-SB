@@ -96,7 +96,7 @@ public class FeedService {
 
     /* get feed's comment list */
     public CommentInfo getComments(Long memberId, Long feedId) {
-        List<CommentResI> commentResI = commentRepository.findByFeedId(memberId, feedId);
+        List<CommentResI> commentResI = commentRepository.findAllByFeedId(memberId, feedId);
         List<CommentRes> commentRes = new ArrayList<>();
 
         int replyCnt = 0;

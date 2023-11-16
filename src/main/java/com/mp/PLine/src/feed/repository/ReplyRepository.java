@@ -50,4 +50,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Modifying
     @Query("update Reply r set r.status = 'D' where r.comment.id = :commentId")
     void setReplyByCommentStatus(@Param("commentId") Long commentId);
+
+    Optional<List<Reply>> findAllByFeedId(Long feedId);
 }
