@@ -47,13 +47,14 @@ public class Report extends BaseEntity {
                 .build();
     }
 
-    public static ReportResponseDto toReportResponse(Report report) {
+    public static ReportResponseDto toReportResponse(Report report, String context) {
         return ReportResponseDto.builder()
                 .id(report.getId())
                 .fromMember(report.getFromMember().getNickname())
                 .toMember(report.getToMember().getNickname())
                 .category(report.getCategory())
                 .feedOrCommentId(report.getFeedOrCommentId())
+                .context(context)
                 .reason(report.getReason())
                 .build();
     }
