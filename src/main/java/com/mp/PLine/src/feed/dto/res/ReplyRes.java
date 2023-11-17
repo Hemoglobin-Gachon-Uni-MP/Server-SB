@@ -2,6 +2,8 @@ package com.mp.PLine.src.feed.dto.res;
 
 import com.mp.PLine.src.feed.FeedService;
 import com.mp.PLine.src.feed.dto.util.ReplyResI;
+import com.mp.PLine.src.feed.entity.Reply;
+import com.mp.PLine.src.member.entity.Member;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +38,19 @@ public class ReplyRes {
                 .context(replyResInfo.getContext())
                 .date(FeedService.longDate(replyResInfo.getDate()))
                 .isReportedFromUser(replyResInfo.getIsReportedFromUser())
+                .build();
+    }
+
+    public static ReplyRes from(Reply reply) {
+        Member member = reply.getMember();
+        return ReplyRes.builder()
+                .replyId(reply.getId())
+                .memberId(member.getId())
+                .profileImg(member.getProfileImg())
+                .nickname(member.getNickname())
+                .context(reply.getContext())
+                .date(FeedService.longDate(reply.getCreatedAt()))
+                .isReportedFromUser(null)
                 .build();
     }
 }

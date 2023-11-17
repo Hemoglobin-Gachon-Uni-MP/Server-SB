@@ -44,4 +44,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     void setCommentByFeedStatus(@Param("feedId") Long feedId);
 
     Optional<List<Comment>> findAllByFeedId(Long feedId);
+
+    List<Comment> findAllByFeedIdAndStatus(Long feedId, Status status);
 }

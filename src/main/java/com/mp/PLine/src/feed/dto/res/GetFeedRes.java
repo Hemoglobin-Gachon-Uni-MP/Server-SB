@@ -77,4 +77,9 @@ public class GetFeedRes {
                 .isReportedFromUser(isReportedFromUser)
                 .build();
     }
+
+    public void setCommentList(List<CommentRes> commentResList) {
+        this.commentList = commentResList;
+        this.commentCnt = commentResList.size();
+    }
 }

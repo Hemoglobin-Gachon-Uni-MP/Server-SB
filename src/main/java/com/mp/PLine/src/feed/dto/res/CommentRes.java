@@ -1,19 +1,19 @@
 package com.mp.PLine.src.feed.dto.res;
 
 import com.mp.PLine.src.feed.FeedService;
+import com.mp.PLine.src.feed.dto.util.CommentInfo;
 import com.mp.PLine.src.feed.dto.util.CommentResI;
+import com.mp.PLine.src.feed.entity.Comment;
+import com.mp.PLine.src.member.entity.Member;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-
-
 @Getter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentRes {
     // comment information of feed
     @ApiModelProperty("1")
@@ -32,16 +32,8 @@ public class CommentRes {
     @ApiModelProperty(example = "true: 신고 O, false: 신고 X")
     private Boolean isReportedFromUser;
 
-    public CommentRes(Long commentId, Long memberId, String profileImg, String nickname,
-                      String context, List<ReplyRes> reply, String date, Boolean isReportedFromUser) {
-        this.commentId = commentId;
-        this.memberId = memberId;
-        this.profileImg = profileImg;
-        this.nickname = nickname;
-        this.context = context;
-        this.replyList = reply;
-        this.date = date;
-        this.isReportedFromUser = isReportedFromUser;
+    public void setReplyList(List<ReplyRes> replyList) {
+        this.replyList = replyList;
     }
 
     public static CommentRes of(CommentResI commentResInfo, List<ReplyRes> replyRes) {
@@ -54,6 +46,20 @@ public class CommentRes {
                 .replyList(replyRes)
                 .date(FeedService.longDate(commentResInfo.getDate()))
                 .isReportedFromUser(commentResInfo.getIsReportedFromUser())
+                .build();
+    }
+
+    public static CommentRes of (Comment comment, List<ReplyRes> replyRes) {
+        Member member = comment.getMember();
+        return CommentRes.builder()
+                .commentId(comment.getId())
+                .memberId(member.getId())
+                .profileImg(member.getProfileImg())
+                .nickname(member.getNickname())
+                .context(comment.getContext())
+                .replyList(replyRes)
+                .date(FeedService.longDate(comment.getCreatedAt()))
+                .isReportedFromUser(null)
                 .build();
     }
 }

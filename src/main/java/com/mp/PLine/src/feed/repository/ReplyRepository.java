@@ -52,4 +52,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     void setReplyByCommentStatus(@Param("commentId") Long commentId);
 
     Optional<List<Reply>> findAllByFeedId(Long feedId);
+
+    List<Reply> findAllByFeedIdAndStatus(Long feedId, Status status);
 }

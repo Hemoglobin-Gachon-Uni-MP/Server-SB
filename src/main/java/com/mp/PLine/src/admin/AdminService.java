@@ -5,11 +5,8 @@ import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.admin.dto.request.AdminRequestDto;
 import com.mp.PLine.src.admin.dto.response.AdminResponseDto;
 import com.mp.PLine.src.admin.entity.Admin;
-import com.mp.PLine.src.feed.FeedService;
 import com.mp.PLine.src.feed.dto.res.CommentRes;
 import com.mp.PLine.src.feed.dto.res.GetFeedRes;
-import com.mp.PLine.src.feed.dto.res.ReplyRes;
-import com.mp.PLine.src.feed.dto.util.CommentInfo;
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.src.feed.entity.Reply;
@@ -32,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -133,33 +129,38 @@ public class AdminService {
         certification.reject();
     }
 
-    public GetFeedRes readDetailReport(AdminRequestDto.DetailReportDto detailReportDto) throws BaseException {
-        Long feedId = -1L;
-        switch (detailReportDto.getCategory()) {
+    public GetFeedRes readDetailReport(Long reportId, String category, Long feedOrCommentId) throws BaseException {
+        Long feedId;
+        switch (category) {
             case "F":
-                feedId = detailReportDto.getFeedOrCommentId();
+                feedId = feedOrCommentId;
                 break;
             case "C":
-                Comment comment = commentRepository.findByIdAndStatus(detailReportDto.getFeedOrCommentId(), Status.A)
+                Comment comment = commentRepository.findByIdAndStatus(feedOrCommentId, Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
                 feedId = comment.getFeed().getId();
                 break;
             case "R":
-                Reply reply = replyRepository.findByIdAndStatus(detailReportDto.getFeedOrCommentId(), Status.A)
+                Reply reply = replyRepository.findByIdAndStatus(feedOrCommentId, Status.A)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
                 feedId = reply.getFeed().getId();
                 break;
+            default:
+                throw new BaseException(BaseResponseStatus.REQUEST_ERROR);
         }
         Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
-        return feedRepository.getDetailFeed();
-    }
 
-    private CommentInfo getComments(Long feedId) {
-        List<Comment> comments = commentRepository.findAllByFeedIdAndStatus(feedId, Status.A);
-        List<ReplyRes> replies = replyRepository.findAllByFeedIdAndStatus(feedId, Status.A).stream()
-                .map(ReplyRes::from)
-                .collect(Collectors.toList());
-
+        GetFeedRes responseFeed = feed.toGetFeedResponse();
+        // 댓글, 대댓글 배치 사이즈 30으로 각각 설정
+        responseFeed.setCommentList(commentRepository.findAllByFeedIdAndStatus(feedId, Status.A).stream()
+                .map(comment -> {
+                    CommentRes commentRes = Comment.toCommentRes(comment);
+                    commentRes.setReplyList(replyRepository.findByCommentId(commentRes.getCommentId()).stream()
+                            .map(Reply::toReplyRes)
+                            .collect(Collectors.toList()));
+                    return commentRes;
+                }).collect(Collectors.toList()));
+        return responseFeed;
     }
 }

@@ -5,6 +5,7 @@ import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.config.BaseResponseStatus;
 import com.mp.PLine.src.admin.dto.request.AdminRequestDto;
 import com.mp.PLine.src.admin.dto.response.AdminResponseDto;
+import com.mp.PLine.src.feed.dto.res.GetFeedRes;
 import com.mp.PLine.src.report.dto.CertificationResponseDto;
 import com.mp.PLine.src.report.dto.ReportRequestDto;
 import com.mp.PLine.src.report.dto.ReportResponseDto;
@@ -43,8 +44,10 @@ public class AdminController {
 
     @ApiOperation("신고 게시물 상세 조회 API")
     @GetMapping("/reports/detail")
-    public BaseResponse<List<ReportResponseDto>> readDetailReport(@RequestBody AdminRequestDto.DetailReportDto detailReportDto) throws BaseException {
-        return new BaseResponse<>(adminService.readDetailReport(detailReportDto));
+    public BaseResponse<GetFeedRes> readDetailReport(@RequestParam Long reportId,
+                                                     @RequestParam String category,
+                                                     @RequestParam Long feedOrCommentId) throws BaseException {
+        return new BaseResponse<>(adminService.readDetailReport(reportId, category, feedOrCommentId));
     }
 
     @ApiOperation("신고 게시물 삭제 및 처리 API")

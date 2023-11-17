@@ -1,8 +1,8 @@
 package com.mp.PLine.src.feed.repository;
 
 import com.mp.PLine.src.feed.dto.util.GetFeedsResI;
-import com.mp.PLine.src.myPage.dto.util.FeedResI;
 import com.mp.PLine.src.feed.entity.Feed;
+import com.mp.PLine.src.myPage.dto.util.FeedResI;
 import com.mp.PLine.utils.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
