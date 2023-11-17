@@ -49,6 +49,7 @@ public class Report extends BaseEntity {
 
     public static ReportResponseDto toReportResponse(Report report) {
         return ReportResponseDto.builder()
+                .id(report.getFeedOrCommentId())
                 .fromMember(report.getFromMember().getNickname())
                 .toMember(report.getToMember().getNickname())
                 .category(report.getCategory())

@@ -23,8 +23,6 @@ import com.mp.PLine.src.report.entity.Report;
 import com.mp.PLine.utils.JwtService;
 import com.mp.PLine.utils.entity.Status;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,10 +55,8 @@ public class AdminService {
         return new AdminResponseDto.ResponseDto(jwtService.createAccessToken(admin.getAdminKey()));
     }
 
-    public List<ReportResponseDto> readReports(int page) {
-        Pageable pageable = PageRequest.of(page, 20);
-        return reportRepository.findAllByStatus(Status.A, pageable)
-                .stream()
+    public List<ReportResponseDto> readReports() {
+        return reportRepository.findAllByStatus(Status.A).stream()
                 .map(Report::toReportResponse)
                 .collect(Collectors.toList());
     }

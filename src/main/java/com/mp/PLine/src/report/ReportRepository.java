@@ -2,7 +2,6 @@ package com.mp.PLine.src.report;
 
 import com.mp.PLine.src.report.entity.Report;
 import com.mp.PLine.utils.entity.Status;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -26,7 +25,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "   and r.status = 'A'")
     Optional<Report> findReportedFeed(@Param("fromMember") Long fromMember, @Param("toMember") Long toMember, @Param("feedId")Long feedId);
 
-    List<Report> findAllByStatus(Status status, Pageable pageable);
+    List<Report> findAllByStatus(Status status);
 
     Optional<Report> findByIdAndStatus(Long id, Status status);
 }
