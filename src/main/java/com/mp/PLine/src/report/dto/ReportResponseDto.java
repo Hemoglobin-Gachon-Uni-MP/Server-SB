@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ReportResponseDto {
+    private Long id;
     private String fromMember;
     private String toMember;
     private String category;

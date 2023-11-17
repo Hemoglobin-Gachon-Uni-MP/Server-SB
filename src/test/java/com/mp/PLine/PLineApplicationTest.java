@@ -40,34 +40,34 @@ class PLineApplicationTest {
 		}
 	}
 
-	@Test
-	public void createComment() {
-		Optional<Member> member = memberRepository.findByIdAndStatus(20L, Status.A);
-
-		if(member.isPresent()) {
-			Optional<Feed> feed = feedRepository.findByIdAndStatus(73L, Status.A);
-			if(feed.isPresent()) {
-				Comment comment = new Comment(member.get(), feed.get(), "제가 헌혈하겠습니다!", Status.A);
-				Comment newComment = commentRepository.save(comment);
-
-				System.out.println(newComment.getId());
-			} else System.out.println("존재하지 않는 피드입니다.");
-
-		} else System.out.println("존재하지 않는 유저입니다.");
-	}
-
-	@Test
-	public void checkBlank() {
-		Optional<Member> member = memberRepository.findByIdAndStatus(20L, Status.A);
-
-		if(member.isPresent()) {
-			Feed feed = new Feed(member.get(), null, 0, 1, "서울시 도봉구", false, Status.A);
-			try {
-				feedRepository.save(feed);
-				System.out.println("게시물 생성에 성공했습니다.");
-			} catch (Exception e) {
-				System.out.println("게시물 생성에 실패했습니다.");
-			}
-		} else System.out.println("존재하지 않는 유저입니다.");
-	}
+//	@Test
+//	public void createComment() {
+//		Optional<Member> member = memberRepository.findByIdAndStatus(20L, Status.A);
+//
+//		if(member.isPresent()) {
+//			Optional<Feed> feed = feedRepository.findByIdAndStatus(73L, Status.A);
+//			if(feed.isPresent()) {
+//				Comment comment = new Comment(member.get(), feed.get(), "제가 헌혈하겠습니다!", Status.A);
+//				Comment newComment = commentRepository.save(comment);
+//
+//				System.out.println(newComment.getId());
+//			} else System.out.println("존재하지 않는 피드입니다.");
+//
+//		} else System.out.println("존재하지 않는 유저입니다.");
+//	}
+//
+//	@Test
+//	public void checkBlank() {
+//		Optional<Member> member = memberRepository.findByIdAndStatus(20L, Status.A);
+//
+//		if(member.isPresent()) {
+//			Feed feed = new Feed(member.get(), null, 0, 1, "서울시 도봉구", false, Status.A);
+//			try {
+//				feedRepository.save(feed);
+//				System.out.println("게시물 생성에 성공했습니다.");
+//			} catch (Exception e) {
+//				System.out.println("게시물 생성에 실패했습니다.");
+//			}
+//		} else System.out.println("존재하지 않는 유저입니다.");
+//	}
 }

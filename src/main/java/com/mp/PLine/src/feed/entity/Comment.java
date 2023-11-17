@@ -1,10 +1,13 @@
 package com.mp.PLine.src.feed.entity;
 
+import com.mp.PLine.src.feed.FeedService;
+import com.mp.PLine.src.feed.dto.res.CommentRes;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 
@@ -12,7 +15,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
+@BatchSize(size = 30)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
     // Comment Entity for JPA
     @ManyToOne @JoinColumn(name = "member_id")
@@ -23,12 +28,8 @@ public class Comment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Builder
-    public Comment(Member member, Feed feed, String context, Status status) {
-        this.member = member;
-        this.feed = feed;
-        this.context = context;
-        this.status = status;
+    public void delete() {
+        this.status = Status.D;
     }
 
     public static Comment of (Member member, Feed feed, String context, Status status) {
@@ -40,7 +41,15 @@ public class Comment extends BaseEntity {
                 .build();
     }
 
-    public void delete() {
-        this.status = Status.D;
+    public static CommentRes toCommentRes(Comment comment) {
+        Member member = comment.getMember();
+        return CommentRes.builder()
+                .commentId(comment.getId())
+                .memberId(member.getId())
+                .profileImg(member.getProfileImg())
+                .nickname(member.getNickname())
+                .context(comment.getContext())
+                .date(FeedService.longDate(comment.getCreatedAt()))
+                .build();
     }
 }

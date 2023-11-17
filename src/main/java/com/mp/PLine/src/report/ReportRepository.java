@@ -27,4 +27,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     Optional<Report> findReportedFeed(@Param("fromMember") Long fromMember, @Param("toMember") Long toMember, @Param("feedId")Long feedId);
 
     List<Report> findAllByStatus(Status status, Pageable pageable);
+
+    Optional<Report> findByIdAndStatus(Long id, Status status);
 }

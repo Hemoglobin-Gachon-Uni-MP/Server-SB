@@ -1,10 +1,12 @@
 package com.mp.PLine.src.feed.entity;
 
+import com.mp.PLine.src.feed.dto.res.ReplyRes;
 import com.mp.PLine.src.member.entity.Member;
 import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 
@@ -12,7 +14,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
+@BatchSize(size = 30)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reply extends BaseEntity {
     // Reply Entity for JPA
     @ManyToOne @JoinColumn(name = "member_id")
@@ -24,15 +28,6 @@ public class Reply extends BaseEntity {
     private String context;
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Builder
-    public Reply(Member member, Feed feed, Comment comment, String context, Status status) {
-        this.member = member;
-        this.feed = feed;
-        this.comment = comment;
-        this.context = context;
-        this.status = status;
-    }
 
     public void delete() {
         this.status = Status.D;
@@ -46,6 +41,10 @@ public class Reply extends BaseEntity {
                 .context(context)
                 .status(status)
                 .build();
+    }
+
+    public static ReplyRes toReplyRes(Reply reply) {
+        return ReplyRes.from(reply);
     }
 
 }
