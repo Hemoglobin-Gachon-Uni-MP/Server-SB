@@ -2,8 +2,14 @@ package com.mp.PLine.src.admin;
 
 import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponseStatus;
-import com.mp.PLine.src.admin.dto.AdminDto;
+import com.mp.PLine.src.admin.dto.request.AdminRequestDto;
+import com.mp.PLine.src.admin.dto.response.AdminResponseDto;
 import com.mp.PLine.src.admin.entity.Admin;
+import com.mp.PLine.src.feed.FeedService;
+import com.mp.PLine.src.feed.dto.res.CommentRes;
+import com.mp.PLine.src.feed.dto.res.GetFeedRes;
+import com.mp.PLine.src.feed.dto.res.ReplyRes;
+import com.mp.PLine.src.feed.dto.util.CommentInfo;
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.feed.entity.Feed;
 import com.mp.PLine.src.feed.entity.Reply;
@@ -26,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,17 +48,17 @@ public class AdminService {
     private final FeedRepository feedRepository;
 
     @Transactional
-    public void signUp(AdminDto.RequestDto adminRequest) throws BaseException {
+    public void signUp(AdminRequestDto.LoginDto adminRequest) throws BaseException {
         if (!adminRequest.getKey().startsWith("a")) {
             throw new BaseException(BaseResponseStatus.INVALID_ADMIN_KEY);
         }
         adminRepository.save(Admin.from(adminRequest.getKey()));
     }
 
-    public AdminDto.ResponseDto login(AdminDto.RequestDto adminRequest) throws BaseException {
+    public AdminResponseDto.ResponseDto login(AdminRequestDto.LoginDto adminRequest) throws BaseException {
         Admin admin = adminRepository.findAdminByAdminKey(adminRequest.getKey())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_ADMIN_ACCOUNT));
-        return new AdminDto.ResponseDto(jwtService.createAccessToken(admin.getAdminKey()));
+        return new AdminResponseDto.ResponseDto(jwtService.createAccessToken(admin.getAdminKey()));
     }
 
     public List<ReportResponseDto> readReports(int page) {
@@ -124,5 +131,35 @@ public class AdminService {
         Certification certification = certificationRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
         certification.reject();
+    }
+
+    public GetFeedRes readDetailReport(AdminRequestDto.DetailReportDto detailReportDto) throws BaseException {
+        Long feedId = -1L;
+        switch (detailReportDto.getCategory()) {
+            case "F":
+                feedId = detailReportDto.getFeedOrCommentId();
+                break;
+            case "C":
+                Comment comment = commentRepository.findByIdAndStatus(detailReportDto.getFeedOrCommentId(), Status.A)
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_COMMENT));
+                feedId = comment.getFeed().getId();
+                break;
+            case "R":
+                Reply reply = replyRepository.findByIdAndStatus(detailReportDto.getFeedOrCommentId(), Status.A)
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPLY));
+                feedId = reply.getFeed().getId();
+                break;
+        }
+        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
+        return feedRepository.getDetailFeed();
+    }
+
+    private CommentInfo getComments(Long feedId) {
+        List<Comment> comments = commentRepository.findAllByFeedIdAndStatus(feedId, Status.A);
+        List<ReplyRes> replies = replyRepository.findAllByFeedIdAndStatus(feedId, Status.A).stream()
+                .map(ReplyRes::from)
+                .collect(Collectors.toList());
+
     }
 }
