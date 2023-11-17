@@ -8,7 +8,6 @@ import com.mp.PLine.utils.entity.BaseEntity;
 import com.mp.PLine.utils.entity.Status;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 

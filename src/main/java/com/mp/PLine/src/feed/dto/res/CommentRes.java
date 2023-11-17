@@ -1,7 +1,6 @@
 package com.mp.PLine.src.feed.dto.res;
 
 import com.mp.PLine.src.feed.FeedService;
-import com.mp.PLine.src.feed.dto.util.CommentInfo;
 import com.mp.PLine.src.feed.dto.util.CommentResI;
 import com.mp.PLine.src.feed.entity.Comment;
 import com.mp.PLine.src.member.entity.Member;
