@@ -92,8 +92,9 @@ public class MyPageController {
      */
     @ApiOperation("헌혈 인증 업로드 API")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "image", dataTypeClass = Integer.class, paramType = "formData", value = "image"),
-            @ApiImplicitParam(name = "certification", dataTypeClass = PostCertificationReq.class, paramType = "formData", value = "PostCertificationReq", type = "application/json"),
+            @ApiImplicitParam(name = "certification", dataTypeClass = PostCertificationReq.class, paramType = "body", value = "PostCertificationReq", type = "application/json")
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
@@ -129,6 +130,9 @@ public class MyPageController {
      * [GET] /mypages/certification/list
      */
     @ApiOperation("헌혈 목록 반환 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
@@ -152,6 +156,9 @@ public class MyPageController {
      * [GET] /mypages/certification/reward-list
      */
     @ApiOperation("헌혈 리워드 반환 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),

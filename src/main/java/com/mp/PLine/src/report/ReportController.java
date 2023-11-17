@@ -4,10 +4,7 @@ import com.mp.PLine.config.BaseException;
 import com.mp.PLine.config.BaseResponse;
 import com.mp.PLine.src.report.dto.PostReportReq;
 import com.mp.PLine.utils.JwtService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +21,9 @@ public class ReportController {
      * [POST] /reports
      */
     @ApiOperation("신고하기 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
@@ -53,6 +53,9 @@ public class ReportController {
      * [PATCH] /reports/status
      */
     @ApiOperation("신고 취소하기 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2001, message = "JWT를 입력해주세요."),
