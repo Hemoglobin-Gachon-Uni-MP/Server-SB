@@ -49,6 +49,7 @@ public class Certification extends BaseEntity {
 
     public static CertificationResponseDto toCertificationResponseDto(Certification certification) {
         return CertificationResponseDto.builder()
+                .id(certification.getId())
                 .member(certification.getMember().getNickname())
                 .certificateNumber(certification.getCertificateNumber())
                 .certificateImg(certification.getCertificateImg())
