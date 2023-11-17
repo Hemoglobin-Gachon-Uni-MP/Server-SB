@@ -38,7 +38,7 @@ public class AdminController {
     
     @ApiOperation("신고글 조회 API")
     @GetMapping("/reports")
-    public BaseResponse<List<ReportResponseDto>> readReports() {
+    public BaseResponse<List<ReportResponseDto>> readReports() throws BaseException {
         return new BaseResponse<>(adminService.readReports());
     }
 

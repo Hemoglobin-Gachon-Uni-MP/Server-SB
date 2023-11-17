@@ -11,5 +11,6 @@ public class ReportResponseDto {
     private String toMember;
     private String category;
     private Long feedOrCommentId;
+    private String context;
     private String reason;
 }
