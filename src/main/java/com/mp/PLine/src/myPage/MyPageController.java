@@ -93,7 +93,7 @@ public class MyPageController {
     @ApiOperation("헌혈 인증 업로드 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "image", dataTypeClass = Integer.class, paramType = "formData", value = "image"),
-            @ApiImplicitParam(name = "certification", dataTypeClass = PostCertificationReq.class, paramType = "body", value = "PostCertificationReq", type = "application/json"),
+            @ApiImplicitParam(name = "certification", dataTypeClass = PostCertificationReq.class, paramType = "formData", value = "PostCertificationReq", type = "application/json"),
     })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
