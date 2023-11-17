@@ -66,6 +66,9 @@ public class FeedController {
      * [GET] /feeds/info-list
      */
     @ApiOperation("게시물 목록 반환 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다.")
     })
@@ -84,6 +87,9 @@ public class FeedController {
      * [GET] /feeds/info/{feedId}
      */
     @ApiOperation("게시물 정보 반환 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
     @ApiResponses({
             @ApiResponse(code = 1000, message = "요청에 성공하였습니다."),
             @ApiResponse(code = 2045, message = "존재하지 않는 게시물입니다.")
