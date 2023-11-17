@@ -38,8 +38,8 @@ public class AdminController {
     
     @ApiOperation("신고글 조회 API")
     @GetMapping("/reports")
-    public BaseResponse<List<ReportResponseDto>> readReports(@RequestParam(required = false, defaultValue = "0", value = "page") int page) {
-        return new BaseResponse<>(adminService.readReports(page));
+    public BaseResponse<List<ReportResponseDto>> readReports() {
+        return new BaseResponse<>(adminService.readReports());
     }
 
     @ApiOperation("신고 게시물 상세 조회 API")
