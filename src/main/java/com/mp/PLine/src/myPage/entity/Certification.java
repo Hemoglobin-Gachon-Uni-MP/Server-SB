@@ -30,6 +30,7 @@ public class Certification extends BaseEntity {
 
     public void excecute() {
         this.isVerified = true;
+        this.status = Status.D;
     }
 
     public void reject() {
