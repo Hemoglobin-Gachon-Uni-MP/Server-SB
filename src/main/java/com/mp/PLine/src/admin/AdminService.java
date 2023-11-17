@@ -130,6 +130,25 @@ public class AdminService {
     }
 
     public GetFeedRes readDetailReport(Long reportId, String category, Long feedOrCommentId) throws BaseException {
+        reportRepository.findByIdAndStatus(reportId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
+        Long feedId = getFeedId(category, feedOrCommentId);
+        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
+        GetFeedRes responseFeed = feed.toGetFeedResponse();
+        // 댓글, 대댓글 배치 사이즈 30으로 각각 설정
+        responseFeed.setCommentList(commentRepository.findAllByFeedIdAndStatus(feedId, Status.A).stream()
+                .map(comment -> {
+                    CommentRes commentRes = Comment.toCommentRes(comment);
+                    commentRes.setReplyList(replyRepository.findByCommentId(commentRes.getCommentId()).stream()
+                            .map(Reply::toReplyRes)
+                            .collect(Collectors.toList()));
+                    return commentRes;
+                }).collect(Collectors.toList()));
+        return responseFeed;
+    }
+
+    private Long getFeedId(String category, Long feedOrCommentId) throws BaseException {
         Long feedId;
         switch (category) {
             case "F":
@@ -148,19 +167,6 @@ public class AdminService {
             default:
                 throw new BaseException(BaseResponseStatus.REQUEST_ERROR);
         }
-        Feed feed = feedRepository.findByIdAndStatus(feedId, Status.A)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_FEED));
-
-        GetFeedRes responseFeed = feed.toGetFeedResponse();
-        // 댓글, 대댓글 배치 사이즈 30으로 각각 설정
-        responseFeed.setCommentList(commentRepository.findAllByFeedIdAndStatus(feedId, Status.A).stream()
-                .map(comment -> {
-                    CommentRes commentRes = Comment.toCommentRes(comment);
-                    commentRes.setReplyList(replyRepository.findByCommentId(commentRes.getCommentId()).stream()
-                            .map(Reply::toReplyRes)
-                            .collect(Collectors.toList()));
-                    return commentRes;
-                }).collect(Collectors.toList()));
-        return responseFeed;
+        return feedId;
     }
 }

@@ -10,11 +10,4 @@ public class AdminRequestDto {
         @ApiModelProperty(example = "a로 시작하는 키값")
         private String key;
     }
-
-    @Getter
-    public static class DetailReportDto {
-        private Long reportId;
-        private String category;
-        private Long FeedOrCommentId;
-    }
 }
