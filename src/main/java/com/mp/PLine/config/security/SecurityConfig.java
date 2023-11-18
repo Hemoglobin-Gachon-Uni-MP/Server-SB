@@ -57,6 +57,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
                 .antMatchers("/accounts/**", "/admin/accounts/**").permitAll()
+                .antMatchers("/actuator/prometheus", "/actuator/loggers", "/actuator/health", "/actuator/metrics").permitAll()
                 // 어드민 계정 신청, 로그인만 예외적으로 전부 허용
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().hasAnyRole("MEMBER", "ADMIN"));
