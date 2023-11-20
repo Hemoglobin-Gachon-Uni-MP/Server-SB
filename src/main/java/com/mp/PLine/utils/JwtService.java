@@ -8,13 +8,13 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.mp.PLine.config.BaseException;
-import com.mp.PLine.config.security.secret.Secret;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,6 +35,8 @@ import static org.springframework.security.oauth2.core.OAuth2AccessToken.TokenTy
 @Slf4j
 @Service
 public class JwtService {
+    @Value("${jwt.secret}")
+    private static String JWT_ACCESS_TOKEN_KEY;
     private static final String accessHeader = "Authorization";
     private static final String refreshHeader = "Authorization-refresh";
     private static final JwkProvider provider = new JwkProviderBuilder("https://kauth.kakao.com")
@@ -61,7 +63,7 @@ public class JwtService {
                 .claim("userId", userId)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
-                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
+                .signWith(SignatureAlgorithm.HS256, JWT_ACCESS_TOKEN_KEY.getBytes())
                 .compact();
     }
 
@@ -73,7 +75,7 @@ public class JwtService {
                 .claim("key", adminKey)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
-                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
+                .signWith(SignatureAlgorithm.HS256, JWT_ACCESS_TOKEN_KEY.getBytes())
                 .compact();
     }
 
@@ -83,7 +85,7 @@ public class JwtService {
                 .setHeaderParam("type","jwt")
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+2*(1000L *60*60*24*365)))
-                .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
+                .signWith(SignatureAlgorithm.HS256, JWT_ACCESS_TOKEN_KEY.getBytes())
                 .compact();
     }
 
@@ -177,7 +179,7 @@ public class JwtService {
     public Optional<Long> extractUserId(String accessToken) {
         try {
             Jws<Claims> jwt = Jwts.parserBuilder()
-                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
+                    .setSigningKey(JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
                     .build()
                     .parseClaimsJws(accessToken); // 액세스 토큰 파싱
 
@@ -193,7 +195,7 @@ public class JwtService {
     public Optional<String> extractAdminKey(String accessToken) {
         try {
             Jws<Claims> jwt = Jwts.parserBuilder()
-                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
+                    .setSigningKey(JWT_ACCESS_TOKEN_KEY.getBytes()) // 시크릿 키 설정
                     .build()
                     .parseClaimsJws(accessToken); // 액세스 토큰 파싱
 
@@ -209,7 +211,7 @@ public class JwtService {
     public boolean isTokenValid(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(Secret.JWT_ACCESS_TOKEN_KEY.getBytes())
+                    .setSigningKey(JWT_ACCESS_TOKEN_KEY.getBytes())
                     .build()
                     .parseClaimsJws(token);
             return true;
