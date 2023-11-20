@@ -22,16 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: cd /var/www
-    - run: ls
     - run: find . -type d -name ".git"
-    # - name: permission
-      # run: sudo chmod +rx /var/www/Server-SB
 
     - uses: actions/checkout@v3
     - name: Pull Main Branch
       run: |
         sudo git pull origin main
-   # cd /var/www && sudo git pull origin main
     
     - uses: actions/checkout@v3
     - run: mkdir ./src/main/resources
@@ -47,7 +43,7 @@ jobs:
     - name: gradle bootjar
       # 처음에 ./gradlew 파일을 실행할 수 없어서, chmod 로 실행 가능하도록 바꿔줍니다
       run: |
-        cd /var/www
+        cd /var/www/gradle
         chmod +x ./gradlew
         ./gradlew bootjar
         
@@ -62,4 +58,4 @@ jobs:
     # 스프링 프로그램을 실행합니다
     - name: deploy
       run: |
-        sudo java -jar build/libs/jwp-shopping-order.jar --spring.profiles.active=prod &
+        sudo java -jar build/libs/P-Line-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod &
