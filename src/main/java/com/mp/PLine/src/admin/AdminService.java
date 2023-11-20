@@ -137,7 +137,7 @@ public class AdminService {
         }
 
         public List<CertificationResponseDto> readCertifications () {
-            return certificationRepository.findAllByStatus(Status.A).stream()
+            return certificationRepository.findAllByStatusAndIsVerified(Status.A, false).stream()
                     .map(Certification::toCertificationResponseDto)
                     .collect(Collectors.toList());
         }
@@ -146,7 +146,7 @@ public class AdminService {
         public void executeCertification (Long id) throws BaseException {
             Certification certification = certificationRepository.findById(id)
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.INVALID_REPORT));
-            certification.excecute();
+            certification.execute();
         }
 
         @Transactional
