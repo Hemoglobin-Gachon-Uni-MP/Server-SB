@@ -20,6 +20,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: permission
+      run: chmod +rx /var/www/Server-SB
+      
     - name: Pull Main Branch
       run: |
         cd /var/www/Server-SB/ && sudo git pull origin main
