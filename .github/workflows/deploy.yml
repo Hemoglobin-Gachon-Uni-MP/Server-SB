@@ -21,15 +21,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: cd /var
+    - run: cd /var/www
     - run: ls
+    - run: find . -type d -name ".git"
     # - name: permission
       # run: sudo chmod +rx /var/www/Server-SB
 
     - uses: actions/checkout@v3
     - name: Pull Main Branch
       run: |
-        cd /var && sudo git pull origin main
+        sudo git pull origin main
+   # cd /var/www && sudo git pull origin main
     
     - uses: actions/checkout@v3
     - run: mkdir ./src/main/resources
