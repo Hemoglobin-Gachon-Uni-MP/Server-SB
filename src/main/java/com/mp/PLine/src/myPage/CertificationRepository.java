@@ -17,5 +17,5 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
     @Query("update Certification c set c.status = 'D' where c.member.id = :memberId")
     void setCertificationByMemberStatus(@Param("memberId") Long memberId);
 
-    List<Certification> findAllByStatus(Status status);
+    List<Certification> findAllByStatusAndIsVerified(Status status, Boolean isVerified);
 }

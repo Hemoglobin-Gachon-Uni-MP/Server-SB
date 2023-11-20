@@ -28,9 +28,8 @@ public class Certification extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public void excecute() {
+    public void execute() {
         this.isVerified = true;
-        this.status = Status.D;
     }
 
     public void reject() {
