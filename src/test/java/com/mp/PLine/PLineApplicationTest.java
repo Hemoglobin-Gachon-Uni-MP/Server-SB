@@ -15,30 +15,30 @@ import java.util.Optional;
 
 @SpringBootTest
 class PLineApplicationTest {
-	private final MemberRepository memberRepository;
-	private final FeedRepository feedRepository;
-	private final CommentRepository commentRepository;
-
-	@Autowired
-	PLineApplicationTest(MemberRepository memberRepository, FeedRepository feedRepository,
-						 CommentRepository commentRepository) {
-		this.memberRepository = memberRepository;
-		this.feedRepository = feedRepository;
-		this.commentRepository = commentRepository;
-	}
-
-	/* 해당 유저가 존재하는지 검사 */
-	@Test
-	public void existMember() {
-		Long myId = 20L;
-		Optional<Member> member = memberRepository.findByIdAndStatus(myId, Status.A);
-
-		if(member.isPresent()) {
-			System.out.println("해당 유저가 존재합니다.");
-		} else {
-			System.out.println("해당 유저는 존재하지 않습니다.");
-		}
-	}
+//	private final MemberRepository memberRepository;
+//	private final FeedRepository feedRepository;
+//	private final CommentRepository commentRepository;
+//
+//	@Autowired
+//	PLineApplicationTest(MemberRepository memberRepository, FeedRepository feedRepository,
+//						 CommentRepository commentRepository) {
+//		this.memberRepository = memberRepository;
+//		this.feedRepository = feedRepository;
+//		this.commentRepository = commentRepository;
+//	}
+//
+//	/* 해당 유저가 존재하는지 검사 */
+//	@Test
+//	public void existMember() {
+//		Long myId = 20L;
+//		Optional<Member> member = memberRepository.findByIdAndStatus(myId, Status.A);
+//
+//		if(member.isPresent()) {
+//			System.out.println("해당 유저가 존재합니다.");
+//		} else {
+//			System.out.println("해당 유저는 존재하지 않습니다.");
+//		}
+//	}
 
 //	@Test
 //	public void createComment() {
