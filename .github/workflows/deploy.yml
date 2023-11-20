@@ -20,9 +20,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: permission
       run: sudo chmod +rx /var/www/Server-SB
-      
+
+    - uses: actions/checkout@v3
     - name: Pull Main Branch
       run: |
         cd /var/www/Server-SB/ && sudo git pull origin main
