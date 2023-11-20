@@ -14,7 +14,6 @@
 secret/
 application.yml
 build/
-gradle/
 .gradle
 
 *.iml
