@@ -43,7 +43,7 @@ jobs:
     - name: gradle bootjar
       # 처음에 ./gradlew 파일을 실행할 수 없어서, chmod 로 실행 가능하도록 바꿔줍니다
       run: |
-        cd /var/www/gradle
+        cd /var/www
         chmod +x ./gradlew
         ./gradlew bootjar
         
