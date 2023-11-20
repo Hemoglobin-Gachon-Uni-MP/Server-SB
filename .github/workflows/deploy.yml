@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: permission
-      run: chmod +rx /var/www/Server-SB
+      run: sudo chmod +rx /var/www/Server-SB
       
     - name: Pull Main Branch
       run: |
