@@ -25,7 +25,6 @@ jobs:
         cd /var/www/Server-SB/ && sudo git pull origin main
     
     - uses: actions/checkout@v3
-    - name: application.yml setup
     - run: mkdir ./src/main/resources
     - run: touch ./src/main/resources/application.yml
     - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
